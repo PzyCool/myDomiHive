@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DomiHive Dashboard</title>
+    <link rel="stylesheet" href="/CSS/spa.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+        <!-- Dashboard Sidebar -->
+        <aside class="dashboard-sidebar" id="dashboardSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/ASSECT/Logo Design_ DomiHive saas 2.png" alt="DomiHive" class="sidebar-logo-img">
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h4 class="nav-section-title">MAIN</h4>
+                    <a href="#" class="nav-link" data-section="overview">
+                        <i class="fas fa-chart-pie"></i>
+                        <span class="nav-text">Overview</span>
+                    </a>
+                    
+                    <a href="#" class="nav-link" data-section="browse">
+                        <i class="fas fa-search"></i>
+                        <span class="nav-text">Browse Properties</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="favorites">
+                        <i class="fas fa-heart"></i>
+                        <span class="nav-text">Favorites</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h4 class="nav-section-title">APPLICATIONS</h4>
+                    <a href="#" class="nav-link" data-section="applications">
+                        <i class="fas fa-file-alt"></i>
+                        <span class="nav-text">My Applications</span>
+                        <span class="nav-badge" id="applicationsBadge">0</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h4 class="nav-section-title">MY PROPERTIES</h4>
+                    <a href="#" class="nav-link" data-section="my-properties">
+                        <i class="fas fa-home"></i>
+                        <span class="nav-text">My Properties</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="maintenance">
+                        <i class="fas fa-tools"></i>
+                        <span class="nav-text">Maintenance</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="payments">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="nav-text">Payments</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h4 class="nav-section-title">ACCOUNT</h4>
+                    <a href="#" class="nav-link" data-section="messages">
+                        <i class="fas fa-comments"></i>
+                        <span class="nav-text">Messages</span>
+                    </a>
+                    <a href="#" class="nav-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="/ASSECT/default-avatar.png" alt="User Avatar" id="userAvatarImg">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="sidebarUserName">Loading...</span>
+                        <span class="user-role">Tenant</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-main">
+            <!-- Navigation Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="breadcrumb">
+                        <span>Dashboard</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="breadcrumb-active" id="breadcrumbActive">Overview</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="action-btn" title="Notifications" id="notificationsBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="headerNotificationBadge">0</span>
+                        </button>
+                        <button class="action-btn" title="Help" id="helpBtn">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="user-menu">
+                        <button class="user-menu-btn" id="userMenuBtn">
+                            <div class="user-avatar-sm">
+                                <img src="/ASSECT/default-avatar.png" alt="User" id="headerAvatarImg">
+                            </div>
+                            <span class="user-name-sm" id="headerUserName">Loading...</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="#" class="user-dropdown-item" data-section="settings">
+                                <i class="fas fa-user"></i>
+                                My Profile
+                            </a>
+                            <a href="#" class="user-dropdown-item" data-section="settings">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <button class="user-dropdown-item logout-item" onclick="handleLogout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Area -->
+            <div class="dashboard-content" id="contentArea">
+                <!-- Content will be loaded here by spa.js -->
+                <div class="loading-section">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <h2>Loading Dashboard...</h2>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/JAVASCRIPT/spa.js"></script>
+</body>
+</html>

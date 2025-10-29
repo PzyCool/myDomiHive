@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortlet Property - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/property-details-rent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Property Details Main Content -->
+    <main class="property-details-page">
+        <div class="container">
+            <!-- Back to Dashboard Button -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToDashboard">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </button>
+                <div class="property-context" id="propertyContext">
+                    <!-- Shows which dashboard user came from -->
+                </div>
+            </div>
+
+            <!-- Property Gallery Section -->
+            <section class="property-gallery">
+                <!-- Main Image Carousel -->
+                <div class="main-carousel">
+                    <div class="carousel-container">
+                        <div class="carousel-slide active">
+                            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop" alt="Luxury shortlet apartment" id="mainImage" class="main-property-image">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop" alt="Modern living area" class="main-property-image">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800&h=600&fit=crop" alt="Comfortable bedroom" class="main-property-image">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&h=600&fit=crop" alt="Well-equipped kitchen" class="main-property-image">
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-btn next-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="carousel-dots">
+                        <!-- Dots will be added by JavaScript -->
+                    </div>
+                    
+                    <div class="property-badges">
+                        <span class="property-badge badge-verified" id="verifiedBadge">Verified</span>
+                        <span class="property-badge badge-featured" id="featuredBadge">Featured</span>
+                        <span class="property-badge badge-new" id="newBadge">Popular</span>
+                        <span class="property-badge badge-type" id="typeBadge" style="background: #8b5cf6; color: white;">Shortlet</span>
+                    </div>
+                </div>
+
+                <!-- Thumbnail Gallery -->
+                <div class="thumbnail-gallery">
+                    <div class="thumbnails-container">
+                        <!-- Thumbnails will be added by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Property Main Details -->
+            <section class="property-main-details">
+                <div class="details-header">
+                    <h1 class="property-title" id="propertyTitle">Luxury 2-Bedroom Serviced Apartment in VI</h1>
+                    <div class="property-price" id="propertyPrice">₦45,000/night</div>
+                    
+                    <div class="property-meta">
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="propertyLocation">Victoria Island, Lagos</span>
+                        </div>
+                        <div class="property-id">
+                            <i class="fas fa-hashtag"></i>
+                            Property ID: <span id="propertyId">shortlet_101</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Features -->
+                <div class="key-features">
+                    <div class="feature">
+                        <i class="fas fa-bed"></i>
+                        <span id="bedroomsCount">2</span> Bedrooms
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-bath"></i>
+                        <span id="bathroomsCount">2</span> Bathrooms
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span id="propertySize">85 sqm</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-user-friends"></i>
+                        <span id="maxGuests">4</span> Guests
+                    </div>
+                </div>
+
+                <!-- Property Description -->
+                <div class="property-description-section">
+                    <h2><i class="fas fa-file-alt"></i> Property Overview</h2>
+                    <p id="propertyDescription">This beautifully furnished 2-bedroom serviced apartment offers the perfect short-term accommodation in the heart of Victoria Island. Perfect for business travelers, vacationers, or short stays, this property features modern amenities, comfortable living spaces, and excellent location convenience. Enjoy hotel-like services with the comfort and privacy of a home.</p>
+                </div>
+
+                <!-- Quick Facts -->
+                <div class="quick-facts">
+                    <h3><i class="fas fa-bolt"></i> Quick Facts</h3>
+                    <div class="facts-grid">
+                        <div class="fact-item">
+                            <i class="fas fa-wifi"></i>
+                            <span>Free High-Speed WiFi</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-tv"></i>
+                            <span>Smart TV & Netflix</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-utensils"></i>
+                            <span>Fully Equipped Kitchen</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Air Conditioning</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-car"></i>
+                            <span>Free Parking</span>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-concierge-bell"></i>
+                            <span>Daily Housekeeping</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== GUEST REVIEWS & RATING SECTION ===== -->
+            <section class="reviews-section">
+                <h2><i class="fas fa-star"></i> Guest Reviews & Ratings</h2>
+                
+                <!-- Overall Rating Summary -->
+                <div class="rating-summary">
+                    <div class="overall-rating">
+                        <div class="rating-score">
+                            <span class="score">4.8</span>
+                            <span class="out-of">/5</span>
+                        </div>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div class="rating-count">Based on 127 reviews</div>
+                    </div>
+                    
+                    <div class="rating-breakdown">
+                        <div class="rating-bar">
+                            <span class="rating-label">5 stars</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 72%;"></div>
+                            </div>
+                            <span class="rating-percent">72%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">4 stars</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 22%;"></div>
+                            </div>
+                            <span class="rating-percent">22%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">3 stars</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 4%;"></div>
+                            </div>
+                            <span class="rating-percent">4%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">2 stars</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 2%;"></div>
+                            </div>
+                            <span class="rating-percent">2%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">1 star</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="rating-percent">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Filters -->
+                <div class="review-filters">
+                    <button class="filter-btn active" data-filter="all">All Reviews</button>
+                    <button class="filter-btn" data-filter="5">5 Stars</button>
+                    <button class="filter-btn" data-filter="4">4 Stars</button>
+                    <button class="filter-btn" data-filter="3">3 Stars</button>
+                    <button class="filter-btn" data-filter="verified">Verified Guests</button>
+                </div>
+
+                <!-- Reviews List -->
+                <div class="reviews-list">
+                    <!-- Review 1 -->
+                    <div class="review-card" data-rating="5" data-verified="true">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Jennifer Martinez">
+                                </div>
+                                <div class="reviewer-details">
+                                    <h4>Jennifer Martinez</h4>
+                                    <div class="review-meta">
+                                        <span class="verified-tenant"><i class="fas fa-check-circle"></i> Verified Guest</span>
+                                        <span class="review-date">April 5, 2024</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-text">Excellent</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <h3>Perfect Business Trip Stay!</h3>
+                            <p>Stayed here for a week during my business trip and it was absolutely perfect. The apartment is exactly as pictured - clean, modern, and well-equipped. The location in VI made it easy to get to all my meetings. The high-speed WiFi was reliable for work, and the kitchen had everything I needed.</p>
+                            
+                            <div class="review-highlights">
+                                <span class="highlight-tag"><i class="fas fa-thumbs-up"></i> Great Location</span>
+                                <span class="highlight-tag"><i class="fas fa-thumbs-up"></i> Reliable WiFi</span>
+                                <span class="highlight-tag"><i class="fas fa-thumbs-up"></i> Clean & Modern</span>
+                            </div>
+                            
+                            <div class="review-helpful">
+                                <button class="helpful-btn">
+                                    <i class="far fa-thumbs-up"></i>
+                                    Helpful (24)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="review-card" data-rating="5" data-verified="true">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Robert Kim">
+                                </div>
+                                <div class="reviewer-details">
+                                    <h4>Robert Kim</h4>
+                                    <div class="review-meta">
+                                        <span class="verified-tenant"><i class="fas fa-check-circle"></i> Verified Guest</span>
+                                        <span class="review-date">March 28, 2024</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-text">Excellent</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <h3>Amazing Vacation Stay!</h3>
+                            <p>Our family of 4 stayed here for 5 nights and we loved every moment. The apartment is spacious, beautifully decorated, and has all the amenities you could need. The kids loved the smart TV with Netflix, and we appreciated the fully equipped kitchen. The location is perfect - close to restaurants and shopping.</p>
+                            
+                            <div class="review-highlights">
+                                <span class="highlight-tag"><i class="fas fa-thumbs-up"></i> Family Friendly</span>
+                                <span class="highlight-tag"><i class="fas fa-thumbs-up"></i> Great Amenities</span>
+                                <span class="highlight-tag"><i class="fas fa-thumbs-up"></i> Spacious</span>
+                            </div>
+                            
+                            <div class="review-helpful">
+                                <button class="helpful-btn">
+                                    <i class="far fa-thumbs-up"></i>
+                                    Helpful (18)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Reviews -->
+                <div class="load-more-reviews">
+                    <button class="load-more-btn" id="loadMoreReviews">
+                        <i class="fas fa-arrow-down"></i>
+                        Load More Reviews
+                    </button>
+                </div>
+
+                <!-- DomiHive Verified Badge -->
+                <div class="domihive-verified">
+                    <div class="verified-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="badge-content">
+                            <strong>DomiHive Verified Reviews</strong>
+                            <span>All reviews are from verified guests who have stayed at this property</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Room-by-Room Gallery -->
+            <section class="room-gallery-section">
+                <h2><i class="fas fa-images"></i> Space Tour</h2>
+                
+                <!-- Living Area -->
+                <div class="room-section">
+                    <h3>Living & Dining Area</h3>
+                    <div class="room-images-grid">
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=400&fit=crop" alt="Comfortable living room" loading="lazy">
+                        </div>
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&h=400&fit=crop" alt="Dining area" loading="lazy">
+                        </div>
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&h=400&fit=crop" alt="Entertainment setup" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bedrooms -->
+                <div class="room-section">
+                    <h3>Comfortable Bedrooms</h3>
+                    <div class="room-images-grid">
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=400&fit=crop" alt="Master bedroom" loading="lazy">
+                            <span class="room-label">Master Bedroom</span>
+                        </div>
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&h=400&fit=crop" alt="Second bedroom" loading="lazy">
+                            <span class="room-label">Guest Bedroom</span>
+                        </div>
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=400&fit=crop" alt="Bedroom storage" loading="lazy">
+                            <span class="room-label">Wardrobe Space</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kitchen & Bathrooms -->
+                <div class="room-section">
+                    <h3>Kitchen & Bathrooms</h3>
+                    <div class="room-images-grid">
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" alt="Modern kitchen" loading="lazy">
+                            <span class="room-label">Fully Equipped Kitchen</span>
+                        </div>
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1584621744653-701b3d0fc00c?w=600&h=400&fit=crop" alt="Master bathroom" loading="lazy">
+                            <span class="room-label">Master Bathroom</span>
+                        </div>
+                        <div class="room-image">
+                            <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&h=400&fit=crop" alt="Guest bathroom" loading="lazy">
+                            <span class="room-label">Guest Bathroom</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Video Walkthrough Section -->
+            <section class="video-section">
+                <h2><i class="fas fa-video"></i> Virtual Tour</h2>
+                <div class="video-container">
+                    <video controls poster="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=450&fit=crop" id="mainVideo" class="property-video">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-modern-living-room-interior-44514-large.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                    <div class="video-thumbnails">
+                        <div class="video-thumbnail active" data-video-index="0">
+                            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=300&h=200&fit=crop" alt="Apartment tour">
+                            <div class="video-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <span class="video-title">Full Apartment Tour</span>
+                        </div>
+                        <div class="video-thumbnail" data-video-index="1">
+                            <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=300&h=200&fit=crop" alt="Neighborhood">
+                            <div class="video-play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <span class="video-title">Neighborhood Guide</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Location & Neighborhood -->
+            <section class="location-section">
+                <h2><i class="fas fa-map"></i> Location & Accessibility</h2>
+                
+                <div class="location-details">
+                    <div class="address-details">
+                        <h3>Property Address</h3>
+                        <div class="address-info">
+                            <p><strong>Full Address:</strong> 56A Adeola Odeku Street, Victoria Island, Lagos</p>
+                            <div class="landmarks">
+                                <h4>Key Landmarks:</h4>
+                                <ul>
+                                    <li>3 mins to Eko Atlantic City</li>
+                                    <li>5 mins to Landmark Beach</li>
+                                    <li>8 mins to Lagos Continental Hotel</li>
+                                    <li>10 mins to Ikoyi</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="neighborhood-features">
+                            <h4>Neighborhood Features</h4>
+                            <div class="neighborhood-list">
+                                <span class="neighborhood-tag">Upscale Residential Area</span>
+                                <span class="neighborhood-tag">24/7 Security</span>
+                                <span class="neighborhood-tag">Walking Distance to Beach</span>
+                                <span class="neighborhood-tag">Multiple Restaurants</span>
+                                <span class="neighborhood-tag">Shopping Centers</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container">
+                        <h3>Property Location</h3>
+                        <div class="interactive-map" id="propertyMap">
+                            <!-- Google Maps Embed -->
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.614218548356!2d3.425663774887944!3d6.428282223784667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae2c8b3a5%3A0x6f2b2b2b2b2b2b2b!2sVictoria%20Island%2C%20Lagos!5e0!3m2!1sen!2sng!4v1700000000000!5m2!1sen!2sng" 
+                                width="100%" 
+                                height="300" 
+                                style="border:0; border-radius: 8px;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                            <div class="map-actions">
+                                <button class="map-direction-btn" id="mapDirectionBtn">
+                                    <i class="fas fa-directions"></i>
+                                    Get Directions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nearby Amenities -->
+                <div class="nearby-amenities">
+                    <h3>Nearby Amenities</h3>
+                    <div class="amenities-grid">
+                        <div class="amenity-item">
+                            <i class="fas fa-utensils"></i>
+                            <div class="amenity-info">
+                                <strong>Restaurants</strong>
+                                <span>0.2km away</span>
+                            </div>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div class="amenity-info">
+                                <strong>Shopping Mall</strong>
+                                <span>0.5km away</span>
+                            </div>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-umbrella-beach"></i>
+                            <div class="amenity-info">
+                                <strong>Beach</strong>
+                                <span>0.8km away</span>
+                            </div>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-subway"></i>
+                            <div class="amenity-info">
+                                <strong>Transport</strong>
+                                <span>0.3km away</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Property Specifications -->
+            <section class="specifications-section">
+                <h2><i class="fas fa-clipboard-list"></i> Property Specifications</h2>
+                
+                <div class="specs-grid">
+                    <div class="specs-category">
+                        <h3>Accommodation Details</h3>
+                        <div class="specs-list" id="buildingSpecs">
+                            <div class="spec-item">2 bedrooms (1 master, 1 guest)</div>
+                            <div class="spec-item">2 full bathrooms</div>
+                            <div class="spec-item">Open plan living/dining area</div>
+                            <div class="spec-item">Fully equipped kitchen</div>
+                            <div class="spec-item">Balcony with city views</div>
+                        </div>
+                    </div>
+                    
+                    <div class="specs-category">
+                        <h3>Amenities & Features</h3>
+                        <div class="specs-list" id="interiorSpecs">
+                            <div class="spec-item">High-speed fiber internet</div>
+                            <div class="spec-item">Smart TV with streaming services</div>
+                            <div class="spec-item">Air conditioning throughout</div>
+                            <div class="spec-item">Fully equipped kitchen</div>
+                            <div class="spec-item">In-unit laundry</div>
+                        </div>
+                    </div>
+                    
+                    <div class="specs-category">
+                        <h3>Building Facilities</h3>
+                        <div class="specs-list" id="exteriorSpecs">
+                            <div class="spec-item">Swimming pool</div>
+                            <div class="spec-item">Fitness center</div>
+                            <div class="spec-item">Secure parking</div>
+                            <div class="spec-item">24/7 security</div>
+                            <div class="spec-item">Elevator access</div>
+                        </div>
+                    </div>
+                    
+                    <div class="specs-category">
+                        <h3>Services Included</h3>
+                        <div class="specs-list" id="utilitiesSpecs">
+                            <div class="spec-item">Daily housekeeping</div>
+                            <div class="spec-item">Utilities (water, electricity)</div>
+                            <div class="spec-item">WiFi internet</div>
+                            <div class="spec-item">Cable TV</div>
+                            <div class="spec-item">Maintenance support</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shortlet Terms & Conditions -->
+            <section class="terms-section">
+                <h2><i class="fas fa-file-contract"></i> Shortlet Terms & Conditions</h2>
+                
+                <div class="terms-grid">
+                    <div class="term-item">
+                        <h3>Minimum Stay</h3>
+                        <p id="minStay">2 nights</p>
+                    </div>
+                    
+                    <div class="term-item">
+                        <h3>Check-in/Check-out</h3>
+                        <p id="checkTimes">3PM / 11AM</p>
+                    </div>
+                    
+                    <div class="term-item">
+                        <h3>Security Deposit</h3>
+                        <p id="securityDeposit">₦50,000</p>
+                    </div>
+                    
+                    <div class="term-item">
+                        <h3>Cancellation</h3>
+                        <p id="cancellationPolicy">Flexible</p>
+                    </div>
+                </div>
+                
+                <div class="full-terms">
+                    <h3>Complete Terms & Conditions</h3>
+                    <div class="terms-content">
+                        <p>This shortlet property is managed by DomiHive with the following terms:</p>
+                        <ul>
+                            <li><strong>Minimum Stay:</strong> 2 nights minimum booking</li>
+                            <li><strong>Check-in/Check-out:</strong> 3:00 PM check-in, 11:00 AM check-out</li>
+                            <li><strong>Security Deposit:</strong> ₦50,000 refundable deposit required</li>
+                            <li><strong>Cancellation Policy:</strong> Free cancellation up to 48 hours before check-in</li>
+                            <li>No smoking allowed inside the property</li>
+                            <li>No parties or events without prior approval</li>
+                            <li>Maximum 4 guests (including children)</li>
+                            <li>Pets not allowed</li>
+                            <li>Quiet hours from 10:00 PM to 7:00 AM</li>
+                            <li>Damage to property will be charged accordingly</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Section -->
+            <section class="action-section">
+                <div class="like-section">
+                    <label class="like-checkbox">
+                        <input type="checkbox" id="likeCheckbox">
+                        <span class="checkmark"></span>
+                        <span class="like-text">I like this shortlet and want to book it</span>
+                    </label>
+                    
+                    <div class="proceed-button-container" id="proceedButtonContainer">
+                        <button class="proceed-btn" id="bookShortletBtn">
+                            <i class="fas fa-calendar-check"></i>
+                            Book Now
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Floating Call Button -->
+            <div class="floating-call-btn" id="floatingCallBtn">
+                <div class="call-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <span class="call-text">Contact</span>
+                <div class="call-details" id="callDetails">
+                    <div class="call-info">
+                        <i class="fas fa-phone"></i>
+                        <div class="phone-number">+234 901 085 1071</div>
+                        <div class="call-note">Click to call DomiHive</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/property-details-shortlet.js"></script>
+</body>
+</html>

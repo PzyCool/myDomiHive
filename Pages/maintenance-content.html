@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Requests - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/maintenance-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Maintenance Content -->
+    <div class="maintenance-content">
+        <!-- Page Header -->
+        <div class="maintenance-header">
+            <div class="header-content">
+                <h1>
+                    <i class="fas fa-tools"></i>
+                    Maintenance Requests
+                </h1>
+                <p>Select a property to manage maintenance requests or report new issues</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="pendingRequests">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon progress">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="inProgressRequests">0</span>
+                        <span class="stat-label">In Progress</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="completedRequests">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon urgent">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="urgentRequests">0</span>
+                        <span class="stat-label">Urgent</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Grid Section -->
+        <section class="properties-section">
+            <div class="section-header">
+                <h2>Select Property for Maintenance</h2>
+                <p>Choose a property to view existing requests or report new maintenance issues</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-layer-group"></i>
+                    All Properties
+                </button>
+                <button class="filter-btn" data-filter="active">
+                    <i class="fas fa-home"></i>
+                    Active Properties
+                </button>
+                <button class="filter-btn" data-filter="maintenance">
+                    <i class="fas fa-tools"></i>
+                    Needs Maintenance
+                </button>
+            </div>
+
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Properties will be dynamically loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3>No Properties Available</h3>
+                <p>Your properties will appear here for maintenance management</p>
+                <button class="btn-primary" onclick="goToMyProperties()">
+                    <i class="fas fa-home"></i>
+                    View My Properties
+                </button>
+            </div>
+        </section>
+
+        <!-- Recent Activity Section -->
+        <section class="recent-activity-section">
+            <div class="section-header">
+                <h2>Recent Maintenance Activity</h2>
+                <p>Latest updates across all your properties</p>
+            </div>
+
+            <div class="activity-list" id="recentActivity">
+                <!-- Recent maintenance activity loaded dynamically -->
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">No recent activity</div>
+                        <div class="activity-description">Maintenance updates will appear here</div>
+                    </div>
+                    <div class="activity-time">Just now</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/maintenance-content.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/favorites-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="favorites-content">
+        <!-- Header Section -->
+        <div class="favorites-header">
+            <div class="header-content">
+                <h1><i class="fas fa-heart"></i> My Favorite Properties</h1>
+                <p class="subtitle">Your saved properties for easy access and comparison</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalFavorites">0</div>
+                    <div class="stat-label">Total Saved</div>
+                </div>
+                <!--<div class="stat-card">
+                    <div class="stat-number" id="topPicksCount">0</div>
+                    <div class="stat-label">Top Picks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="comparisonCount">0</div>
+                    <div class="stat-label">For Comparison</div>
+                </div>-->
+            </div>
+        </div>
+
+        <!-- Category Filter & Actions -->
+        <div class="filters-actions-section">
+            <div class="category-filters">
+                <button class="category-filter active" data-category="all">
+                    <i class="fas fa-star"></i>
+                    All Favorites
+                </button>
+                <!--<button class="category-filter" data-category="top-picks">
+                    <i class="fas fa-crown"></i>
+                    Top Picks
+                </button>
+                <button class="category-filter" data-category="maybe">
+                    <i class="fas fa-question-circle"></i>
+                    Maybe
+                </button>
+                <button class="category-filter" data-category="dream-homes">
+                    <i class="fas fa-cloud"></i>
+                    Dream Homes
+                </button>-->
+            </div>
+
+            <div class="actions-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="favoritesSearch" placeholder="Search in favorites...">
+                </div>
+                <div class="sort-dropdown">
+                    <select id="sortFavorites">
+                        <option value="recent">Recently Added</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="size">Size: Large to Small</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Bar (Sticky) -->
+        <div class="comparison-bar" id="comparisonBar">
+            <div class="comparison-info">
+                <span id="selectedCount">0</span> properties selected for comparison
+            </div>
+            <div class="comparison-actions">
+                <button class="btn-clear" id="clearSelection">
+                    <i class="fas fa-times"></i>
+                    Clear
+                </button>
+                <button class="btn-compare" id="compareProperties" disabled>
+                    <i class="fas fa-balance-scale"></i>
+                    Compare Properties (2-5)
+                </button>
+            </div>
+        </div>
+
+        <!-- Properties Grid -->
+        <div class="favorites-grid-section">
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Properties will be loaded here by JavaScript -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>No favorites yet</h3>
+                <p>Start browsing properties and click the heart icon to save them here!</p>
+                <button class="btn-browse" onclick="window.spa.navigateToSection('browse')">
+                    <i class="fas fa-search"></i>
+                    Browse Properties
+                </button>
+            </div>
+
+            <!-- No Results State -->
+            <div class="empty-state hidden" id="noResultsState">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>No properties found</h3>
+                <p>Try adjusting your search or filter criteria</p>
+                <button class="btn-clear-filters" onclick="clearFilters()">
+                    <i class="fas fa-times"></i>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Modal -->
+    <div class="comparison-modal" id="comparisonModal">
+        <div class="comparison-modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-balance-scale"></i> Compare Properties</h2>
+                <button class="modal-close" id="closeComparisonModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="comparison-container" id="comparisonContainer">
+                <!-- Comparison content will be loaded here -->
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-secondary" id="closeComparison">
+                    <i class="fas fa-times"></i>
+                    Close Comparison
+                </button>
+                <button class="btn-primary" onclick="window.spa.navigateToSection('browse')">
+                    <i class="fas fa-search"></i>
+                    Browse More Properties
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Change Modal -->
+    <div class="category-modal" id="categoryModal">
+        <div class="category-modal-content">
+            <div class="modal-header">
+                <h3>Change Category</h3>
+                <button class="modal-close" id="closeCategoryModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="category-options">
+                <button class="category-option" data-category="top-picks">
+                    <i class="fas fa-crown"></i>
+                    <span>Top Picks</span>
+                </button>
+                <button class="category-option" data-category="maybe">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Maybe</span>
+                </button>
+                <button class="category-option" data-category="dream-homes">
+                    <i class="fas fa-cloud"></i>
+                    <span>Dream Homes</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/JAVASCRIPT/favorites-content.js"></script>
+</body>
+</html>

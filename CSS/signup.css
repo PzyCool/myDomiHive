@@ -1,0 +1,691 @@
+/* signup.css - No Scroll Version with OTP */
+
+/* ===== CSS RESET & BASE STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #334155;
+    background: #ffffff;
+    overflow: hidden; /* Prevent body scrolling */
+}
+
+/* ===== VARIABLES ===== */
+:root {
+    --primary-color: #0e1f42;
+    --accent-color: #9f7539;
+    --white: #ffffff;
+    --light-gray: #f8fafc;
+    --gray-light: #e2e8f0;
+    --gray: #64748b;
+    --dark-gray: #334155;
+    --success: #10b981;
+    --error: #dc2626;
+}
+
+/* ===== SIGNUP CONTAINER ===== */
+.signup-container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent container scrolling */
+}
+
+/* ===== HERO SECTION ===== */
+.signup-hero {
+    flex: 1;
+    background-image: url('/ASSECT/signup-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden; /* Prevent hero scrolling */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(14, 31, 66, 0.9) 0%, rgba(26, 45, 95, 0.8) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden; /* Prevent overlay scrolling */
+}
+
+.hero-content {
+    max-width: 500px;
+    text-align: center;
+    color: var(--white);
+}
+
+.hero-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1.5rem; /* Reduced spacing */
+    filter: brightness(0) invert(1);
+}
+
+.hero-content h1 {
+    font-size: 2rem; /* Smaller font */
+    font-weight: 700;
+    margin-bottom: 0.75rem; /* Reduced spacing */
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 1rem; /* Smaller font */
+    opacity: 0.9;
+    margin-bottom: 1.5rem; /* Reduced spacing */
+    line-height: 1.5;
+}
+
+.hero-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Reduced spacing */
+    margin-top: 1.5rem; /* Reduced spacing */
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Reduced spacing */
+    padding: 0.75rem; /* Reduced padding */
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.feature i {
+    font-size: 1.2rem; /* Smaller icons */
+    color: var(--accent-color);
+}
+
+.feature span {
+    font-weight: 600;
+    font-size: 0.9rem; /* Smaller text */
+}
+
+/* ===== FORM SECTION ===== */
+.signup-form-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem; /* Reduced padding */
+    background: var(--white);
+    overflow-y: auto; /* Allow only form section to scroll if needed */
+    max-height: 100vh;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 420px; /* Slightly smaller */
+    max-height: 95vh; /* Prevent overflow */
+    overflow-y: auto; /* Scroll only form if absolutely necessary */
+    padding: 1rem 0;
+}
+
+/* Hide scrollbar for form container */
+.form-container::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 1.5rem; /* Reduced spacing */
+    transition: color 0.3s ease;
+    font-size: 0.9rem; /* Smaller text */
+}
+
+.back-link:hover {
+    color: var(--primary-color);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 1.5rem; /* Reduced spacing */
+}
+
+.form-header h2 {
+    font-size: 1.8rem; /* Smaller font */
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: var(--gray);
+    font-size: 0.9rem; /* Smaller text */
+}
+
+/* ===== SOCIAL SIGNUP ===== */
+.social-signup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Reduced spacing */
+    margin-bottom: 1.5rem; /* Reduced spacing */
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Reduced spacing */
+    padding: 0.8rem 1rem; /* Reduced padding */
+    border: 2px solid var(--gray-light);
+    border-radius: 10px; /* Slightly smaller */
+    background: var(--white);
+    font-size: 0.9rem; /* Smaller text */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.social-btn:hover {
+    transform: translateY(-1px); /* Smaller hover effect */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.google-btn {
+    color: #4285F4;
+    border-color: #4285F4;
+}
+
+.google-btn:hover {
+    background: #4285F4;
+    color: white;
+}
+
+.apple-btn {
+    color: #000000;
+    border-color: #000000;
+}
+
+.apple-btn:hover {
+    background: #000000;
+    color: white;
+}
+
+.social-icon {
+    width: 18px; /* Smaller icons */
+    text-align: center;
+}
+
+.social-text {
+    flex: 1;
+    text-align: center;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0; /* Reduced spacing */
+    color: var(--gray);
+    font-size: 0.9rem; /* Smaller text */
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gray-light);
+}
+
+.divider span {
+    background: var(--white);
+    padding: 0 0.75rem; /* Reduced padding */
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== PHONE SIGNUP FORM ===== */
+.phone-signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Reduced spacing */
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Reduced spacing */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem; /* Reduced spacing */
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.85rem; /* Smaller text */
+}
+
+.form-group input {
+    padding: 0.8rem; /* Reduced padding */
+    border: 2px solid var(--gray-light);
+    border-radius: 8px; /* Slightly smaller */
+    font-size: 0.9rem; /* Smaller text */
+    transition: all 0.3s ease;
+    background: var(--white);
+    font-family: inherit;
+}
+
+.form-group input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(159, 117, 57, 0.1);
+}
+
+.form-group input.error {
+    border-color: var(--error);
+    background: #fef2f2;
+}
+
+/* Phone Input Container */
+.phone-input-container {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--gray-light);
+    border-radius: 8px; /* Slightly smaller */
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.phone-input-container:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(159, 117, 57, 0.1);
+}
+
+.phone-input-container.error {
+    border-color: var(--error);
+    background: #fef2f2;
+}
+
+.country-code {
+    padding: 0.8rem; /* Reduced padding */
+    background: var(--light-gray);
+    color: var(--dark-gray);
+    font-weight: 600;
+    border-right: 2px solid var(--gray-light);
+    min-width: 70px; /* Smaller width */
+    text-align: center;
+    font-size: 0.9rem; /* Smaller text */
+}
+
+.phone-input-container input {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    padding: 0.8rem; /* Reduced padding */
+}
+
+.phone-input-container input:focus {
+    border: none;
+    box-shadow: none;
+}
+
+/* Error Messages */
+.error-message {
+    color: var(--error);
+    font-size: 0.75rem; /* Smaller text */
+    margin-top: 0.2rem; /* Reduced spacing */
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* ===== CHECKBOX GROUP ===== */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Reduced spacing */
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem; /* Reduced spacing */
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 16px; /* Smaller checkboxes */
+    height: 16px;
+    margin-top: 0.1rem; /* Adjusted positioning */
+    accent-color: var(--accent-color);
+}
+
+.checkbox-item label {
+    font-weight: normal;
+    font-size: 0.8rem; /* Smaller text */
+    line-height: 1.3; /* Tighter line height */
+    flex: 1;
+    color: var(--dark-gray);
+}
+
+.link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* ===== SIGNUP BUTTON ===== */
+.signup-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem; /* Reduced padding */
+    border-radius: 10px; /* Slightly smaller */
+    font-size: 1rem; /* Smaller text */
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem; /* Reduced spacing */
+    font-family: inherit;
+    width: 100%;
+}
+
+.signup-btn:hover:not(:disabled) {
+    background: #b58a4a;
+    transform: translateY(-1px); /* Smaller hover effect */
+    box-shadow: 0 5px 15px rgba(159, 117, 57, 0.3);
+}
+
+.signup-btn:disabled {
+    background: var(--gray);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem; /* Smaller text */
+}
+
+/* ===== OTP VERIFICATION STYLES ===== */
+.otp-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.otp-header h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.otp-header p {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+#verificationPhoneNumber {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.otp-container {
+    margin-bottom: 1rem;
+}
+
+.otp-inputs {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.otp-input {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--gray-light);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    background: var(--white);
+}
+
+.otp-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(159, 117, 57, 0.1);
+}
+
+.otp-input.filled {
+    border-color: var(--success);
+    background: #f0fdf4;
+}
+
+.otp-actions {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.resend-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+}
+
+.resend-btn:hover:not(:disabled) {
+    color: #b58a4a;
+    text-decoration: underline;
+}
+
+.resend-btn:disabled {
+    color: var(--gray);
+    cursor: not-allowed;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.back-btn {
+    flex: 1;
+    background: var(--light-gray);
+    color: var(--dark-gray);
+    border: 2px solid var(--gray-light);
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.back-btn:hover {
+    background: var(--gray-light);
+}
+
+.verify-btn {
+    flex: 2;
+}
+
+/* ===== LOGIN REDIRECT ===== */
+.login-redirect {
+    text-align: center;
+    margin-top: 1.5rem; /* Reduced spacing */
+    padding-top: 1rem; /* Reduced padding */
+    border-top: 1px solid var(--gray-light);
+}
+
+.login-redirect p {
+    color: var(--gray);
+    font-size: 0.85rem; /* Smaller text */
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+    .signup-container {
+        flex-direction: column;
+        height: auto; /* Allow height to adjust */
+        min-height: 100vh; /* Minimum full height */
+        overflow-y: auto; /* Allow scrolling on mobile */
+    }
+    
+    .signup-hero {
+        min-height: 250px; /* Smaller hero on mobile */
+        flex: none;
+    }
+    
+    .hero-content {
+        max-width: 350px;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .signup-form-section {
+        padding: 1rem;
+        overflow-y: visible;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.3rem;
+    }
+    
+    .hero-features {
+        gap: 0.5rem;
+    }
+    
+    .feature {
+        padding: 0.6rem;
+    }
+    
+    .feature i {
+        font-size: 1rem;
+    }
+    
+    .feature span {
+        font-size: 0.8rem;
+    }
+    
+    .otp-input {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .social-btn {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .form-group input {
+        padding: 0.7rem;
+    }
+    
+    .signup-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .hero-content {
+        padding: 0 1rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.2rem;
+    }
+    
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+    
+    .otp-inputs {
+        gap: 0.5rem;
+    }
+    
+    .otp-input {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* ===== ANIMATIONS & UTILITIES ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-center { text-align: center; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+
+/* Smooth transitions for form steps */
+.form-step {
+    transition: all 0.3s ease;
+}

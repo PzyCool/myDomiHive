@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Dashboard - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/tenant-property.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Tenant Property Content -->
+    <div class="tenant-property-content">
+        <!-- Page Header with Back Button -->
+        <div class="property-page-header">
+            <button class="back-button" onclick="goBackToProperties()">
+                <i class="fas fa-arrow-left"></i>
+                Back to My Properties
+            </button>
+            <div class="header-content">
+                <h1 id="propertyPageTitle">
+                    <i class="fas fa-home"></i>
+                    Property Dashboard
+                </h1>
+                <p id="propertyPageSubtitle">Managing your rental property</p>
+            </div>
+        </div>
+
+        <!-- Property Overview Card -->
+        <div class="property-overview-card" id="propertyOverview">
+            <!-- Property details loaded dynamically -->
+        </div>
+
+        <!-- Tab Navigation - UPDATED WITH 4TH TAB -->
+        <nav class="property-tabs">
+            <button class="tab-btn active" data-tab="timeline">
+                <i class="fas fa-road"></i>
+                <span class="tab-text">Property Journey</span>
+            </button>
+            <button class="tab-btn" data-tab="updates">
+                <i class="fas fa-bullhorn"></i>
+                <span class="tab-text">Updates</span>
+            </button>
+            <button class="tab-btn" data-tab="lease">
+                <i class="fas fa-file-contract"></i>
+                <span class="tab-text">Lease & Documents</span>
+            </button>
+            <!-- NEW TAB -->
+            <button class="tab-btn" data-tab="rate">
+                <i class="fas fa-star"></i>
+                <span class="tab-text">Rate Property</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+            <!-- Timeline Tab (ORIGINAL) -->
+            <div class="tab-content active" id="timeline-content">
+                <div class="tab-header">
+                    <h2>Property Journey Timeline</h2>
+                    <p>Track your property journey from application to current tenancy</p>
+                </div>
+                <div class="timeline-wrapper">
+                    <div class="journey-timeline" id="journeyTimeline">
+                        <div class="empty-timeline">
+                            <i class="fas fa-road"></i>
+                            <h4>Loading Timeline...</h4>
+                            <p>Your property journey will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updates Tab (ORIGINAL) -->
+            <div class="tab-content" id="updates-content">
+                <div class="tab-header">
+                    <h2>Property Updates & Announcements</h2>
+                    <p>Important updates and announcements about your property</p>
+                </div>
+                <div class="updates-wrapper">
+                    <div class="updates-list" id="updatesList">
+                        <div class="empty-updates">
+                            <i class="fas fa-bullhorn"></i>
+                            <h4>Loading Updates...</h4>
+                            <p>Property updates will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lease & Documents Tab (ORIGINAL) -->
+            <div class="tab-content" id="lease-content">
+                <div class="tab-header">
+                    <h2>Lease Management & Documents</h2>
+                    <p>Manage your lease agreements and important documents</p>
+                </div>
+                
+                <!-- Lease Overview -->
+                <div class="lease-overview-section">
+                    <h3>Lease Overview</h3>
+                    <div class="lease-details-grid" id="leaseOverview">
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Annual Rent</div>
+                            <div class="lease-detail-value">Loading...</div>
+                            <div class="lease-detail-note">Per year</div>
+                        </div>
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Lease Duration</div>
+                            <div class="lease-detail-value">Loading...</div>
+                            <div class="lease-detail-note">Remaining: ... days</div>
+                        </div>
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Next Payment</div>
+                            <div class="lease-detail-value">Loading...</div>
+                            <div class="lease-detail-note">Amount due</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="redirectToMaintenance()">
+                            <div class="action-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Request Maintenance</span>
+                                <span class="action-description">Report issues or schedule repairs</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="redirectToPayments()">
+                            <div class="action-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Make Payment</span>
+                                <span class="action-description">Pay rent or other fees</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="redirectToMessages()">
+                            <div class="action-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Message About Property</span>
+                                <span class="action-description">Contact DomiHive support</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lease Documents -->
+                <div class="documents-section">
+                    <h3>Lease Documents</h3>
+                    <div class="documents-grid">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Tenant Agreement</h4>
+                                <p>Professional rental agreement with DomiHive</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewTenantAgreement()">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadTenantAgreement()">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lease Actions -->
+                <div class="lease-actions-section">
+                    <h3>Lease Management</h3>
+                    <div class="lease-actions-grid">
+                        <button class="btn-success" onclick="renewLease()">
+                            <i class="fas fa-sync-alt"></i>
+                            Renew Lease
+                        </button>
+                        <button class="btn-danger" onclick="endLease()">
+                            <i class="fas fa-times-circle"></i>
+                            End Lease
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Rate Property Tab -->
+            <div class="tab-content" id="rate-content">
+                <div class="tab-header">
+                    <h2>Rate & Review Property</h2>
+                    <p>Share your experience to help future tenants make informed decisions</p>
+                </div>
+                
+                <!-- Review History -->
+                <div class="review-history-section" id="reviewHistorySection" style="display: none;">
+                    <h3>Your Previous Reviews</h3>
+                    <div class="review-history-list" id="reviewHistoryList">
+                        <!-- Previous reviews will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Review Form -->
+                <div class="review-form-section">
+                    <div class="review-form-card">
+                        <h3>Write Your Review</h3>
+                        <p class="form-description">Your feedback helps improve our services and assists other tenants</p>
+                        
+                        <!-- Overall Rating -->
+                        <div class="rating-section">
+                            <label class="rating-label">Overall Rating *</label>
+                            <div class="star-rating" id="overallRating">
+                                <div class="stars-container">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <div class="rating-text" id="overallRatingText">Select your rating</div>
+                            </div>
+                        </div>
+
+                        <!-- Category Ratings -->
+                        <div class="category-ratings">
+                            <label class="rating-label">Category Ratings</label>
+                            <div class="category-grid">
+                                <div class="category-item">
+                                    <span class="category-name">Property Condition</span>
+                                    <div class="category-stars" data-category="propertyCondition">
+                                        <span class="star" data-rating="1">★</span>
+                                        <span class="star" data-rating="2">★</span>
+                                        <span class="star" data-rating="3">★</span>
+                                        <span class="star" data-rating="4">★</span>
+                                        <span class="star" data-rating="5">★</span>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <span class="category-name">Landlord Responsiveness</span>
+                                    <div class="category-stars" data-category="landlordResponsiveness">
+                                        <span class="star" data-rating="1">★</span>
+                                        <span class="star" data-rating="2">★</span>
+                                        <span class="star" data-rating="3">★</span>
+                                        <span class="star" data-rating="4">★</span>
+                                        <span class="star" data-rating="5">★</span>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <span class="category-name">Neighborhood</span>
+                                    <div class="category-stars" data-category="neighborhood">
+                                        <span class="star" data-rating="1">★</span>
+                                        <span class="star" data-rating="2">★</span>
+                                        <span class="star" data-rating="3">★</span>
+                                        <span class="star" data-rating="4">★</span>
+                                        <span class="star" data-rating="5">★</span>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <span class="category-name">Value for Money</span>
+                                    <div class="category-stars" data-category="valueForMoney">
+                                        <span class="star" data-rating="1">★</span>
+                                        <span class="star" data-rating="2">★</span>
+                                        <span class="star" data-rating="3">★</span>
+                                        <span class="star" data-rating="4">★</span>
+                                        <span class="star" data-rating="5">★</span>
+                                    </div>
+                                </div>
+                                <div class="category-item">
+                                    <span class="category-name">Maintenance Quality</span>
+                                    <div class="category-stars" data-category="maintenanceQuality">
+                                        <span class="star" data-rating="1">★</span>
+                                        <span class="star" data-rating="2">★</span>
+                                        <span class="star" data-rating="3">★</span>
+                                        <span class="star" data-rating="4">★</span>
+                                        <span class="star" data-rating="5">★</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review Details -->
+                        <div class="review-details">
+                            <div class="form-group">
+                                <label for="reviewTitle">Review Title *</label>
+                                <input type="text" id="reviewTitle" class="form-input" placeholder="Summarize your experience" maxlength="100">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reviewText">Your Review *</label>
+                                <textarea id="reviewText" class="form-textarea" placeholder="Share your detailed experience living in this property. What did you like? What could be improved?" rows="6"></textarea>
+                            </div>
+
+                            <div class="pros-cons-grid">
+                                <div class="form-group">
+                                    <label for="pros">Pros</label>
+                                    <textarea id="pros" class="form-textarea" placeholder="What did you love about this property?" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cons">Cons</label>
+                                    <textarea id="cons" class="form-textarea" placeholder="What could be improved?" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Recommendation -->
+                            <div class="recommendation-section">
+                                <label class="recommendation-label">Would you recommend this property to others? *</label>
+                                <div class="recommendation-options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="yes" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">Yes, I would recommend</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="no" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">No, I would not recommend</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Privacy Options -->
+                            <div class="privacy-section">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="anonymousPost">
+                                    <span class="checkbox-checkmark"></span>
+                                    <span class="checkbox-text">Post anonymously (your name will not be shown)</span>
+                                </label>
+                                <p class="privacy-note">Your review will be submitted to DomiHive admin for approval before being published on the property details page.</p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="clearReviewForm()">
+                                <i class="fas fa-eraser"></i>
+                                Clear Form
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitPropertyReview()">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Review for Approval
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Document Viewer Modal (ORIGINAL) -->
+    <div class="modal" id="documentViewerModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container document-viewer">
+            <div class="modal-header">
+                <h3 id="documentViewerTitle">Document Viewer</h3>
+                <button class="close-modal" onclick="closeDocumentViewer()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="document-viewer-content" id="documentViewerContent">
+                    <!-- Professional legal document will be loaded here -->
+                    <div class="legal-document-placeholder">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>Loading Professional Agreement...</h4>
+                        <p>The legal document will appear here</p>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <!-- Buttons will be dynamically set based on signing status -->
+                    <button class="btn-secondary" onclick="closeDocumentViewer()">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                    <button class="btn-primary" onclick="openSignatureModal()">
+                        <i class="fas fa-pen"></i>
+                        Sign Document
+                    </button>
+                    <button class="btn-success" onclick="downloadCurrentDocument()">
+                        <i class="fas fa-download"></i>
+                        Download Template
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Signature Modal (ORIGINAL) -->
+    <div class="modal" id="signatureModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container signature-modal">
+            <div class="modal-header">
+                <h3>Sign Document</h3>
+                <button class="close-modal" onclick="closeSignatureModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="signature-instructions">
+                    <p><strong>Please sign in the box below:</strong></p>
+                    <p>Draw your signature on the line provided. This signature will be legally binding.</p>
+                </div>
+                <div class="signature-pad-container">
+                    <canvas id="signatureCanvas" width="600" height="200"></canvas>
+                    <div class="signature-actions">
+                        <button class="btn-secondary" onclick="clearSignature()">
+                            <i class="fas fa-eraser"></i>
+                            Clear Signature
+                        </button>
+                        <button class="btn-primary" onclick="saveSignature()">
+                            <i class="fas fa-check"></i>
+                            Save & Upload Signature
+                        </button>
+                    </div>
+                </div>
+                <div class="signature-preview" id="signaturePreview">
+                    <!-- Signature preview will appear here after signing -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files (ORIGINAL) -->
+    <script src="/JAVASCRIPT/tenant-property.js"></script>
+</body>
+</html>

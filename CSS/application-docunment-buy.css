@@ -1,0 +1,95 @@
+.legal-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: rgba(220, 38, 38, 0.05);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--error);
+    margin-top: 1rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.legal-notice i {
+    color: var(--error);
+    font-size: 1.5rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.legal-notice strong {
+    color: var(--error);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.legal-notice p {
+    color: var(--dark-gray);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* Responsive design for legal notice */
+@media (max-width: 768px) {
+    .legal-notice {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .legal-notice i {
+        margin-top: 0;
+        align-self: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .legal-notice {
+        padding: 1rem;
+    }
+    
+    .legal-notice strong {
+        font-size: 0.95rem;
+    }
+    
+    .legal-notice p {
+        font-size: 0.85rem;
+    }
+}
+
+/* Animation for legal notice */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .legal-notice {
+        border-left-width: 6px;
+        background: rgba(220, 38, 38, 0.1);
+    }
+    
+    .legal-notice strong {
+        color: #8b0000;
+    }
+}
+
+/* Print styles */
+@media print {
+    .legal-notice {
+        background: #f8f8f8;
+        border: 1px solid #ccc;
+        border-left: 4px solid #dc2626;
+    }
+}

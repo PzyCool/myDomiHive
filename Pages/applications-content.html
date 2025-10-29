@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/applications-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- My Applications Content -->
+    <div class="applications-content">
+        <!-- Page Header -->
+        <div class="applications-header">
+            <div class="header-content">
+                <h1>My Applications</h1>
+                <p>Manage your property applications across all property types</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalPendingCount">0</span>
+                        <span class="stat-label">Total Pending</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon active">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalActiveCount">0</span>
+                        <span class="stat-label">Total Active</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon approved">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalApprovedCount">0</span>
+                        <span class="stat-label">Total Approved</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- For Rent Properties Section -->
+        <section class="properties-section" id="rentSection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-home"></i> For Rent Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge pending">Pending: <span id="rentPendingCount">0</span></span>
+                        <span class="stat-badge active">Active: <span id="rentActiveCount">0</span></span>
+                        <span class="stat-badge approved">Approved: <span id="rentApprovedCount">0</span></span>
+                    </div>
+                </div>
+                <p>Continue with rental properties you've inspected</p>
+            </div>
+            <div class="properties-grid" id="rentPropertiesGrid">
+                <!-- Rent properties will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Shortlet Properties Section -->
+        <section class="properties-section" id="shortletSection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-calendar-day"></i> Shortlet Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge pending">Pending: <span id="shortletPendingCount">0</span></span>
+                        <span class="stat-badge active">Active: <span id="shortletActiveCount">0</span></span>
+                        <span class="stat-badge approved">Approved: <span id="shortletApprovedCount">0</span></span>
+                    </div>
+                </div>
+                <p>Manage your short-term stay applications</p>
+            </div>
+            <div class="properties-grid" id="shortletPropertiesGrid">
+                <!-- Shortlet properties will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Commercial Properties Section -->
+        <section class="properties-section" id="commercialSection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-building"></i> Commercial Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge pending">Pending: <span id="commercialPendingCount">0</span></span>
+                        <span class="stat-badge active">Active: <span id="commercialActiveCount">0</span></span>
+                        <span class="stat-badge approved">Approved: <span id="commercialApprovedCount">0</span></span>
+                    </div>
+                </div>
+                <p>Continue with commercial property applications</p>
+            </div>
+            <div class="properties-grid" id="commercialPropertiesGrid">
+                <!-- Commercial properties will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Buy Properties Section -->
+        <section class="properties-section" id="buySection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-key"></i> Buy Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge pending">Pending: <span id="buyPendingCount">0</span></span>
+                        <span class="stat-badge active">Active: <span id="buyActiveCount">0</span></span>
+                        <span class="stat-badge approved">Approved: <span id="buyApprovedCount">0</span></span>
+                    </div>
+                </div>
+                <p>Manage your property purchase applications</p>
+            </div>
+            <div class="properties-grid" id="buyPropertiesGrid">
+                <!-- Buy properties will be dynamically loaded here -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Professional Decision Modal -->
+    <div class="decision-modal" id="decisionModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">Continue Application</h3>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Property Preview -->
+                <div class="property-preview" id="modalPropertyPreview">
+                    <!-- Property details will be loaded here -->
+                </div>
+
+                <!-- Question Flow - Dynamic based on property type -->
+                <div class="question-flow" id="questionFlow">
+                    <!-- Questions will be dynamically loaded based on property type -->
+                </div>
+
+                <!-- Inspection Required Message -->
+                <div class="message-container" id="inspectionRequiredMessage">
+                    <div class="message-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="message-content">
+                            <h5>Inspection Required</h5>
+                            <p id="inspectionMessageText">Please complete your physical inspection of this property before proceeding with the application.</p>
+                            <div class="inspection-details">
+                                <strong>Your inspection is scheduled for:</strong>
+                                <span id="scheduledInspectionDate">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-actions">
+                        <button class="btn-secondary" onclick="closeDecisionModal()">Close</button>
+                    </div>
+                </div>
+
+                <!-- Rejection Feedback Section -->
+                <div class="feedback-container" id="rejectionFeedback">
+                    <div class="feedback-header">
+                        <i class="fas fa-comment-dots"></i>
+                        <h5 id="feedbackTitle">Help us understand your decision</h5>
+                    </div>
+                    <div class="feedback-options" id="feedbackOptions">
+                        <!-- Feedback options will be dynamically loaded based on property type -->
+                    </div>
+                    <div class="other-reason" id="otherReasonInput">
+                        <textarea placeholder="Please specify your other reasons..." rows="3"></textarea>
+                    </div>
+                    <div class="feedback-note">
+                        <i class="fas fa-info-circle"></i>
+                        <p id="feedbackNote">You can still proceed with this property later if it's available</p>
+                    </div>
+                    <div class="feedback-actions">
+                        <button class="btn-secondary" onclick="closeDecisionModal()">Cancel</button>
+                        <button class="btn-reject" onclick="submitPropertyRejection()">Submit Feedback</button>
+                    </div>
+                </div>
+
+                <!-- Proceed to Application Section -->
+                <div class="proceed-container" id="proceedSection">
+                    <div class="proceed-message">
+                        <i class="fas fa-thumbs-up"></i>
+                        <div class="message-content">
+                            <h5 id="proceedTitle">Great! Let's get you moved in</h5>
+                            <p id="proceedMessage">You're ready to start your application for this property.</p>
+                        </div>
+                    </div>
+                    <div class="proceed-actions">
+                        <button class="btn-secondary" onclick="closeDecisionModal()">Not Now</button>
+                        <button class="btn-primary" id="proceedButton" onclick="redirectToApplication()">
+                            <i class="fas fa-play-circle"></i>
+                            Start Application
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Final Rejection Message -->
+                <div class="rejection-container" id="finalRejectionMessage">
+                    <div class="rejection-message">
+                        <i class="fas fa-heart-broken"></i>
+                        <div class="message-content">
+                            <h5>Sorry to see you go</h5>
+                            <p id="finalRejectionText">Thank you for your feedback. You can always consider this property again in the future if it's still available.</p>
+                        </div>
+                    </div>
+                    <div class="rejection-actions">
+                        <button class="btn-primary" onclick="closeDecisionModalAndRefresh()">Browse Other Properties</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/applications-content.js"></script>
+</body>
+</html>

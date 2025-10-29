@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Inspection - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/book-inspection.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Book Inspection Main Content -->
+    <main class="book-inspection-page">
+      <div class="container">
+        <!-- Back Navigation -->
+        <div class="back-navigation">
+          <button class="back-btn" id="backToProperty">
+            <i class="fas fa-arrow-left"></i>
+            Back to Property
+          </button>
+          <div class="booking-context">
+            Booking Inspection •
+            <span id="bookingContextType">Rental Property</span>
+          </div>
+        </div>
+
+        <!-- Property Summary -->
+        <section class="property-summary">
+          <div class="summary-header">
+            <h1>Book Property Inspection</h1>
+            <p>
+              Schedule a physical viewing of the property before making your
+              decision
+            </p>
+          </div>
+
+          <div class="property-card">
+            <div class="property-image">
+              <img
+                src="/ASSECT/3d-rendering-modern-dining-room-living-room-with-luxury-decor (1).jpg"
+                alt="Property Image"
+                id="inspectionPropertyImage"
+              />
+            </div>
+            <div class="property-info">
+              <h3 id="inspectionPropertyTitle">Property Title</h3>
+              <div class="property-price" id="inspectionPropertyPrice">
+                ₦0/year
+              </div>
+              <div class="property-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="inspectionPropertyLocation">Location</span>
+              </div>
+              <div class="property-features">
+                <span class="feature">
+                  <i class="fas fa-bed"></i>
+                  <span id="inspectionBedrooms">0</span> bed
+                </span>
+                <span class="feature">
+                  <i class="fas fa-bath"></i>
+                  <span id="inspectionBathrooms">0</span> bath
+                </span>
+                <span class="feature">
+                  <i class="fas fa-ruler-combined"></i>
+                  <span id="inspectionSize">0 sqm</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Inspection Booking Form -->
+        <section class="inspection-form-section">
+          <div class="form-container">
+            <h2>Schedule Your Inspection</h2>
+            <p>Choose a convenient date and time for your property viewing</p>
+
+            <form id="inspectionBookingForm" class="inspection-form">
+              <!-- User Context Display (Auto-detected) -->
+              <div class="user-context-banner">
+                <div class="context-info">
+                  <i class="fas fa-user-circle"></i>
+                  <div class="context-details">
+                    <strong>Booking as:</strong>
+                    <span id="userDisplayName">Loading...</span>
+                    <span class="dashboard-badge" id="dashboardTypeBadge"
+                      >Rent</span
+                    >
+                  </div>
+                </div>
+                <div class="context-note">
+                  <i class="fas fa-info-circle"></i>
+                  Your account information is automatically used for this
+                  booking
+                </div>
+              </div>
+
+              <!-- Inspection Details -->
+              <div class="form-section">
+                <h3>Inspection Details</h3>
+                <div class="form-grid">
+                  <!-- Available Dates Calendar -->
+                  <div class="form-group full-width">
+                    <label for="availableDates">Select Available Date *</label>
+                    <div class="available-dates-calendar" id="availableDates">
+                      <!-- Available dates will be loaded here dynamically -->
+                      <div class="calendar-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Loading available dates...
+                      </div>
+                    </div>
+                    <div
+                      class="selected-date-display"
+                      id="selectedDateDisplay"
+                      style="display: none"
+                    >
+                      <i class="fas fa-calendar-check"></i>
+                      Selected: <span id="selectedDateText"></span>
+                    </div>
+                    <input
+                      type="hidden"
+                      id="inspectionDate"
+                      name="inspectionDate"
+                      required
+                    />
+                  </div>
+
+                  <!-- Available Time Slots -->
+                  <div class="form-group full-width">
+                    <label for="availableTimes">Select Available Time *</label>
+                    <div class="available-times-slots" id="availableTimes">
+                      <div class="no-date-selected">
+                        <i class="fas fa-clock"></i>
+                        Please select a date first
+                      </div>
+                    </div>
+                    <div class="time-slots-info">
+                      <i class="fas fa-info-circle"></i>
+                      Each inspection slot is 1 hour 30 min between 9:00 AM -
+                      5:00 PM, Monday to Friday
+                    </div>
+                    <input
+                      type="hidden"
+                      id="inspectionTime"
+                      name="inspectionTime"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label for="inspectionNotes"
+                      >Additional Notes (Optional)</label
+                    >
+                    <textarea
+                      id="inspectionNotes"
+                      name="inspectionNotes"
+                      rows="4"
+                      placeholder="Any specific areas you'd like to focus on during the inspection..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Number of People -->
+              <div class="form-section">
+                <h3>Inspection Party</h3>
+                <div class="form-group">
+                  <label for="numberOfPeople"
+                    >Number of people attending *</label
+                  >
+                  <select id="numberOfPeople" name="numberOfPeople" required>
+                    <option value="">Select number</option>
+                    <option value="1">1 person</option>
+                    <option value="2">2 people</option>
+                    <option value="3">3 people</option>
+                    <option value="4">4 people</option>
+                    <option value="5">5+ people</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Terms and Conditions -->
+              <div class="form-section">
+                <div class="terms-agreement">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      id="agreeTerms"
+                      name="agreeTerms"
+                      required
+                    />
+                    <span class="checkmark"></span>
+                    I agree to the
+                    <a href="#" class="terms-link">Terms and Conditions</a> and
+                    understand that:
+                  </label>
+                  <ul class="terms-list">
+                    <li>I must arrive on time for the scheduled inspection</li>
+                    <li>I need to bring a valid ID for verification</li>
+                    <li>Maximum inspection time is 30 minutes</li>
+                    <li>
+                      Photos and videos are allowed for personal reference only
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  id="backToPropertyBtn"
+                >
+                  <i class="fas fa-arrow-left"></i>
+                  Back to Property
+                </button>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-calendar-check"></i>
+                  Book Inspection
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!-- Floating Call Button -->
+    <div class="floating-call-btn" id="floatingCallBtn">
+      <div class="call-icon">
+        <i class="fas fa-phone"></i>
+      </div>
+      <span class="call-text">Contact</span>
+      <div class="call-details" id="callDetails">
+        <div class="call-info">
+          <i class="fas fa-phone"></i>
+          <div class="phone-number">+234 901 085 1071</div>
+          <div class="call-note">Click to call DomiHive</div>
+        </div>
+      </div>
+    </div>
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2>Inspection Booked Successfully!</h2>
+          <button class="close-modal" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="success-details">
+            <p>Your property inspection has been scheduled successfully.</p>
+            <div class="booking-summary">
+              <h4>Booking Details:</h4>
+              <div class="detail-item">
+                <strong>Property:</strong>
+                <span id="summaryPropertyTitle">-</span>
+              </div>
+              <div class="detail-item">
+                <strong>Date & Time:</strong>
+                <span id="summaryDateTime">-</span>
+              </div>
+              <div class="detail-item">
+                <strong>Location:</strong>
+                <span id="summaryLocation">-</span>
+              </div>
+              <div class="detail-item">
+                <strong>Attendees:</strong>
+                <span id="summaryAttendees">-</span>
+              </div>
+            </div>
+            <div class="reschedule-notice">
+              <i class="fas fa-phone"></i>
+              <div>
+                <strong>Can't make it?</strong>
+                <p>
+                  Call us at
+                  <a href="tel:+2348123456789">+234 812 345 6789</a> to
+                  reschedule your appointment
+                </p>
+              </div>
+            </div>
+            <p class="confirmation-note">
+              You will receive a confirmation notification on your dashboard.
+            </p>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-primary" id="goToDashboardBtn">
+              Return to Dashboard
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="btn-secondary" id="viewApplicationBtn">
+              View Application
+              <i class="fas fa-file-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/book-inspection.js"></script>
+  </body>
+</html>

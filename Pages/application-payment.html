@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-payment.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Payment Main Content -->
+    <main class="payment-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Application Details</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToDocuments">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Documents
+                </button>
+                <div class="payment-context">
+                    Step 3: Payment • <span id="paymentContextType">Rental Application</span>
+                </div>
+            </div>
+
+            <!-- Payment Summary -->
+            <section class="payment-summary">
+                <div class="summary-header">
+                    <h1>Complete Your Application Payment</h1>
+                    <p>Final step: Secure your application with payment</p>
+                </div>
+
+                <div class="summary-grid">
+                    <!-- Application Summary -->
+                    <div class="application-summary-card">
+                        <h3>Application Summary</h3>
+                        <div class="summary-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Applicant:</span>
+                                <span class="detail-value" id="applicantName">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Application ID:</span>
+                                <span class="detail-value" id="applicationId">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Property:</span>
+                                <span class="detail-value" id="propertyTitle">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Location:</span>
+                                <span class="detail-value" id="propertyLocation">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Breakdown -->
+                    <div class="payment-breakdown-card">
+                        <h3>Payment Breakdown</h3>
+                        <div class="breakdown-details">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Application Fee</span>
+                                <span class="breakdown-amount" id="applicationFee">₦15,000</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Background Check</span>
+                                <span class="breakdown-amount" id="backgroundCheckFee">₦5,000</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Processing Fee</span>
+                                <span class="breakdown-amount" id="processingFee">₦2,500</span>
+                            </div>
+                            <div class="breakdown-item total">
+                                <span class="breakdown-label">Total Amount</span>
+                                <span class="breakdown-amount" id="totalAmount">₦22,500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Escrow Explanation -->
+            <section class="escrow-section">
+                <div class="escrow-card">
+                    <div class="escrow-header">
+                        <div class="escrow-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="escrow-content">
+                            <h2>Secure Escrow Payment Protection</h2>
+                            <p>Your payment is protected by DomiHive's secure escrow system</p>
+                        </div>
+                    </div>
+                    
+                    <div class="escrow-process">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Payment Held Securely</h4>
+                                <p>Your funds are held securely in escrow by DomiHive, not released immediately</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Application Review</h4>
+                                <p>We review your application and documents within 48-72 hours</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Approval & Fund Release</h4>
+                                <p>If approved, you get access to your tenant dashboard</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Full Refund if Not Approved</h4>
+                                <p>If your application is not approved, you receive a 100% refund</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Methods -->
+            <section class="payment-methods-section">
+                <div class="payment-container">
+                    <h2>Select Payment Method</h2>
+                    <p>Choose your preferred payment method to complete your application</p>
+
+                    <form id="paymentForm" class="payment-form">
+                        <input type="hidden" id="applicationData" name="applicationData">
+                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="22500">
+
+                        <!-- Payment Method Selection -->
+                        <div class="payment-methods">
+                            <div class="payment-method-card" data-method="card">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Credit/Debit Card</h4>
+                                        <p>Pay securely with your card</p>
+                                    </div>
+                                    <div class="method-check">
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-card" data-method="bank">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Bank Transfer</h4>
+                                        <p>Transfer directly from your bank</p>
+                                    </div>
+                                    <div class="method-check">
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-card" data-method="flutterwave">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Flutterwave</h4>
+                                        <p>Pay with mobile money or card</p>
+                                    </div>
+                                    <div class="method-check">
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-card" data-method="paystack">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-bolt"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Paystack</h4>
+                                        <p>Quick and secure payments</p>
+                                    </div>
+                                    <div class="method-check">
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Payment Form -->
+                        <div class="payment-details" id="cardDetails">
+                            <div class="form-section">
+                                <h3>Card Information</h3>
+                                <div class="form-grid">
+                                    <div class="form-group full-width">
+                                        <label for="cardNumber" class="required">Card Number</label>
+                                        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                        <div class="card-icons">
+                                            <i class="fab fa-cc-visa"></i>
+                                            <i class="fab fa-cc-mastercard"></i>
+                                            <i class="fab fa-cc-amex"></i>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardHolder" class="required">Card Holder Name</label>
+                                        <input type="text" id="cardHolder" name="cardHolder" placeholder="John Doe" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="expiryDate" class="required">Expiry Date</label>
+                                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cvv" class="required">CVV</label>
+                                        <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer Details -->
+                        <div class="payment-details" id="bankDetails">
+                            <div class="form-section">
+                                <h3>Bank Transfer Instructions</h3>
+                                <div class="bank-instructions">
+                                    <div class="instruction-item">
+                                        <strong>Bank Name:</strong>
+                                        <span>DomiHive Trust Bank</span>
+                                    </div>
+                                    <div class="instruction-item">
+                                        <strong>Account Number:</strong>
+                                        <span id="bankAccountNumber">8325001746</span>
+                                        <button type="button" class="copy-btn" onclick="copyToClipboard('bankAccountNumber')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <div class="instruction-item">
+                                        <strong>Account Name:</strong>
+                                        <span>DomiHive Escrow Services</span>
+                                    </div>
+                                    <div class="instruction-item">
+                                        <strong>Reference:</strong>
+                                        <span id="paymentReference">DOMI-APP-001</span>
+                                        <button type="button" class="copy-btn" onclick="copyToClipboard('paymentReference')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <div class="instruction-item">
+                                        <strong>Amount:</strong>
+                                        <span id="bankAmount">₦22,500</span>
+                                    </div>
+                                </div>
+                                <div class="upload-receipt">
+                                    <label for="bankReceipt" class="required">Upload Transfer Receipt</label>
+                                    <input type="file" id="bankReceipt" name="bankReceipt" accept=".pdf,.jpg,.jpeg,.png" required>
+                                    <span class="file-note">Upload proof of payment after transfer</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Gateway Instructions -->
+                        <div class="payment-details" id="gatewayDetails">
+                            <div class="form-section">
+                                <h3>Gateway Payment</h3>
+                                <div class="gateway-instructions">
+                                    <p>You will be redirected to a secure payment gateway to complete your transaction.</p>
+                                    <div class="gateway-features">
+                                        <div class="feature">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Secure encrypted payment</span>
+                                        </div>
+                                        <div class="feature">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>Multiple payment options</span>
+                                        </div>
+                                        <div class="feature">
+                                            <i class="fas fa-clock"></i>
+                                            <span>Instant confirmation</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-section">
+                            <div class="terms-agreement">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeEscrowTerms" name="agreeEscrowTerms" required>
+                                    <span class="checkmark"></span>
+                                    I understand and agree to the <a href="#" class="terms-link">Escrow Terms</a> and DomiHive's payment protection policy
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
+                                    <span class="checkmark"></span>
+                                    I understand that my payment will be fully refunded if my application is not approved within 72 hours
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreePrivacyPolicy" name="agreePrivacyPolicy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to the <a href="#" class="terms-link">Privacy Policy</a> and consent to the processing of my payment information
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToDocumentsBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Documents
+                            </button>
+                            <button type="submit" class="btn-primary" id="submitPaymentBtn">
+                                <i class="fas fa-lock"></i>
+                                Complete Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Security Features -->
+            <section class="security-features">
+                <div class="security-grid">
+                    <div class="security-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Bank-Level Security</h4>
+                        <p>All payments are encrypted and secure</p>
+                    </div>
+                    <div class="security-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h4>PCI DSS Compliant</h4>
+                        <p>We meet the highest security standards</p>
+                    </div>
+                    <div class="security-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>Escrow Protection</h4>
+                        <p>Your funds are protected until approval</p>
+                    </div>
+                    <div class="security-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <h4>Instant Refunds</h4>
+                        <p>Full refund if application not approved</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Payment Processing Modal -->
+    <div class="modal" id="processingModal">
+        <div class="modal-content processing-modal">
+            <div class="modal-body">
+                <div class="processing-animation">
+                    <div class="spinner"></div>
+                    <h3>Processing Your Payment</h3>
+                    <p>Please wait while we securely process your payment...</p>
+                    <div class="processing-steps">
+                        <div class="processing-step active">
+                            <i class="fas fa-check"></i>
+                            <span>Validating payment details</span>
+                        </div>
+                        <div class="processing-step">
+                            <i class="fas fa-check"></i>
+                            <span>Processing transaction</span>
+                        </div>
+                        <div class="processing-step">
+                            <i class="fas fa-check"></i>
+                            <span>Securing funds in escrow</span>
+                        </div>
+                        <div class="processing-step">
+                            <i class="fas fa-check"></i>
+                            <span>Finalizing application</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Payment Successful!</h2>
+                <button class="close-modal" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="success-details">
+                    <p>Your payment has been processed successfully and is being held securely in escrow.</p>
+                    <div class="payment-summary-modal">
+                        <h4>Payment Details:</h4>
+                        <div class="detail-item">
+                            <strong>Transaction ID:</strong>
+                            <span id="transactionId">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Amount Paid:</strong>
+                            <span id="paidAmount">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Payment Method:</strong>
+                            <span id="paymentMethod">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Escrow Status:</strong>
+                            <span class="status-badge pending">Funds Held Securely</span>
+                        </div>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h4>What Happens Next:</h4>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h5>Application Review (0-72 hours)</h5>
+                                    <p>We're reviewing your application and screening documents</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h5>Approval Notification</h5>
+                                    <p>You'll receive an email with your login credentials</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h5>Access Tenant Dashboard</h5>
+                                    <p>Login to manage your rental and communicate with landlords</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="refund-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <p><strong>Refund Guarantee:</strong> If your application is not approved within 72 hours, you will receive a 100% refund automatically.</p>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="downloadReceiptBtn">
+                        <i class="fas fa-download"></i>
+                        Download Receipt
+                    </button>
+                    <button class="btn-primary" id="goToDashboardBtn">
+                        Go to Dashboard
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-payment.js"></script>
+</body>
+</html>

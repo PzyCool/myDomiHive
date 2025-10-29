@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Management - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/tenant-maintenance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Tenant Maintenance Content -->
+    <div class="tenant-maintenance-content">
+        <!-- Page Header -->
+        <div class="maintenance-page-header">
+            <button class="back-button" onclick="goBackToMaintenance()">
+                <i class="fas fa-arrow-left"></i>
+                Back to Properties
+            </button>
+            <div class="header-content">
+                <h1 id="maintenancePageTitle">
+                    <i class="fas fa-tools"></i>
+                    Maintenance Management
+                </h1>
+                <p id="maintenancePageSubtitle">Managing maintenance requests for your property</p>
+            </div>
+        </div>
+
+        <!-- Property Overview -->
+        <div class="property-overview-card" id="propertyOverview">
+            <!-- Property details loaded dynamically -->
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="propertyPendingRequests">0</span>
+                    <span class="stat-label">Pending</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon progress">
+                    <i class="fas fa-hammer"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="propertyInProgressRequests">0</span>
+                    <span class="stat-label">In Progress</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon completed">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="propertyCompletedRequests">0</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon urgent">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="propertyUrgentRequests">0</span>
+                    <span class="stat-label">Urgent</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="maintenance-tabs">
+            <button class="tab-btn active" data-tab="new-request">
+                <i class="fas fa-plus-circle"></i>
+                <span class="tab-text">New Request</span>
+            </button>
+            <button class="tab-btn" data-tab="active-requests">
+                <i class="fas fa-list-alt"></i>
+                <span class="tab-text">Active Requests</span>
+            </button>
+            <button class="tab-btn" data-tab="tracking">
+                <i class="fas fa-chart-line"></i>
+                <span class="tab-text">Tracking</span>
+            </button>
+            <button class="tab-btn" data-tab="history">
+                <i class="fas fa-history"></i>
+                <span class="tab-text">History</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+            <!-- New Request Tab -->
+            <div class="tab-content active" id="new-request-content">
+                <div class="tab-header">
+                    <h2>Submit New Maintenance Request</h2>
+                    <p>Report a new maintenance issue for your property</p>
+                </div>
+
+                <form class="maintenance-form" id="maintenanceForm">
+                    <div class="form-section">
+                        <h3>Issue Details</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="issueTitle">Issue Title *</label>
+                                <input type="text" id="issueTitle" name="issueTitle" required 
+                                       placeholder="e.g., Leaking Kitchen Faucet">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="issueCategory">Category *</label>
+                                <select id="issueCategory" name="issueCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="plumbing">Plumbing</option>
+                                    <option value="electrical">Electrical</option>
+                                    <option value="hvac">HVAC (Heating/Cooling)</option>
+                                    <option value="appliance">Appliance</option>
+                                    <option value="structural">Structural</option>
+                                    <option value="pest">Pest Control</option>
+                                    <option value="emergency">Emergency</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="urgencyLevel">Urgency Level *</label>
+                                <select id="urgencyLevel" name="urgencyLevel" required>
+                                    <option value="low">Low - Can wait a few days</option>
+                                    <option value="medium" selected>Medium - Within 48 hours</option>
+                                    <option value="high">High - Within 24 hours</option>
+                                    <option value="emergency">Emergency - Immediate attention</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="preferredDate">Preferred Repair Date</label>
+                                <input type="date" id="preferredDate" name="preferredDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="issueDescription">Detailed Description *</label>
+                            <textarea id="issueDescription" name="issueDescription" required 
+                                      rows="5" placeholder="Please describe the issue in detail. Include when it started, specific locations, and any patterns you've noticed..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Media Evidence</h3>
+                        <p class="section-description">Upload photos or videos to help us understand the issue better</p>
+                        
+                        <div class="media-upload-section">
+                            <div class="upload-area" id="photoUploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="upload-text">
+                                    <h4>Upload Photos</h4>
+                                    <p>Drag & drop or click to upload images</p>
+                                    <p class="upload-note">Supports JPG, PNG (Max 5MB each)</p>
+                                </div>
+                                <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
+                                <button type="button" class="btn-secondary" onclick="document.getElementById('photoUpload').click()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Photos
+                                </button>
+                            </div>
+
+                            <div class="upload-area" id="videoUploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div class="upload-text">
+                                    <h4>Upload Videos</h4>
+                                    <p>Drag & drop or click to upload videos</p>
+                                    <p class="upload-note">Supports MP4, MOV (Max 50MB each)</p>
+                                </div>
+                                <input type="file" id="videoUpload" accept="video/*" multiple style="display: none;">
+                                <button type="button" class="btn-secondary" onclick="document.getElementById('videoUpload').click()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Videos
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="media-preview" id="mediaPreview">
+                            <!-- Uploaded media previews will appear here -->
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Contact & Access</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Contact Phone</label>
+                                <input type="tel" id="contactPhone" name="contactPhone" 
+                                       placeholder="Your phone number for updates">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bestTime">Best Time to Contact</label>
+                                <select id="bestTime" name="bestTime">
+                                    <option value="">Any time</option>
+                                    <option value="morning">Morning (8AM - 12PM)</option>
+                                    <option value="afternoon">Afternoon (12PM - 5PM)</option>
+                                    <option value="evening">Evening (5PM - 8PM)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="permissionToEnter" name="permissionToEnter">
+                                <span class="checkmark"></span>
+                                I grant permission for maintenance staff to enter the property when I'm not home
+                            </label>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="emergencyContact" name="emergencyContact" checked>
+                                <span class="checkmark"></span>
+                                Contact me immediately for emergency repairs
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="clearForm()">
+                            <i class="fas fa-times"></i>
+                            Clear Form
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Maintenance Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Active Requests Tab -->
+            <div class="tab-content" id="active-requests-content">
+                <div class="tab-header">
+                    <h2>Active Maintenance Requests</h2>
+                    <p>Track the progress of your current maintenance issues</p>
+                </div>
+
+                <div class="requests-filter">
+                    <button class="filter-btn active" data-filter="all">All Requests</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <button class="filter-btn" data-filter="progress">In Progress</button>
+                    <button class="filter-btn" data-filter="urgent">Urgent</button>
+                </div>
+
+                <div class="requests-list" id="activeRequestsList">
+                    <!-- Active maintenance requests will be loaded here -->
+                    <div class="empty-requests">
+                        <i class="fas fa-tools"></i>
+                        <h4>No Active Requests</h4>
+                        <p>You don't have any active maintenance requests</p>
+                        <button class="btn-primary" onclick="switchToTab('new-request')">
+                            <i class="fas fa-plus"></i>
+                            Submit New Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Tab -->
+            <div class="tab-content" id="tracking-content">
+                <div class="tab-header">
+                    <h2>Maintenance Tracking</h2>
+                    <p>Visual overview of your maintenance request progress</p>
+                </div>
+
+                <div class="tracking-overview">
+                    <div class="progress-stats">
+                        <div class="progress-stat">
+                            <div class="progress-number">0</div>
+                            <div class="progress-label">Requests This Month</div>
+                        </div>
+                        <div class="progress-stat">
+                            <div class="progress-number">0</div>
+                            <div class="progress-label">Average Resolution Time</div>
+                        </div>
+                        <div class="progress-stat">
+                            <div class="progress-number">0%</div>
+                            <div class="progress-label">Satisfaction Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-flow">
+                        <h3>Maintenance Process Flow</h3>
+                        <div class="flow-steps">
+                            <div class="flow-step active">
+                                <div class="step-icon">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Request Submitted</h4>
+                                    <p>Your maintenance request has been received</p>
+                                </div>
+                                <div class="step-status">Current</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Under Review</h4>
+                                    <p>Maintenance team is assessing your request</p>
+                                </div>
+                                <div class="step-status">Pending</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-user-cog"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Technician Assigned</h4>
+                                    <p>A technician has been assigned to your request</p>
+                                </div>
+                                <div class="step-status">Pending</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-hammer"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Repair In Progress</h4>
+                                    <p>Technician is working on the repair</p>
+                                </div>
+                                <div class="step-status">Pending</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Completed</h4>
+                                    <p>Maintenance has been successfully completed</p>
+                                </div>
+                                <div class="step-status">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history-content">
+                <div class="tab-header">
+                    <h2>Maintenance History</h2>
+                    <p>Complete history of all maintenance requests for this property</p>
+                </div>
+
+                <div class="history-filters">
+                    <div class="filter-group">
+                        <label for="historyCategory">Filter by Category:</label>
+                        <select id="historyCategory">
+                            <option value="all">All Categories</option>
+                            <option value="plumbing">Plumbing</option>
+                            <option value="electrical">Electrical</option>
+                            <option value="hvac">HVAC</option>
+                            <option value="appliance">Appliance</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="historyStatus">Filter by Status:</label>
+                        <select id="historyStatus">
+                            <option value="all">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="historyDate">Filter by Date:</label>
+                        <select id="historyDate">
+                            <option value="all">All Time</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="history-list" id="maintenanceHistory">
+                    <!-- Maintenance history will be loaded here -->
+                    <div class="empty-history">
+                        <i class="fas fa-history"></i>
+                        <h4>No Maintenance History</h4>
+                        <p>Your maintenance history will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Maintenance Chat Modal -->
+        <div class="modal" id="maintenanceChatModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-container maintenance-chat">
+                <div class="modal-header">
+                    <h3 id="chatModalTitle">Maintenance Updates</h3>
+                    <button class="close-modal" onclick="closeMaintenanceChat()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="chat-container" id="chatContainer">
+                        <!-- Chat messages will be loaded here -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatMessageInput" placeholder="Type your message...">
+                        <button class="btn-primary" onclick="sendChatMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Details Modal -->
+        <div class="modal" id="requestDetailsModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-container request-details">
+                <div class="modal-header">
+                    <h3 id="requestModalTitle">Request Details</h3>
+                    <button class="close-modal" onclick="closeRequestDetails()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="request-details-content" id="requestDetailsContent">
+                        <!-- Request details will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/tenant-maintenance.js"></script>
+</body>
+</html>

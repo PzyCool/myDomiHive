@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspection Management - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/inspection-update.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="inspection-management-section">
+        <!-- Section 1: Inspection Overview Dashboard -->
+        <section class="inspection-dashboard">
+            <div class="section-header">
+                <h1>Inspection Management</h1>
+                <p>Manage and track all your property inspections in one place</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalInspections">4</div>
+                        <div class="stat-label">Total Inspections</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="upcomingInspections">2</div>
+                        <div class="stat-label">Upcoming</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="completedInspections">1</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="cancelledInspections">1</div>
+                        <div class="stat-label">Cancelled</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Active Inspection Properties -->
+        <section class="active-inspections">
+            <div class="section-header">
+                <h2>Your Inspection Properties</h2>
+                <p>Manage your booked property inspections</p>
+            </div>
+
+            <div class="inspections-grid">
+                <!-- Property 1: Pending Inspection -->
+                <div class="inspection-card" data-inspection-id="ins_001">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1545323157-f6f63c0d66a7?w=400&h=300&fit=crop" alt="Luxury Apartment">
+                        <div class="inspection-badge pending">Pending</div>
+                    </div>
+                    
+                    <div class="property-details">
+                        <h3 class="property-title">Luxury 3-Bedroom Apartment</h3>
+                        <p class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Victoria Island, Lagos
+                        </p>
+                        
+                        <div class="property-features">
+                            <span class="feature">
+                                <i class="fas fa-bed"></i>
+                                3 beds
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-bath"></i>
+                                2 baths
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-ruler-combined"></i>
+                                1200 sq ft
+                            </span>
+                        </div>
+
+                        <div class="inspection-info">
+                            <div class="inspection-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                <strong>Scheduled:</strong> Dec 15, 2024 at 2:00 PM
+                            </div>
+                            <div class="inspection-agent">
+                                <i class="fas fa-user"></i>
+                                <strong>Agent:</strong> John Smith
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inspection-actions">
+                        <button class="action-btn reschedule-btn" onclick="rescheduleInspection('ins_001')">
+                            <i class="fas fa-calendar-plus"></i>
+                            Reschedule
+                        </button>
+                        <button class="action-btn cancel-btn" onclick="cancelInspection('ins_001')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button class="action-btn details-btn" onclick="viewPropertyDetails('prop_001')">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                        <button class="action-btn contact-btn" onclick="contactAgent('agent_001')">
+                            <i class="fas fa-phone"></i>
+                            Contact Agent
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Property 2: Confirmed Inspection -->
+                <div class="inspection-card" data-inspection-id="ins_002">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1564019471349-34e8a875c5c8?w=400&h=300&fit=crop" alt="Modern Apartment">
+                        <div class="inspection-badge confirmed">Confirmed</div>
+                    </div>
+                    
+                    <div class="property-details">
+                        <h3 class="property-title">Modern Lekki Apartment</h3>
+                        <p class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Lekki Phase 1, Lagos
+                        </p>
+                        
+                        <div class="property-features">
+                            <span class="feature">
+                                <i class="fas fa-bed"></i>
+                                2 beds
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-bath"></i>
+                                2 baths
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-ruler-combined"></i>
+                                950 sq ft
+                            </span>
+                        </div>
+
+                        <div class="inspection-info">
+                            <div class="inspection-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                <strong>Scheduled:</strong> Dec 18, 2024 at 10:00 AM
+                            </div>
+                            <div class="inspection-agent">
+                                <i class="fas fa-user"></i>
+                                <strong>Agent:</strong> Sarah Johnson
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inspection-actions">
+                        <button class="action-btn reschedule-btn" onclick="rescheduleInspection('ins_002')">
+                            <i class="fas fa-calendar-plus"></i>
+                            Reschedule
+                        </button>
+                        <button class="action-btn cancel-btn" onclick="cancelInspection('ins_002')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button class="action-btn details-btn" onclick="viewPropertyDetails('prop_002')">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                        <button class="action-btn contact-btn" onclick="contactAgent('agent_002')">
+                            <i class="fas fa-phone"></i>
+                            Contact Agent
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Property 3: Completed Inspection -->
+                <div class="inspection-card" data-inspection-id="ins_003">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop" alt="Duplex Apartment">
+                        <div class="inspection-badge completed">Completed</div>
+                    </div>
+                    
+                    <div class="property-details">
+                        <h3 class="property-title">Spacious Ikeja Duplex</h3>
+                        <p class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Ikeja GRA, Lagos
+                        </p>
+                        
+                        <div class="property-features">
+                            <span class="feature">
+                                <i class="fas fa-bed"></i>
+                                4 beds
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-bath"></i>
+                                3 baths
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-ruler-combined"></i>
+                                1800 sq ft
+                            </span>
+                        </div>
+
+                        <div class="inspection-info">
+                            <div class="inspection-date">
+                                <i class="fas fa-calendar-check"></i>
+                                <strong>Completed:</strong> Dec 10, 2024 at 3:00 PM
+                            </div>
+                            <div class="inspection-agent">
+                                <i class="fas fa-user"></i>
+                                <strong>Agent:</strong> Mike Adebayo
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inspection-actions">
+                        <button class="action-btn details-btn" onclick="viewPropertyDetails('prop_003')">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                        <button class="action-btn contact-btn" onclick="contactAgent('agent_003')">
+                            <i class="fas fa-phone"></i>
+                            Contact Agent
+                        </button>
+                        <button class="action-btn review-btn" onclick="leaveReview('prop_003')">
+                            <i class="fas fa-star"></i>
+                            Leave Review
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Property 4: Cancelled Inspection -->
+                <div class="inspection-card" data-inspection-id="ins_004">
+                    <div class="property-image">
+                        <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=400&h=300&fit=crop" alt="Studio Apartment">
+                        <div class="inspection-badge cancelled">Cancelled</div>
+                    </div>
+                    
+                    <div class="property-details">
+                        <h3 class="property-title">Cozy Yaba Studio</h3>
+                        <p class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Yaba, Lagos
+                        </p>
+                        
+                        <div class="property-features">
+                            <span class="feature">
+                                <i class="fas fa-bed"></i>
+                                1 bed
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-bath"></i>
+                                1 bath
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-ruler-combined"></i>
+                                600 sq ft
+                            </span>
+                        </div>
+
+                        <div class="inspection-info">
+                            <div class="inspection-date">
+                                <i class="fas fa-calendar-times"></i>
+                                <strong>Cancelled:</strong> Dec 5, 2024
+                            </div>
+                            <div class="inspection-agent">
+                                <i class="fas fa-user"></i>
+                                <strong>Agent:</strong> Grace Okon
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inspection-actions">
+                        <button class="action-btn details-btn" onclick="viewPropertyDetails('prop_004')">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                        <button class="action-btn rebook-btn" onclick="rebookInspection('prop_004')">
+                            <i class="fas fa-redo"></i>
+                            Rebook
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Inspection Timeline & Updates -->
+        <section class="inspection-timeline">
+            <div class="section-header">
+                <h2>Inspection Updates & Timeline</h2>
+                <p>Track the progress of your property inspections</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Dec 12, 2024 - 10:30 AM</div>
+                        <div class="timeline-title">Inspection Confirmed</div>
+                        <div class="timeline-description">Your inspection for Modern Lekki Apartment has been confirmed by the agent.</div>
+                        <div class="timeline-property">Property: Modern Lekki Apartment</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Dec 10, 2024 - 3:15 PM</div>
+                        <div class="timeline-title">Inspection Completed</div>
+                        <div class="timeline-description">Your inspection for Spacious Ikeja Duplex has been completed successfully.</div>
+                        <div class="timeline-property">Property: Spacious Ikeja Duplex</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Dec 5, 2024 - 11:00 AM</div>
+                        <div class="timeline-title">Inspection Cancelled</div>
+                        <div class="timeline-description">You cancelled the inspection for Cozy Yaba Studio.</div>
+                        <div class="timeline-property">Property: Cozy Yaba Studio</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Dec 1, 2024 - 2:00 PM</div>
+                        <div class="timeline-title">Inspection Booked</div>
+                        <div class="timeline-description">You successfully booked an inspection for Luxury 3-Bedroom Apartment.</div>
+                        <div class="timeline-property">Property: Luxury 3-Bedroom Apartment</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating Call Button -->
+    <div class="floating-call-btn" id="floatingCallBtn">
+        <div class="call-icon">
+            <i class="fas fa-phone"></i>
+        </div>
+        <span class="call-text">Contact</span>
+        <div class="call-details" id="callDetails">
+            <div class="call-info">
+                <i class="fas fa-phone"></i>
+                <div class="phone-number">+234 901 085 1071</div>
+                <div class="call-note">Click to call DomiHive</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="/JAVASCRIPT/inspection-update.js"></script>
+</body>
+</html>

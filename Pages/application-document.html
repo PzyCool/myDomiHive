@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Documents - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-document.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Document Upload Main Content -->
+    <main class="document-upload-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Application Details</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToApplication">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Application
+                </button>
+                <div class="application-context">
+                    Step 2: Document Upload • <span id="applicationContextType">Rental Application</span>
+                </div>
+            </div>
+
+            <!-- Application Summary -->
+            <section class="application-summary">
+                <div class="summary-header">
+                    <h1>Upload Required Documents</h1>
+                    <p id="applicationSubtitle">Step 2: Upload your identification and supporting documents</p>
+                </div>
+
+                <div class="application-card">
+                    <div class="application-info">
+                        <h3 id="applicationPropertyTitle">Luxury 3-Bedroom Apartment in Ikoyi</h3>
+                        <div class="applicant-details">
+                            <div class="detail-item">
+                                <strong>Applicant:</strong>
+                                <span id="applicantName">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Application ID:</strong>
+                                <span id="applicationId">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Occupation:</strong>
+                                <span id="applicantOccupation">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-status">
+                        <div class="status-badge completed">Step 1 Complete</div>
+                        <div class="status-badge active">Step 2 in Progress</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Document Upload Form -->
+            <section class="document-upload-section">
+                <div class="form-container">
+                    <form id="documentUploadForm" class="document-form">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" id="applicationId" name="applicationId">
+                        <input type="hidden" id="propertyId" name="propertyId">
+                        <input type="hidden" id="userId" name="userId">
+
+                        <!-- Section 1: Required Documents -->
+                        <div class="form-section">
+                            <h3>Required Documents</h3>
+                            <p class="section-description">Please upload clear copies of the following required documents</p>
+                            
+                            <!-- Government ID Upload -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="governmentId" class="required">Government Issued ID *</label>
+                                    <span class="upload-status" id="governmentIdStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Upload a clear copy of your Passport, Driver's License, or National ID (NIN)</p>
+                                <div class="upload-area" id="governmentIdArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-id-card"></i>
+                                        <p>Click to upload Government ID</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="governmentId" name="governmentId" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="governmentIdPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Clear, readable copy</li>
+                                        <li>All four corners visible</li>
+                                        <li>Current and valid</li>
+                                        <li>File size under 5MB</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Proof of Income Upload -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="proofOfIncome" class="required">Proof of Income *</label>
+                                    <span class="upload-status" id="proofOfIncomeStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Upload recent pay stub, employment letter, or bank statements</p>
+                                <div class="upload-area" id="proofOfIncomeArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        <p>Click to upload Proof of Income</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="proofOfIncome" name="proofOfIncome" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="proofOfIncomePreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Last 3 months of statements</li>
+                                        <li>Clearly shows your name</li>
+                                        <li>Shows income amounts</li>
+                                        <li>File size under 5MB</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Additional Documents (Optional) -->
+                        <div class="form-section">
+                            <h3>Additional Documents (Optional)</h3>
+                            <p class="section-description">You may upload additional documents to support your application</p>
+                            
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="additionalDocuments">Additional Supporting Documents</label>
+                                    <span class="upload-status" id="additionalDocumentsStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Reference letters, additional IDs, or any other supporting documents</p>
+                                <div class="upload-area" id="additionalDocumentsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-folder-plus"></i>
+                                        <p>Click to upload additional documents</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG, DOC, DOCX (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="additionalDocuments" name="additionalDocuments" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple>
+                                </div>
+                                <div class="file-preview" id="additionalDocumentsPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Terms and Agreements -->
+                        <div class="form-section">
+                            <h3>Terms and Agreements</h3>
+                            
+                            <div class="terms-agreement">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeDocumentTerms" name="agreeDocumentTerms" required>
+                                    <span class="checkmark"></span>
+                                    I certify that all uploaded documents are authentic, current, and belong to me
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreePrivacy" name="agreePrivacy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to DomiHive's <a href="#" class="terms-link">Privacy Policy</a> and understand how my documents will be used and stored
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeVerification" name="agreeVerification" required>
+                                    <span class="checkmark"></span>
+                                    I consent to document verification and background checks as part of the application process
+                                </label>
+                            </div>
+
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Your documents are secure</strong>
+                                    <p>All uploaded documents are encrypted and stored securely. They will only be used for your rental application and will be deleted after the process is complete.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToApplicationBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Application
+                            </button>
+                            <button type="submit" class="btn-primary" id="proceedToPaymentBtn">
+                                <i class="fas fa-lock"></i>
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Upload Progress Modal -->
+    <div class="upload-progress-modal" id="uploadProgressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Processing Your Documents</h2>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Uploading documents...</div>
+                </div>
+                <div class="upload-details">
+                    <div class="upload-item" id="uploadGovernmentId">
+                        <i class="fas fa-id-card"></i>
+                        <span>Government ID</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadProofOfIncome">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Proof of Income</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadAdditionalDocs">
+                        <i class="fas fa-folder-plus"></i>
+                        <span>Additional Documents</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-document.js"></script>
+</body>
+</html>

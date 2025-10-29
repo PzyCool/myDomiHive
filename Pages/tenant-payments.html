@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Management - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/tenant-payments.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Tenant Payments Content -->
+    <div class="tenant-payments-content">
+        <!-- Page Header -->
+        <div class="payments-page-header">
+            <button class="back-button" onclick="goBackToPayments()">
+                <i class="fas fa-arrow-left"></i>
+                Back to Payments
+            </button>
+            <div class="header-content">
+                <h1 id="paymentsPageTitle">
+                    <i class="fas fa-credit-card"></i>
+                    Payment Management
+                </h1>
+                <p id="paymentsPageSubtitle">Complete payment management for your property</p>
+            </div>
+        </div>
+
+        <!-- Property Overview -->
+        <div class="property-overview-card" id="propertyOverview">
+            <!-- Property details loaded dynamically -->
+        </div>
+
+        <!-- Payment Overview Stats -->
+        <div class="payment-overview-stats">
+            <div class="stat-card">
+                <div class="stat-icon balance">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="currentBalance">₦0</span>
+                    <span class="stat-label">Current Balance</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon due">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="nextPayment">₦0</span>
+                    <span class="stat-label">Next Payment Due</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon escrow">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon overdue">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="overdueAmount">₦0</span>
+                    <span class="stat-label">Overdue</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="payments-tabs">
+            <button class="tab-btn active" data-tab="payment-history">
+                <i class="fas fa-history"></i>
+                <span class="tab-text">Payment History</span>
+            </button>
+            <button class="tab-btn" data-tab="payment-flow">
+                <i class="fas fa-project-diagram"></i>
+                <span class="tab-text">Payment Flow</span>
+            </button>
+            <button class="tab-btn" data-tab="upcoming-payments">
+                <i class="fas fa-calendar-check"></i>
+                <span class="tab-text">Upcoming Payments</span>
+            </button>
+            <button class="tab-btn" data-tab="bills-payment">
+                <i class="fas fa-receipt"></i>
+                <span class="tab-text">Bills Payment</span>
+            </button>
+            <button class="tab-btn" data-tab="manage-payment">
+                <i class="fas fa-cog"></i>
+                <span class="tab-text">Manage Payment</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+            <!-- Payment History Tab -->
+            <div class="tab-content active" id="payment-history-content">
+                <div class="tab-header">
+                    <h2>Payment History</h2>
+                    <p>Complete history of all your payment transactions</p>
+                </div>
+
+                <div class="history-filters">
+                    <div class="filter-group">
+                        <label for="historyPeriod">Period:</label>
+                        <select id="historyPeriod">
+                            <option value="all">All Time</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="historyType">Type:</label>
+                        <select id="historyType">
+                            <option value="all">All Types</option>
+                            <option value="rent">Rent</option>
+                            <option value="utility">Utility</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="historyStatus">Status:</label>
+                        <select id="historyStatus">
+                            <option value="all">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <button class="btn-secondary" onclick="exportPaymentHistory()">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+
+                <div class="payment-history-list" id="paymentHistoryList">
+                    <!-- Payment history will be loaded here -->
+                    <div class="empty-history">
+                        <i class="fas fa-history"></i>
+                        <h4>No Payment History</h4>
+                        <p>Your payment transactions will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Flow Tab -->
+            <div class="tab-content" id="payment-flow-content">
+                <div class="tab-header">
+                    <h2>Payment Process Flow</h2>
+                    <p>Visual overview of your payment journey and status</p>
+                </div>
+
+                <!-- Visual Payment Flow Diagram -->
+                <div class="payment-flow-diagram">
+                    <div class="flow-container">
+                        <!-- Payment Initiation Step -->
+                        <div class="flow-step active" data-step="1">
+                            <div class="step-connector"></div>
+                            <div class="step-content">
+                                <div class="step-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                                <div class="step-info">
+                                    <h4>Payment Initiated</h4>
+                                    <p>Payment request created and pending processing</p>
+                                    <div class="step-meta">
+                                        <span class="step-date">Today, 10:30 AM</span>
+                                        <span class="step-status active">Current</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Processing Step -->
+                        <div class="flow-step" data-step="2">
+                            <div class="step-connector"></div>
+                            <div class="step-content">
+                                <div class="step-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="step-info">
+                                    <h4>Processing Payment</h4>
+                                    <p>Payment is being verified and processed</p>
+                                    <div class="step-meta">
+                                        <span class="step-date">Estimated: 2-5 minutes</span>
+                                        <span class="step-status pending">Next</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Release Step -->
+                        <div class="flow-step" data-step="4">
+                            <div class="step-connector"></div>
+                            <div class="step-content">
+                                <div class="step-icon">
+                                    <i class="fas fa-paper-plane"></i>
+                                </div>
+                                <div class="step-info">
+                                    <h4>Payment Released</h4>
+                                    <p>Funds transferred to property owner</p>
+                                    <div class="step-meta">
+                                        <span class="step-date">On due date</span>
+                                        <span class="step-status pending">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Completion Step -->
+                        <div class="flow-step" data-step="5">
+                            <div class="step-connector"></div>
+                            <div class="step-content">
+                                <div class="step-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="step-info">
+                                    <h4>Payment Completed</h4>
+                                    <p>Transaction successfully completed</p>
+                                    <div class="step-meta">
+                                        <span class="step-date">Confirmation sent</span>
+                                        <span class="step-status pending">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Chat Section -->
+                <div class="payment-chat-section">
+                    <h3>Payment Communication</h3>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="paymentChatMessages">
+                            <div class="chat-message system">
+                                <div class="message-content">
+                                    <strong>System:</strong> Your payment of ₦1,250,000 has been initiated and is being processed.
+                                </div>
+                                <div class="message-time">10:30 AM</div>
+                            </div>
+                            <div class="chat-message tenant">
+                                <div class="message-content">
+                                    When will the payment be completed?
+                                </div>
+                                <div class="message-time">10:32 AM</div>
+                            </div>
+                            <div class="chat-message support">
+                                <div class="message-content">
+                                    <strong>Payment Support:</strong> Your payment is currently being verified. It should be completed within 2-5 minutes. You'll receive a confirmation once it's processed.
+                                </div>
+                                <div class="message-time">10:35 AM</div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="paymentChatInput" placeholder="Type your message about this payment...">
+                            <button class="btn-primary" onclick="sendPaymentMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Payments Tab -->
+            <div class="tab-content" id="upcoming-payments-content">
+                <div class="tab-header">
+                    <h2>Upcoming Payments</h2>
+                    <p>Your scheduled payments and payment calendar</p>
+                </div>
+
+                <div class="upcoming-payments-grid">
+                    <div class="payment-schedule">
+                        <h3>Payment Schedule</h3>
+                        <div class="schedule-list" id="paymentSchedule">
+                            <!-- Payment schedule items will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="payment-calendar">
+                        <h3>Payment Calendar</h3>
+                        <div class="calendar-placeholder">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p>Payment calendar view</p>
+                            <small>Visual calendar showing due dates</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bills Payment Tab -->
+            <div class="tab-content" id="bills-payment-content">
+                <div class="tab-header">
+                    <h2>Bills & Utilities Payment</h2>
+                    <p>Manage all your property-related bills in one place</p>
+                </div>
+
+                <div class="bills-overview">
+                    <div class="bills-stats">
+                        <div class="bill-stat">
+                            <div class="stat-value">₦0</div>
+                            <div class="stat-label">Total Due</div>
+                        </div>
+                        <div class="bill-stat">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Pending Bills</div>
+                        </div>
+                        <div class="bill-stat">
+                            <div class="stat-value">₦0</div>
+                            <div class="stat-label">Paid This Month</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bills-categories">
+                    <div class="bill-category">
+                        <div class="category-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Electricity</h4>
+                            <p>IKEDC & Eko Electric</p>
+                        </div>
+                        <div class="category-amount">
+                            ₦0 Due
+                        </div>
+                        <button class="btn-secondary">Pay Now</button>
+                    </div>
+
+                    <div class="bill-category">
+                        <div class="category-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Water</h4>
+                            <p>Lagos Water Corporation</p>
+                        </div>
+                        <div class="category-amount">
+                            ₦0 Due
+                        </div>
+                        <button class="btn-secondary">Pay Now</button>
+                    </div>
+
+                    <div class="bill-category">
+                        <div class="category-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Internet</h4>
+                            <p>Service provider bills</p>
+                        </div>
+                        <div class="category-amount">
+                            ₦0 Due
+                        </div>
+                        <button class="btn-secondary">Pay Now</button>
+                    </div>
+
+                    <div class="bill-category">
+                        <div class="category-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Cable TV</h4>
+                            <p>DSTV, GoTV, etc.</p>
+                        </div>
+                        <div class="category-amount">
+                            ₦0 Due
+                        </div>
+                        <button class="btn-secondary">Pay Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Payment Tab -->
+            <div class="tab-content" id="manage-payment-content">
+                <div class="tab-header">
+                    <h2>Payment Settings & Management</h2>
+                    <p>Configure your payment preferences and methods</p>
+                </div>
+
+                <!-- Payment Methods Section -->
+                <section class="payment-methods-section">
+                    <div class="payment-container">
+                        <h2>Select Payment Method</h2>
+                        <p>Choose your preferred payment method to complete your payment</p>
+
+                        <form id="paymentForm" class="payment-form">
+                            <input type="hidden" id="paymentPropertyId" name="paymentPropertyId">
+                            <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="1250000">
+
+                            <!-- Payment Method Selection -->
+                            <div class="payment-methods">
+                                <div class="payment-method-card" data-method="card">
+                                    <div class="method-header">
+                                        <div class="method-icon">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h4>Credit/Debit Card</h4>
+                                            <p>Pay securely with your card</p>
+                                        </div>
+                                        <div class="method-check">
+                                            <div class="check-circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="bank">
+                                    <div class="method-header">
+                                        <div class="method-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h4>Bank Transfer</h4>
+                                            <p>Transfer directly from your bank</p>
+                                        </div>
+                                        <div class="method-check">
+                                            <div class="check-circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="flutterwave">
+                                    <div class="method-header">
+                                        <div class="method-icon">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h4>Flutterwave</h4>
+                                            <p>Pay with mobile money or card</p>
+                                        </div>
+                                        <div class="method-check">
+                                            <div class="check-circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="payment-method-card" data-method="paystack">
+                                    <div class="method-header">
+                                        <div class="method-icon">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h4>Paystack</h4>
+                                            <p>Quick and secure payments</p>
+                                        </div>
+                                        <div class="method-check">
+                                            <div class="check-circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Payment Form -->
+                            <div class="payment-details" id="cardDetails">
+                                <div class="form-section">
+                                    <h3>Card Information</h3>
+                                    <div class="form-grid">
+                                        <div class="form-group full-width">
+                                            <label for="cardNumber" class="required">Card Number</label>
+                                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                            <div class="card-icons">
+                                                <i class="fab fa-cc-visa"></i>
+                                                <i class="fab fa-cc-mastercard"></i>
+                                                <i class="fab fa-cc-amex"></i>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cardHolder" class="required">Card Holder Name</label>
+                                            <input type="text" id="cardHolder" name="cardHolder" placeholder="John Doe" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expiryDate" class="required">Expiry Date</label>
+                                            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvv" class="required">CVV</label>
+                                            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bank Transfer Details -->
+                            <div class="payment-details" id="bankDetails">
+                                <div class="form-section">
+                                    <h3>Bank Transfer Instructions</h3>
+                                    <div class="bank-instructions">
+                                        <div class="instruction-item">
+                                            <strong>Bank Name:</strong>
+                                            <span>DomiHive Trust Bank</span>
+                                        </div>
+                                        <div class="instruction-item">
+                                            <strong>Account Number:</strong>
+                                            <span id="bankAccountNumber">8325001746</span>
+                                            <button type="button" class="copy-btn" onclick="copyToClipboard('bankAccountNumber')">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                        <div class="instruction-item">
+                                            <strong>Account Name:</strong>
+                                            <span>DomiHive Escrow Services</span>
+                                        </div>
+                                        <div class="instruction-item">
+                                            <strong>Reference:</strong>
+                                            <span id="paymentReference">DOMI-RENT-001</span>
+                                            <button type="button" class="copy-btn" onclick="copyToClipboard('paymentReference')">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                        <div class="instruction-item">
+                                            <strong>Amount:</strong>
+                                            <span id="bankAmount">₦1,250,000</span>
+                                        </div>
+                                    </div>
+                                    <div class="upload-receipt">
+                                        <label for="bankReceipt" class="required">Upload Transfer Receipt</label>
+                                        <input type="file" id="bankReceipt" name="bankReceipt" accept=".pdf,.jpg,.jpeg,.png" required>
+                                        <span class="file-note">Upload proof of payment after transfer</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Gateway Instructions -->
+                            <div class="payment-details" id="gatewayDetails">
+                                <div class="form-section">
+                                    <h3>Gateway Payment</h3>
+                                    <div class="gateway-instructions">
+                                        <p>You will be redirected to a secure payment gateway to complete your transaction.</p>
+                                        <div class="gateway-features">
+                                            <div class="feature">
+                                                <i class="fas fa-shield-alt"></i>
+                                                <span>Secure encrypted payment</span>
+                                            </div>
+                                            <div class="feature">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                <span>Multiple payment options</span>
+                                            </div>
+                                            <div class="feature">
+                                                <i class="fas fa-clock"></i>
+                                                <span>Instant confirmation</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Breakdown -->
+                            <div class="payment-breakdown">
+                                <h3>Payment Breakdown</h3>
+                                <div class="breakdown-list">
+                                    <div class="breakdown-item">
+                                        <span>Annual Rent</span>
+                                        <span>₦1,250,000</span>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <span>Service Charge</span>
+                                        <span>₦0</span>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <span>Utility Bills</span>
+                                        <span>₦0</span>
+                                    </div>
+                                    <div class="breakdown-item total">
+                                        <span>Total Amount</span>
+                                        <span>₦1,250,000</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terms and Conditions -->
+                            <div class="form-section">
+                                <div class="terms-agreement">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="agreeEscrowTerms" name="agreeEscrowTerms" required>
+                                        <span class="checkmark"></span>
+                                        I understand and agree to the <a href="#" class="terms-link">Escrow Terms</a> and DomiHive's payment protection policy
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
+                                        <span class="checkmark"></span>
+                                        I understand that my payment will be held securely until the due date
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="agreePrivacyPolicy" name="agreePrivacyPolicy" required>
+                                        <span class="checkmark"></span>
+                                        I agree to the <a href="#" class="terms-link">Privacy Policy</a> and consent to the processing of my payment information
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="clearPaymentForm()">
+                                    <i class="fas fa-times"></i>
+                                    Clear Form
+                                </button>
+                                <button type="submit" class="btn-primary" id="submitPaymentBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Submit Payment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+
+        <!-- Receipt Modal -->
+        <div class="modal" id="receiptModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-container receipt-modal">
+                <div class="modal-header">
+                    <h3>Payment Receipt</h3>
+                    <button class="close-modal" onclick="closeReceiptModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="receipt-content" id="receiptContent">
+                        <!-- Receipt content will be loaded here -->
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-secondary" onclick="closeReceiptModal()">
+                            <i class="fas fa-times"></i>
+                            Close
+                        </button>
+                        <button class="btn-primary" onclick="downloadReceipt()">
+                            <i class="fas fa-download"></i>
+                            Download PDF
+                        </button>
+                        <button class="btn-success" onclick="printReceipt()">
+                            <i class="fas fa-print"></i>
+                            Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/tenant-payments.js"></script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Purchase Documents - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-document.css">
+    <link rel="stylesheet" href="/CSS/application-docunment-buy.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Document Upload Main Content -->
+    <main class="document-upload-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Purchase Details</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment & Legal Review</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToApplication">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Application
+                </button>
+                <div class="application-context">
+                    Step 2: Document Upload • <span id="applicationContextType">Property Purchase Application</span>
+                </div>
+            </div>
+
+            <!-- Application Summary -->
+            <section class="application-summary">
+                <div class="summary-header">
+                    <h1>Upload Required Purchase Documents</h1>
+                    <p id="applicationSubtitle">Step 2: Upload your identification, financial documents, and legal paperwork</p>
+                </div>
+
+                <div class="application-card">
+                    <div class="application-info">
+                        <h3 id="applicationPropertyTitle">4-Bedroom Detached House in Ajah</h3>
+                        <div class="applicant-details">
+                            <div class="detail-item">
+                                <strong>Applicant:</strong>
+                                <span id="applicantName">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Application ID:</strong>
+                                <span id="applicationId">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Purchase Type:</strong>
+                                <span id="purchaseType">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-status">
+                        <div class="status-badge completed">Step 1 Complete</div>
+                        <div class="status-badge active">Step 2 in Progress</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Document Upload Form -->
+            <section class="document-upload-section">
+                <div class="form-container">
+                    <form id="purchaseDocumentUploadForm" class="document-form">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" id="applicationId" name="applicationId">
+                        <input type="hidden" id="propertyId" name="propertyId">
+                        <input type="hidden" id="userId" name="userId">
+
+                        <!-- Section 1: Required Identification Documents -->
+                        <div class="form-section">
+                            <h3>Required Identification Documents</h3>
+                            <p class="section-description">Upload clear copies of your government-issued identification</p>
+                            
+                            <!-- Government ID Upload -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="governmentId" class="required">Government Issued ID *</label>
+                                    <span class="upload-status" id="governmentIdStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Upload a clear copy of your Passport, National ID (NIN), or Driver's License</p>
+                                <div class="upload-area" id="governmentIdArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-id-card"></i>
+                                        <p>Click to upload Government ID</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="governmentId" name="governmentId" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="governmentIdPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Clear, readable copy</li>
+                                        <li>All four corners visible</li>
+                                        <li>Current and valid</li>
+                                        <li>File size under 5MB</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Passport Photograph -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="passportPhoto" class="required">Passport Photograph *</label>
+                                    <span class="upload-status" id="passportPhotoStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Recent passport-sized photograph (white background)</p>
+                                <div class="upload-area" id="passportPhotoArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-user-circle"></i>
+                                        <p>Click to upload Passport Photo</p>
+                                        <span class="file-types">Accepted: JPG, PNG (Max: 2MB)</span>
+                                    </div>
+                                    <input type="file" id="passportPhoto" name="passportPhoto" accept=".jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="passportPhotoPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Financial Capacity Documents -->
+                        <div class="form-section">
+                            <h3>Financial Capacity Documents</h3>
+                            <p class="section-description">Upload documents proving your financial capacity for this purchase</p>
+                            
+                            <!-- Proof of Funds Upload -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="proofOfFunds" class="required">Proof of Funds *</label>
+                                    <span class="upload-status" id="proofOfFundsStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Bank statements (last 6 months) or proof of financing</p>
+                                <div class="upload-area" id="proofOfFundsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        <p>Click to upload Proof of Funds</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 10MB)</span>
+                                    </div>
+                                    <input type="file" id="proofOfFunds" name="proofOfFunds" accept=".pdf,.jpg,.jpeg,.png" required multiple>
+                                </div>
+                                <div class="file-preview" id="proofOfFundsPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Last 6 months of bank statements</li>
+                                        <li>Clearly shows your name and account details</li>
+                                        <li>Shows sufficient funds for purchase</li>
+                                        <li>Multiple files accepted (up to 10MB total)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Tax Clearance Certificate -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="taxClearance" class="required">Tax Clearance Certificate *</label>
+                                    <span class="upload-status" id="taxClearanceStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Current year tax clearance certificate from FIRS</p>
+                                <div class="upload-area" id="taxClearanceArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-receipt"></i>
+                                        <p>Click to upload Tax Clearance</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="taxClearance" name="taxClearance" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="taxClearancePreview"></div>
+                            </div>
+
+                            <!-- Proof of Income -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="proofOfIncome" class="required">Proof of Income *</label>
+                                    <span class="upload-status" id="proofOfIncomeStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Pay slips, employment letter, or business income proof</p>
+                                <div class="upload-area" id="proofOfIncomeArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-money-check"></i>
+                                        <p>Click to upload Proof of Income</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="proofOfIncome" name="proofOfIncome" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="proofOfIncomePreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Legal & Additional Documents -->
+                        <div class="form-section">
+                            <h3>Legal & Additional Documents</h3>
+                            <p class="section-description">Additional documents required for property purchase verification</p>
+                            
+                            <!-- Utility Bill -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="utilityBill" class="required">Recent Utility Bill *</label>
+                                    <span class="upload-status" id="utilityBillStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Recent electricity, water, or waste bill for address verification</p>
+                                <div class="upload-area" id="utilityBillArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-file-invoice"></i>
+                                        <p>Click to upload Utility Bill</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="utilityBill" name="utilityBill" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="utilityBillPreview"></div>
+                            </div>
+
+                            <!-- Reference Letters -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="referenceLetters">Reference Letters (Optional)</label>
+                                    <span class="upload-status" id="referenceLettersStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Professional or personal reference letters</p>
+                                <div class="upload-area" id="referenceLettersArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                        <p>Click to upload Reference Letters</p>
+                                        <span class="file-types">Accepted: PDF, DOC, DOCX (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="referenceLetters" name="referenceLetters" accept=".pdf,.doc,.docx" multiple>
+                                </div>
+                                <div class="file-preview" id="referenceLettersPreview"></div>
+                            </div>
+
+                            <!-- Additional Legal Documents -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="additionalLegalDocs">Additional Legal Documents (Optional)</label>
+                                    <span class="upload-status" id="additionalLegalDocsStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Any other legal documents you'd like to include</p>
+                                <div class="upload-area" id="additionalLegalDocsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-gavel"></i>
+                                        <p>Click to upload Legal Documents</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG, DOC, DOCX (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="additionalLegalDocs" name="additionalLegalDocs" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple>
+                                </div>
+                                <div class="file-preview" id="additionalLegalDocsPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Terms and Agreements -->
+                        <div class="form-section">
+                            <h3>Terms and Agreements</h3>
+                            
+                            <div class="terms-agreement">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeDocumentTerms" name="agreeDocumentTerms" required>
+                                    <span class="checkmark"></span>
+                                    I certify that all uploaded documents are authentic, current, and belong to me
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreePrivacy" name="agreePrivacy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to DomiHive's <a href="#" class="terms-link">Privacy Policy</a> and understand how my documents will be used for property purchase verification
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeLegalVerification" name="agreeLegalVerification" required>
+                                    <span class="checkmark"></span>
+                                    I consent to comprehensive document verification, background checks, and legal review as part of the property purchase process
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeFIRSVerification" name="agreeFIRSVerification" required>
+                                    <span class="checkmark"></span>
+                                    I authorize DomiHive to verify my tax clearance certificate with the Federal Inland Revenue Service (FIRS)
+                                </label>
+                            </div>
+
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Your documents are secure and confidential</strong>
+                                    <p>All uploaded documents are encrypted and stored securely. They will only be used for your property purchase application and legal verification process. Documents will be permanently deleted after the purchase process is complete or if the application is withdrawn.</p>
+                                </div>
+                            </div>
+
+                            <div classlegal-notice>
+                                <i class="fas fa-balance-scale"></i>
+                                <div>
+                                    <strong>Legal Compliance Notice</strong>
+                                    <p>By submitting these documents, you confirm compliance with all relevant Nigerian property laws and regulations. Providing false information may result in legal consequences and application rejection.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToApplicationBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Application
+                            </button>
+                            <button type="submit" class="btn-primary" id="proceedToPaymentBtn">
+                                <i class="fas fa-gavel"></i>
+                                Proceed to Payment & Legal Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Upload Progress Modal -->
+    <div class="upload-progress-modal" id="uploadProgressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Processing Your Purchase Documents</h2>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Validating documents...</div>
+                </div>
+                <div class="upload-details">
+                    <div class="upload-item" id="uploadGovernmentId">
+                        <i class="fas fa-id-card"></i>
+                        <span>Government ID</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadPassportPhoto">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Passport Photo</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadProofOfFunds">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Proof of Funds</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadTaxClearance">
+                        <i class="fas fa-receipt"></i>
+                        <span>Tax Clearance</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadProofOfIncome">
+                        <i class="fas fa-money-check"></i>
+                        <span>Proof of Income</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadUtilityBill">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Utility Bill</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-document-buy.js"></script>
+</body>
+</html>

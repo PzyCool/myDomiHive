@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Overview - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/overview-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+        <!-- Continue Your Journey Section -->
+<section class="continue-journey-section" id="continueJourneySection">
+    <div class="journey-header">
+        <h2><i class="fas fa-play-circle"></i> Continue Your Journey</h2>
+        <p>Pick up where you left off</p>
+    </div>
+    <div class="journey-content" id="journeyContent">
+        <!-- Content populated by JavaScript when there's pending action -->
+    </div>
+</section>
+        
+        <!-- Live Activity Feed -->
+<section class="live-activity-section">
+    <div class="activity-header">
+        <h2>Recent Activity</h2>
+        <div class="activity-controls">
+            <div class="activity-filters">
+                <button class="filter-btn active" data-filter="all">All Activity</button>
+                <button class="filter-btn" data-filter="property">Properties</button>
+                <button class="filter-btn" data-filter="application">Applications</button>
+                <button class="filter-btn" data-filter="payment">Payments</button>
+            </div>
+            <button class="refresh-activities-btn" onclick="refreshActivities()">
+                <i class="fas fa-sync-alt"></i>
+                Refresh
+            </button>
+        </div>
+    </div>
+    
+    <!-- All Activity Tab Content -->
+    <div class="activity-tab-content active" data-tab="all">
+        <div class="activities-timeline" id="activitiesTimeline">
+            <!-- Activities loaded dynamically -->
+        </div>
+    </div>
+    
+    <!-- Properties Tab Content -->
+    <div class="activity-tab-content" data-tab="property">
+        <div class="properties-activity" id="propertiesActivity">
+            <!-- Property interests loaded dynamically -->
+        </div>
+    </div>
+    
+    <!-- Applications Tab Content -->
+    <div class="activity-tab-content" data-tab="application">
+        <div class="applications-activity" id="applicationsActivity">
+            <!-- Applications loaded dynamically -->
+        </div>
+    </div>
+    
+    <!-- Payments Tab Content -->
+    <div class="activity-tab-content" data-tab="payment">
+        <div class="payments-activity" id="paymentsActivity">
+            <!-- Payments loaded dynamically -->
+        </div>
+    </div>
+    
+    <div class="activities-loader" id="activitiesLoader">
+        <div class="loader-spinner"></div>
+        <span>Loading live activities...</span>
+    </div>
+</section>
+        <!-- Interactive Sidebar Status Panel -->
+        <section class="sidebar-status-panel">
+            <h2 class="panel-title">Your Rental Journey Status</h2>
+            <div class="status-grid">
+                <!-- MAIN Section -->
+                <div class="status-category">
+                    <h3 class="category-title">MAIN</h3>
+                    <div class="status-item" onclick="spa.navigateToSection('browse')">
+                        <div class="status-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="status-content">
+                            <span class="status-label">Browse Properties</span>
+                            <span class="status-value" id="browseStatus">80+ verified properties</span>
+                        </div>
+                        <div class="status-badge new">LIVE</div>
+                    </div>
+                </div>
+
+                <!-- APPLICATIONS Section -->
+                <div class="status-category">
+                    <h3 class="category-title">APPLICATIONS</h3>
+                    <div class="status-item" onclick="spa.navigateToSection('applications')">
+                        <div class="status-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="status-content">
+                            <span class="status-label">My Applications</span>
+                            <span class="status-value" id="applicationsStatus">0 active applications</span>
+                        </div>
+                        <div class="status-badge" id="applicationsBadge">0</div>
+                    </div>
+                    <div class="status-item" onclick="spa.navigateToSection('inspections')">
+                        <div class="status-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="status-content">
+                            <span class="status-label">Booked Inspections</span>
+                            <span class="status-value" id="inspectionsStatus">0 upcoming inspections</span>
+                        </div>
+                        <div class="status-badge" id="inspectionsBadge">0</div>
+                    </div>
+                </div>
+
+ 
+
+                <!-- ACCOUNT Section -->
+                <div class="status-category">
+                    <h3 class="category-title">ACCOUNT</h3>
+                    <div class="status-item" onclick="spa.navigateToSection('favorites')">
+                        <div class="status-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="status-content">
+                            <span class="status-label">Favorites</span>
+                            <span class="status-value" id="favoritesStatus">0 saved properties</span>
+                        </div>
+                        <div class="status-badge" id="favoritesBadge">0</div>
+                    </div>
+                    <div class="status-item" onclick="spa.navigateToSection('messages')">
+                        <div class="status-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="status-content">
+                            <span class="status-label">Messages</span>
+                            <span class="status-value" id="messagesStatus">0 unread messages</span>
+                        </div>
+                        <div class="status-badge" id="messagesBadge">0</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                       <!-- Add this button in your overview-content.html -->
+<!--<section class="quick-actions-section">
+    <div class="quick-actions-grid">
+        <button class="quick-action-btn" onclick="viewBookedInspections()">
+            <div class="action-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <span class="action-text">View Booked Inspections</span>
+            <span class="action-badge" id="inspectionsCount">0</span>
+        </button>
+        <!-- Add other quick action buttons as needed -->
+    </div>
+</section>
+
+        <!-- Smart Recommendations -->
+        <section class="recommendations-section">
+            <h2>Refrerral</h2>
+            <div class="recommendations-grid">
+                <!-- Referral Program -->
+                <div class="recommendation-card" id="referralCard">
+                    <div class="recommendation-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Refer & Earn</h3>
+                    <p>Refer friends and earn ₦2,000 for each successful rental. Share your unique link below.</p>
+                    
+                    <div class="referral-section">
+                        <div class="referral-stats">
+                            <div class="stat">
+                                <span class="stat-value" id="referralEarnings">₦0</span>
+                                <span class="stat-label">Total Earnings</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="referralCount">0</span>
+                                <span class="stat-label">Successful Referrals</span>
+                            </div>
+                        </div>
+                        
+                        <div class="referral-link">
+                            <input type="text" id="referralLinkInput" readonly value="Generating your link...">
+                            <button class="copy-link-btn" onclick="copyReferralLink()">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="share-buttons">
+                            <button class="share-btn whatsapp" onclick="shareReferral('whatsapp')">
+                                <i class="fab fa-whatsapp"></i>
+                                WhatsApp
+                            </button>
+                            <button class="share-btn telegram" onclick="shareReferral('telegram')">
+                                <i class="fab fa-telegram"></i>
+                                Telegram
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/overview-content.js"></script>
+    
+</body>
+</html>

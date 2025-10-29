@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Properties - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/my-properties-content.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- My Properties Content -->
+    <div class="my-properties-content">
+        <!-- Page Header -->
+        <div class="properties-header">
+            <div class="header-content">
+                <h1>
+                    <i class="fas fa-home"></i>
+                    My Properties
+                </h1>
+                <p>Manage your rented properties and access important documents</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-icon active">
+                        <i class="fas fa-house-user"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="activeProperties">0</span>
+                        <span class="stat-label">Active</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon documents">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="signedDocuments">0</span>
+                        <span class="stat-label">Signed Docs</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon payments">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="upcomingPayments">0</span>
+                        <span class="stat-label">Due Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Grid Section -->
+        <section class="properties-section">
+            <div class="section-header">
+                <h2>Your Rented Properties</h2>
+                <p>Click on any property to view dashboard and manage your lease</p>
+            </div>
+
+            <div class="properties-grid" id="propertiesGrid">
+                <!-- Properties will be dynamically loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>No Properties Yet</h3>
+                <p>Your rented properties will appear here once you become a tenant</p>
+                <button class="btn-primary" onclick="window.location.href='/Pages/rent.html'">
+                    <i class="fas fa-search"></i>
+                    Browse Properties
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/my-properties-content.js"></script>
+</body>
+</html>
