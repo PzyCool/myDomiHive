@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Commercial Property Application - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-process-commercial.css">
+    <link rel="stylesheet" href="/CSS/application-process.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Application Main Content -->
+    <main class="application-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Business Details</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToPrevious">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Property
+                </button>
+                <div class="application-context">
+                    Step 1: Business Details • <span id="applicationContextType">Commercial Property Application</span>
+                </div>
+            </div>
+
+            <!-- Property Summary -->
+            <section class="property-summary">
+                <div class="summary-header">
+                    <h1>Complete Your Commercial Property Application</h1>
+                    <p id="applicationSubtitle">Step 1: Provide your business information and commercial requirements</p>
+                </div>
+
+                <div class="property-card">
+                    <div class="property-image">
+                        <img src="/ASSECT/commercial-building.jpg" alt="Commercial Property Image" id="applicationPropertyImage">
+                    </div>
+                    <div class="property-info">
+                        <h3 id="applicationPropertyTitle">Prime Retail Space in Victoria Island</h3>
+                        <div class="property-price" id="applicationPropertyPrice">₦12,500,000/year</div>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="applicationPropertyLocation">Victoria Island, Lagos</span>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature">
+                                <i class="fas fa-building"></i>
+                                <span id="applicationSize">350 sqm</span>
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-door-open"></i>
+                                <span id="applicationUnits">1 unit</span>
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-car"></i>
+                                <span id="applicationParking">5 parking</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Commercial Application Form -->
+            <section class="application-form-section">
+                <div class="form-container">
+                    <form id="commercialApplicationForm" class="application-form">
+                        <!-- Hidden Fields for Tracking -->
+                        <input type="hidden" id="dashboardSource" name="dashboardSource" value="dashboard-commercial">
+                        <input type="hidden" id="propertyId" name="propertyId">
+                        <input type="hidden" id="userId" name="userId">
+                        <input type="hidden" id="bookingId" name="bookingId">
+
+                        <!-- Section 1: Business Information -->
+                        <div class="form-section">
+                            <h3>Business Information</h3>
+                            <p class="section-description">Provide details about your business entity</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="businessName" class="required">Business Name</label>
+                                    <input type="text" id="businessName" name="businessName" placeholder="Enter your business name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessType" class="required">Business Type</label>
+                                    <select id="businessType" name="businessType" required>
+                                        <option value="">Select business type</option>
+                                        <option value="retail">Retail Store</option>
+                                        <option value="restaurant">Restaurant/Cafe</option>
+                                        <option value="office">Office Space</option>
+                                        <option value="warehouse">Warehouse/Storage</option>
+                                        <option value="manufacturing">Manufacturing</option>
+                                        <option value="showroom">Showroom</option>
+                                        <option value="medical">Medical Facility</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessRegistration" class="required">Business Registration Number</label>
+                                    <input type="text" id="businessRegistration" name="businessRegistration" placeholder="CAC/BN number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessIndustry" class="required">Industry</label>
+                                    <select id="businessIndustry" name="businessIndustry" required>
+                                        <option value="">Select industry</option>
+                                        <option value="retail">Retail Trade</option>
+                                        <option value="hospitality">Hospitality</option>
+                                        <option value="professional-services">Professional Services</option>
+                                        <option value="technology">Technology</option>
+                                        <option value="healthcare">Healthcare</option>
+                                        <option value="manufacturing">Manufacturing</option>
+                                        <option value="logistics">Logistics</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="yearsInBusiness" class="required">Years in Business</label>
+                                    <select id="yearsInBusiness" name="yearsInBusiness" required>
+                                        <option value="">Select years</option>
+                                        <option value="0-1">Less than 1 year</option>
+                                        <option value="1-3">1-3 years</option>
+                                        <option value="3-5">3-5 years</option>
+                                        <option value="5-10">5-10 years</option>
+                                        <option value="10+">10+ years</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="numberOfEmployees" class="required">Number of Employees</label>
+                                    <select id="numberOfEmployees" name="numberOfEmployees" required>
+                                        <option value="">Select number</option>
+                                        <option value="1-5">1-5 employees</option>
+                                        <option value="6-10">6-10 employees</option>
+                                        <option value="11-20">11-20 employees</option>
+                                        <option value="21-50">21-50 employees</option>
+                                        <option value="51+">51+ employees</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="annualRevenue" class="required">Annual Business Revenue</label>
+                                    <select id="annualRevenue" name="annualRevenue" required>
+                                        <option value="">Select revenue range</option>
+                                        <option value="0-5000000">₦0 - ₦5M</option>
+                                        <option value="5000000-20000000">₦5M - ₦20M</option>
+                                        <option value="20000000-50000000">₦20M - ₦50M</option>
+                                        <option value="50000000-100000000">₦50M - ₦100M</option>
+                                        <option value="100000000+">₦100M+</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Contact Person Details -->
+                        <div class="form-section">
+                            <h3>Authorized Contact Person</h3>
+                            <p class="section-description">Primary contact person for this application</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="required">Full Name</label>
+                                    <div class="prefilled-data" id="prefilledFullName">Loading...</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Email Address</label>
+                                    <div class="prefilled-data" id="prefilledEmail">Loading...</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Phone Number</label>
+                                    <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="contactPosition" class="required">Position in Company</label>
+                                    <input type="text" id="contactPosition" name="contactPosition" placeholder="e.g., Managing Director, CEO" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactAuthority" class="required">Authorization Level</label>
+                                    <select id="contactAuthority" name="contactAuthority" required>
+                                        <option value="">Select authorization</option>
+                                        <option value="owner">Owner/Proprietor</option>
+                                        <option value="director">Director</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="authorized-signatory">Authorized Signatory</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Commercial Requirements -->
+                        <div class="form-section">
+                            <h3>Commercial Space Requirements</h3>
+                            <p class="section-description">Tell us about your commercial space needs</p>
+                            
+                            <div class="form-group full-width">
+                                <label class="required">Intended Use of Space</label>
+                                <div class="usage-options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="spaceUsage" value="primary-business" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-label">
+                                            <i class="fas fa-store"></i>
+                                            <strong>Primary Business Location</strong>
+                                            <span>Main business operations and customer-facing</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="spaceUsage" value="branch-office" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-label">
+                                            <i class="fas fa-code-branch"></i>
+                                            <strong>Branch Office/Outlet</strong>
+                                            <span>Additional location for existing business</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="spaceUsage" value="storage" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-label">
+                                            <i class="fas fa-warehouse"></i>
+                                            <strong>Storage/Warehouse</strong>
+                                            <span>Inventory storage and logistics operations</span>
+                                        </span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="spaceUsage" value="showroom" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-label">
+                                            <i class="fas fa-eye"></i>
+                                            <strong>Showroom/Display</strong>
+                                            <span>Product display and customer demonstration</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="operatingHours" class="required">Expected Operating Hours</label>
+                                    <select id="operatingHours" name="operatingHours" required>
+                                        <option value="">Select hours</option>
+                                        <option value="standard">Standard Business Hours (9AM-6PM)</option>
+                                        <option value="extended">Extended Hours (7AM-10PM)</option>
+                                        <option value="24-7">24/7 Operations</option>
+                                        <option value="flexible">Flexible/Variable Hours</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerTraffic" class="required">Expected Customer Traffic</label>
+                                    <select id="customerTraffic" name="customerTraffic" required>
+                                        <option value="">Select traffic level</option>
+                                        <option value="low">Low (0-50 customers/day)</option>
+                                        <option value="medium">Medium (50-200 customers/day)</option>
+                                        <option value="high">High (200-500 customers/day)</option>
+                                        <option value="very-high">Very High (500+ customers/day)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaseTerm" class="required">Preferred Lease Term</label>
+                                    <select id="leaseTerm" name="leaseTerm" required>
+                                        <option value="">Select term</option>
+                                        <option value="1">1 Year</option>
+                                        <option value="2">2 Years</option>
+                                        <option value="3">3 Years</option>
+                                        <option value="5">5 Years</option>
+                                        <option value="5+">5+ Years</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="businessDescription" class="required">Business Description & Operations</label>
+                                <textarea id="businessDescription" name="businessDescription" rows="4" placeholder="Describe your business operations, products/services, and how you intend to use the space..." required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Financial Information -->
+                        <div class="form-section">
+                            <h3>Business Financial Information</h3>
+                            <p class="section-description">Provide financial details for business verification</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="bankName" class="required">Primary Bank</label>
+                                    <input type="text" id="bankName" name="bankName" placeholder="Bank name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="accountName" class="required">Business Account Name</label>
+                                    <input type="text" id="accountName" name="accountName" placeholder="Account name as registered" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="accountNumber" class="required">Business Account Number</label>
+                                    <input type="text" id="accountNumber" name="accountNumber" placeholder="10-digit account number" required maxlength="10">
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="taxIdentification" class="required">Tax Identification Number (TIN)</label>
+                                    <input type="text" id="taxIdentification" name="taxIdentification" placeholder="TIN number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vatRegistered" class="required">VAT Registered?</label>
+                                    <select id="vatRegistered" name="vatRegistered" required>
+                                        <option value="">Select option</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                        <option value="pending">Application in Process</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: References & Additional Information -->
+                        <div class="form-section">
+                            <h3>Business References & Additional Information</h3>
+                            
+                            <div class="form-group full-width">
+                                <label for="previousLandlord" class="required">Previous Commercial Landlord (if any)</label>
+                                <input type="text" id="previousLandlord" name="previousLandlord" placeholder="Landlord/Management company name">
+                                <span class="input-note">Leave blank if this is your first commercial space</span>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="referenceContact">Reference Contact Details</label>
+                                <input type="text" id="referenceContact" name="referenceContact" placeholder="Name and phone number of reference">
+                                <span class="input-note">Business reference or previous landlord contact</span>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="additionalNotes">Additional Business Information (Optional)</label>
+                                <textarea id="additionalNotes" name="additionalNotes" rows="4" placeholder="Any additional information about your business, special requirements, or questions..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeCommercialTerms" name="agreeCommercialTerms" required>
+                                    <span class="checkmark"></span>
+                                    I certify that all business information provided is accurate and I agree to DomiHive's <a href="#" class="terms-link">Commercial Application Terms</a>
+                                </label>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeCreditCheck" name="agreeCreditCheck" required>
+                                    <span class="checkmark"></span>
+                                    I authorize DomiHive to conduct business credit checks and verify all provided information with relevant authorities
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToPreviousBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Property
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-arrow-right"></i>
+                                Proceed to Document Upload
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-process-commercial.js"></script>
+</body>
+</html>

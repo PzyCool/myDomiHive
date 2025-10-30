@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Shortlet Documents - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-document.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Document Upload Main Content -->
+    <main class="document-upload-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Booking Details</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToApplication">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Booking
+                </button>
+                <div class="application-context">
+                    Step 2: Document Upload • <span id="applicationContextType">Shortlet Application</span>
+                </div>
+            </div>
+
+            <!-- Application Summary -->
+            <section class="application-summary">
+                <div class="summary-header">
+                    <h1>Upload Required Shortlet Documents</h1>
+                    <p id="applicationSubtitle">Step 2: Upload your identification and booking verification documents</p>
+                </div>
+
+                <div class="application-card">
+                    <div class="application-info">
+                        <h3 id="applicationPropertyTitle">Luxury Serviced Apartment in Lekki</h3>
+                        <div class="applicant-details">
+                            <div class="detail-item">
+                                <strong>Guest:</strong>
+                                <span id="guestName">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Application ID:</strong>
+                                <span id="applicationId">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Stay Duration:</strong>
+                                <span id="stayDuration">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Total Guests:</strong>
+                                <span id="totalGuests">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-status">
+                        <div class="status-badge completed">Step 1 Complete</div>
+                        <div class="status-badge active">Step 2 in Progress</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Document Upload Form -->
+            <section class="document-upload-section">
+                <div class="form-container">
+                    <form id="shortletDocumentUploadForm" class="document-form">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" id="applicationId" name="applicationId">
+                        <input type="hidden" id="propertyId" name="propertyId">
+                        <input type="hidden" id="userId" name="userId">
+
+                        <!-- Section 1: Required Identification Documents -->
+                        <div class="form-section">
+                            <h3>Guest Identification Documents</h3>
+                            <p class="section-description">Upload clear copies of identification for all guests</p>
+                            
+                            <!-- Primary Guest ID -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="primaryGuestId" class="required">Primary Guest ID *</label>
+                                    <span class="upload-status" id="primaryGuestIdStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Upload a clear copy of your Passport, National ID (NIN), or Driver's License</p>
+                                <div class="upload-area" id="primaryGuestIdArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-id-card"></i>
+                                        <p>Click to upload Primary Guest ID</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="primaryGuestId" name="primaryGuestId" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="primaryGuestIdPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Clear, readable copy</li>
+                                        <li>All four corners visible</li>
+                                        <li>Current and valid</li>
+                                        <li>File size under 5MB</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Additional Guest IDs -->
+                            <div class="upload-group optional" id="additionalGuestsIdsSection">
+                                <div class="upload-header">
+                                    <label for="additionalGuestsIds">Additional Guest IDs (If any)</label>
+                                    <span class="upload-status" id="additionalGuestsIdsStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Upload identification for additional guests staying with you</p>
+                                <div class="upload-area" id="additionalGuestsIdsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-users"></i>
+                                        <p>Click to upload Additional Guest IDs</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="additionalGuestsIds" name="additionalGuestsIds" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                </div>
+                                <div class="file-preview" id="additionalGuestsIdsPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Note:</h4>
+                                    <ul>
+                                        <li>Required for all guests 18 years and older</li>
+                                        <li>One file per guest</li>
+                                        <li>Name files with guest names for easy identification</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Selfie with ID -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="selfieWithId" class="required">Selfie with ID *</label>
+                                    <span class="upload-status" id="selfieWithIdStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">A clear selfie photo holding your ID next to your face</p>
+                                <div class="upload-area" id="selfieWithIdArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-camera"></i>
+                                        <p>Click to upload Selfie with ID</p>
+                                        <span class="file-types">Accepted: JPG, PNG (Max: 3MB)</span>
+                                    </div>
+                                    <input type="file" id="selfieWithId" name="selfieWithId" accept=".jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="selfieWithIdPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Clear photo of you holding your ID</li>
+                                        <li>Your face and ID must be clearly visible</li>
+                                        <li>Good lighting and no filters</li>
+                                        <li>ID details must be readable</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Booking Verification -->
+                        <div class="form-section">
+                            <h3>Booking Verification</h3>
+                            <p class="section-description">Documents to verify your booking and stay purpose</p>
+                            
+                            <!-- Proof of Travel -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="proofOfTravel">Proof of Travel (Optional)</label>
+                                    <span class="upload-status" id="proofOfTravelStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Flight tickets, travel itinerary, or other travel documents</p>
+                                <div class="upload-area" id="proofOfTravelArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-plane"></i>
+                                        <p>Click to upload Proof of Travel</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="proofOfTravel" name="proofOfTravel" accept=".pdf,.jpg,.jpeg,.png">
+                                </div>
+                                <div class="file-preview" id="proofOfTravelPreview"></div>
+                            </div>
+
+                            <!-- Business Travel Documents -->
+                            <div class="upload-group optional" id="businessDocumentsSection">
+                                <div class="upload-header">
+                                    <label for="businessDocuments">Business Travel Documents (Optional)</label>
+                                    <span class="upload-status" id="businessDocumentsStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Business card, company letter, or conference registration</p>
+                                <div class="upload-area" id="businessDocumentsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-briefcase"></i>
+                                        <p>Click to upload Business Documents</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="businessDocuments" name="businessDocuments" accept=".pdf,.jpg,.jpeg,.png">
+                                </div>
+                                <div class="file-preview" id="businessDocumentsPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Additional Documents (Optional) -->
+                        <div class="form-section">
+                            <h3>Additional Documents (Optional)</h3>
+                            <p class="section-description">You may upload additional documents to support your application</p>
+                            
+                            <!-- Previous Stay References -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="stayReferences">Previous Stay References</label>
+                                    <span class="upload-status" id="stayReferencesStatus">No files</span>
+                                </div>
+                                <p class="upload-description">References from previous short-term stays or hotels</p>
+                                <div class="upload-area" id="stayReferencesArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-star"></i>
+                                        <p>Click to upload Stay References</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="stayReferences" name="stayReferences" accept=".pdf,.jpg,.jpeg,.png">
+                                </div>
+                                <div class="file-preview" id="stayReferencesPreview"></div>
+                            </div>
+
+                            <!-- Special Requirements Documentation -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="specialRequirementsDocs">Special Requirements Documentation</label>
+                                    <span class="upload-status" id="specialRequirementsDocsStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Medical certificates, accessibility requirements, or other special needs documentation</p>
+                                <div class="upload-area" id="specialRequirementsDocsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-heart"></i>
+                                        <p>Click to upload Special Requirements Docs</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="specialRequirementsDocs" name="specialRequirementsDocs" accept=".pdf,.jpg,.jpeg,.png">
+                                </div>
+                                <div class="file-preview" id="specialRequirementsDocsPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Terms and Agreements -->
+                        <div class="form-section">
+                            <h3>Shortlet Terms and Agreements</h3>
+                            
+                            <div class="terms-agreement">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeDocumentTerms" name="agreeDocumentTerms" required>
+                                    <span class="checkmark"></span>
+                                    I certify that all uploaded identification documents are authentic, current, and belong to me and my guests
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreePrivacy" name="agreePrivacy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to DomiHive's <a href="#" class="terms-link">Privacy Policy</a> and understand how my documents will be used for shortlet verification
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeGuestVerification" name="agreeGuestVerification" required>
+                                    <span class="checkmark"></span>
+                                    I consent to guest verification and background checks for all guests as part of the shortlet booking process
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeHouseRules" name="agreeHouseRules" required>
+                                    <span class="checkmark"></span>
+                                    I confirm that all guests will abide by the property's house rules and terms of stay
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeAgeVerification" name="agreeAgeVerification" required>
+                                    <span class="checkmark"></span>
+                                    I confirm that all guests are 18 years or older, or accompanied by a parent/guardian
+                                </label>
+                            </div>
+
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Your documents are secure and confidential</strong>
+                                    <p>All uploaded documents are encrypted and stored securely. They will only be used for your shortlet booking verification and will be permanently deleted after your stay is completed.</p>
+                                </div>
+                            </div>
+
+                            <div class="guest-notice">
+                                <i class="fas fa-user-friends"></i>
+                                <div>
+                                    <strong>Guest Verification Notice</strong>
+                                    <p>All guests must provide valid identification. Failure to provide proper identification for all guests may result in booking cancellation. Additional guests not listed in the application will not be permitted to stay.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToApplicationBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Booking
+                            </button>
+                            <button type="submit" class="btn-primary" id="proceedToPaymentBtn">
+                                <i class="fas fa-arrow-right"></i>
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Upload Progress Modal -->
+    <div class="upload-progress-modal" id="uploadProgressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Processing Your Shortlet Documents</h2>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Validating guest documents...</div>
+                </div>
+                <div class="upload-details">
+                    <div class="upload-item" id="uploadPrimaryGuestId">
+                        <i class="fas fa-id-card"></i>
+                        <span>Primary Guest ID</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadAdditionalGuestsIds">
+                        <i class="fas fa-users"></i>
+                        <span>Additional Guest IDs</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadSelfieWithId">
+                        <i class="fas fa-camera"></i>
+                        <span>Selfie with ID</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadProofOfTravel">
+                        <i class="fas fa-plane"></i>
+                        <span>Proof of Travel</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadBusinessDocuments">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Business Documents</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-document-shortlet.js"></script>
+</body>
+</html>

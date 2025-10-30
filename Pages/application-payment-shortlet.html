@@ -15,7 +15,7 @@
             <div class="progress-steps">
                 <div class="step completed">
                     <div class="step-number">1</div>
-                    <div class="step-label">Application Details</div>
+                    <div class="step-label">Booking Details</div>
                 </div>
                 <div class="step completed">
                     <div class="step-number">2</div>
@@ -34,25 +34,25 @@
                     Back to Documents
                 </button>
                 <div class="payment-context">
-                    Step 3: Payment • <span id="paymentContextType">Rental Application</span>
+                    Step 3: Payment • <span id="paymentContextType">Shortlet Application</span>
                 </div>
             </div>
 
             <!-- Payment Summary -->
             <section class="payment-summary">
                 <div class="summary-header">
-                    <h1>Complete Your Application Payment</h1>
-                    <p>Final step: Secure your application with payment</p>
+                    <h1>Complete Your Shortlet Booking Payment</h1>
+                    <p>Final step: Secure your short-term stay with payment</p>
                 </div>
 
                 <div class="summary-grid">
-                    <!-- Application Summary -->
+                    <!-- Booking Summary -->
                     <div class="application-summary-card">
-                        <h3>Application Summary</h3>
+                        <h3>Booking Summary</h3>
                         <div class="summary-details">
                             <div class="detail-item">
-                                <span class="detail-label">Applicant:</span>
-                                <span class="detail-value" id="applicantName">-</span>
+                                <span class="detail-label">Guest:</span>
+                                <span class="detail-value" id="guestName">-</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Application ID:</span>
@@ -63,8 +63,12 @@
                                 <span class="detail-value" id="propertyTitle">-</span>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-label">Location:</span>
-                                <span class="detail-value" id="propertyLocation">-</span>
+                                <span class="detail-label">Stay Duration:</span>
+                                <span class="detail-value" id="stayDuration">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total Guests:</span>
+                                <span class="detail-value" id="totalGuests">-</span>
                             </div>
                         </div>
                     </div>
@@ -74,36 +78,44 @@
                         <h3>Payment Breakdown</h3>
                         <div class="breakdown-details">
                             <div class="breakdown-item">
-                                <span class="breakdown-label">Application Fee</span>
+                                <span class="breakdown-label">Shortlet Application Fee</span>
                                 <span class="breakdown-amount" id="applicationFee">₦15,000</span>
                             </div>
                             <div class="breakdown-item">
-                                <span class="breakdown-label">Background Check</span>
-                                <span class="breakdown-amount" id="backgroundCheckFee">₦5,000</span>
+                                <span class="breakdown-label">Guest Verification</span>
+                                <span class="breakdown-amount" id="verificationFee">₦5,000</span>
                             </div>
                             <div class="breakdown-item">
-                                <span class="breakdown-label">Processing Fee</span>
-                                <span class="breakdown-amount" id="processingFee">₦2,500</span>
+                                <span class="breakdown-label">Security Deposit</span>
+                                <span class="breakdown-amount" id="securityDeposit">₦25,000</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Service Fee</span>
+                                <span class="breakdown-amount" id="serviceFee">₦2,500</span>
                             </div>
                             <div class="breakdown-item total">
                                 <span class="breakdown-label">Total Amount</span>
-                                <span class="breakdown-amount" id="totalAmount">₦22,500</span>
+                                <span class="breakdown-amount" id="totalAmount">₦47,500</span>
                             </div>
+                        </div>
+                        <div class="deposit-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Security deposit refundable after stay (subject to property inspection)</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Escrow Explanation -->
+            <!-- Shortlet Escrow Explanation -->
             <section class="escrow-section">
                 <div class="escrow-card">
                     <div class="escrow-header">
                         <div class="escrow-icon">
-                            <i class="fas fa-shield-alt"></i>
+                            <i class="fas fa-home"></i>
                         </div>
                         <div class="escrow-content">
-                            <h2>Secure Escrow Payment Protection</h2>
-                            <p>Your payment is protected by DomiHive's secure escrow system</p>
+                            <h2>Shortlet Payment Protection</h2>
+                            <p>Your payment is protected by DomiHive's shortlet escrow system with guest verification safeguards</p>
                         </div>
                     </div>
                     
@@ -111,29 +123,36 @@
                         <div class="process-step">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <h4>Payment Held Securely</h4>
-                                <p>Your funds are held securely in escrow by DomiHive, not released immediately</p>
+                                <h4>Secure Payment Holding</h4>
+                                <p>Your funds are held securely in escrow by DomiHive until check-in</p>
                             </div>
                         </div>
                         <div class="process-step">
                             <div class="step-number">2</div>
                             <div class="step-content">
-                                <h4>Application Review</h4>
-                                <p>We review your application and documents within 48-72 hours</p>
+                                <h4>Guest Verification Process</h4>
+                                <p>We conduct comprehensive guest verification and ID checks (24-48 hours)</p>
                             </div>
                         </div>
                         <div class="process-step">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <h4>Approval & Fund Release</h4>
-                                <p>If approved, you get access to your tenant dashboard</p>
+                                <h4>Booking Confirmation</h4>
+                                <p>Once verified, your booking is confirmed and property details released</p>
                             </div>
                         </div>
                         <div class="process-step">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <h4>Full Refund if Not Approved</h4>
-                                <p>If your application is not approved, you receive a 100% refund</p>
+                                <h4>Secure Check-in</h4>
+                                <p>Safe and verified check-in process with property access</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Deposit Refund After Stay</h4>
+                                <p>Security deposit refunded within 24 hours after check-out (if no damages)</p>
                             </div>
                         </div>
                     </div>
@@ -144,11 +163,11 @@
             <section class="payment-methods-section">
                 <div class="payment-container">
                     <h2>Select Payment Method</h2>
-                    <p>Choose your preferred payment method to complete your application</p>
+                    <p>Choose your preferred payment method to complete your shortlet booking</p>
 
-                    <form id="paymentForm" class="payment-form">
+                    <form id="shortletPaymentForm" class="payment-form">
                         <input type="hidden" id="applicationData" name="applicationData">
-                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="22500">
+                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="47500">
 
                         <!-- Payment Method Selection -->
                         <div class="payment-methods">
@@ -175,6 +194,21 @@
                                     <div class="method-info">
                                         <h4>Bank Transfer</h4>
                                         <p>Transfer directly from your bank</p>
+                                    </div>
+                                    <div class="method-check">
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-card" data-method="flutterwave">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Flutterwave</h4>
+                                        <p>Pay with mobile money or card</p>
                                     </div>
                                     <div class="method-check">
                                         <div class="check-circle"></div>
@@ -235,29 +269,29 @@
                                 <div class="bank-instructions">
                                     <div class="instruction-item">
                                         <strong>Bank Name:</strong>
-                                        <span>DomiHive Trust Bank</span>
+                                        <span>DomiHive Shortlet Trust Bank</span>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Account Number:</strong>
-                                        <span id="bankAccountNumber">8325001746</span>
+                                        <span id="bankAccountNumber">8325001987</span>
                                         <button type="button" class="copy-btn" onclick="copyToClipboard('bankAccountNumber')">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Account Name:</strong>
-                                        <span>DomiHive Escrow Services</span>
+                                        <span>DomiHive Shortlet Escrow Services</span>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Reference:</strong>
-                                        <span id="paymentReference">DOMI-APP-001</span>
+                                        <span id="paymentReference">DOMI-SHORT-001</span>
                                         <button type="button" class="copy-btn" onclick="copyToClipboard('paymentReference')">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Amount:</strong>
-                                        <span id="bankAmount">₦22,500</span>
+                                        <span id="bankAmount">₦47,500</span>
                                     </div>
                                 </div>
                                 <div class="upload-receipt">
@@ -292,21 +326,39 @@
                             </div>
                         </div>
 
-                        <!-- Terms and Conditions -->
+                        <!-- Shortlet Terms and Conditions -->
                         <div class="form-section">
                             <div class="terms-agreement">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" id="agreeEscrowTerms" name="agreeEscrowTerms" required>
+                                    <input type="checkbox" id="agreeShortletEscrow" name="agreeShortletEscrow" required>
                                     <span class="checkmark"></span>
-                                    I understand and agree to the <a href="#" class="terms-link">Escrow Terms</a> and DomiHive's payment protection policy
+                                    I understand and agree to the <a href="#" class="terms-link">Shortlet Escrow Terms</a> and DomiHive's payment protection policy
                                 </label>
                                 
                                 <label class="checkbox-label">
-                                    <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
+                                    <input type="checkbox" id="agreeGuestVerification" name="agreeGuestVerification" required>
                                     <span class="checkmark"></span>
-                                    I understand that my payment will be fully refunded if my application is not approved within 72 hours
+                                    I consent to guest verification, ID checks, and background verification as part of the shortlet booking process
                                 </label>
                                 
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeSecurityDeposit" name="agreeSecurityDeposit" required>
+                                    <span class="checkmark"></span>
+                                    I understand the ₦25,000 security deposit is refundable after stay completion, subject to property inspection
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeCancellationPolicy" name="agreeCancellationPolicy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to the <a href="#" class="terms-link">Shortlet Cancellation Policy</a> and understand the refund terms
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeHouseRules" name="agreeHouseRules" required>
+                                    <span class="checkmark"></span>
+                                    I agree to abide by all property house rules and terms of stay during my shortlet period
+                                </label>
+
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="agreePrivacyPolicy" name="agreePrivacyPolicy" required>
                                     <span class="checkmark"></span>
@@ -323,43 +375,43 @@
                             </button>
                             <button type="submit" class="btn-primary" id="submitPaymentBtn">
                                 <i class="fas fa-lock"></i>
-                                Complete Payment
+                                Complete Shortlet Payment
                             </button>
                         </div>
                     </form>
                 </div>
             </section>
 
-            <!-- Security Features -->
+            <!-- Security & Guest Features -->
             <section class="security-features">
                 <div class="security-grid">
                     <div class="security-feature">
                         <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
+                            <i class="fas fa-home"></i>
                         </div>
-                        <h4>Bank-Level Security</h4>
-                        <p>All payments are encrypted and secure</p>
+                        <h4>Shortlet Escrow</h4>
+                        <p>Funds held securely until check-in</p>
                     </div>
                     <div class="security-feature">
                         <div class="feature-icon">
                             <i class="fas fa-user-shield"></i>
                         </div>
-                        <h4>PCI DSS Compliant</h4>
-                        <p>We meet the highest security standards</p>
+                        <h4>Guest Verification</h4>
+                        <p>Comprehensive ID and background checks</p>
                     </div>
                     <div class="security-feature">
                         <div class="feature-icon">
-                            <i class="fas fa-lock"></i>
+                            <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h4>Escrow Protection</h4>
-                        <p>Your funds are protected until approval</p>
+                        <h4>Security Deposit</h4>
+                        <p>₦25,000 refundable after stay</p>
                     </div>
                     <div class="security-feature">
                         <div class="feature-icon">
-                            <i class="fas fa-sync-alt"></i>
+                            <i class="fas fa-clock"></i>
                         </div>
-                        <h4>Instant Refunds</h4>
-                        <p>Full refund if application not approved</p>
+                        <h4>Quick Verification</h4>
+                        <p>24-48 hour guest verification</p>
                     </div>
                 </div>
             </section>
@@ -372,24 +424,28 @@
             <div class="modal-body">
                 <div class="processing-animation">
                     <div class="spinner"></div>
-                    <h3>Processing Your Payment</h3>
-                    <p>Please wait while we securely process your payment...</p>
+                    <h3>Processing Your Shortlet Payment</h3>
+                    <p>Please wait while we securely process your payment and initiate guest verification...</p>
                     <div class="processing-steps">
                         <div class="processing-step active">
                             <i class="fas fa-check"></i>
-                            <span>Validating payment details</span>
+                            <span>Processing payment transaction</span>
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
-                            <span>Processing transaction</span>
+                            <span>Securing funds in shortlet escrow</span>
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
-                            <span>Securing funds in escrow</span>
+                            <span>Initiating guest verification</span>
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
-                            <span>Finalizing application</span>
+                            <span>Starting ID verification process</span>
+                        </div>
+                        <div class="processing-step">
+                            <i class="fas fa-check"></i>
+                            <span>Finalizing booking confirmation</span>
                         </div>
                     </div>
                 </div>
@@ -404,7 +460,7 @@
                 <div class="success-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h2>Payment Successful!</h2>
+                <h2>Shortlet Payment Successful!</h2>
                 <button class="close-modal" id="closeModalBtn">
                     <i class="fas fa-times"></i>
                 </button>
@@ -412,9 +468,9 @@
             
             <div class="modal-body">
                 <div class="success-details">
-                    <p>Your payment has been processed successfully and is being held securely in escrow.</p>
+                    <p>Your shortlet payment has been processed successfully and guest verification has been initiated. Your funds are secured in shortlet escrow.</p>
                     <div class="payment-summary-modal">
-                        <h4>Payment Details:</h4>
+                        <h4>Shortlet Payment Details:</h4>
                         <div class="detail-item">
                             <strong>Transaction ID:</strong>
                             <span id="transactionId">-</span>
@@ -429,50 +485,69 @@
                         </div>
                         <div class="detail-item">
                             <strong>Escrow Status:</strong>
-                            <span class="status-badge pending">Funds Held Securely</span>
+                            <span class="status-badge pending">Funds in Shortlet Escrow</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Guest Verification Status:</strong>
+                            <span class="status-badge pending">Verification in Progress</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Security Deposit:</strong>
+                            <span class="status-badge info">₦25,000 (Refundable)</span>
                         </div>
                     </div>
                     
                     <div class="next-steps">
-                        <h4>What Happens Next:</h4>
+                        <h4>Guest Verification Process Timeline:</h4>
                         <div class="timeline">
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Application Review (0-72 hours)</h5>
-                                    <p>We're reviewing your application and screening documents</p>
+                                    <h5>ID Verification (First 12 hours)</h5>
+                                    <p>Verification of all guest identification documents and selfie validation</p>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Approval Notification</h5>
-                                    <p>You'll receive an email with your login credentials</p>
+                                    <h5>Background Check (Next 12 hours)</h5>
+                                    <p>Quick background verification and guest history check</p>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Access Tenant Dashboard</h5>
-                                    <p>Login to manage your rental and communicate with landlords</p>
+                                    <h5>Booking Confirmation (24-48 hours)</h5>
+                                    <p>Final verification and booking confirmation with property access details</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="refund-notice">
+                    <div class="deposit-info">
                         <i class="fas fa-info-circle"></i>
-                        <p><strong>Refund Guarantee:</strong> If your application is not approved within 72 hours, you will receive a 100% refund automatically.</p>
+                        <div>
+                            <strong>Security Deposit Information:</strong>
+                            <p>Your ₦25,000 security deposit will be held securely and refunded within 24 hours after check-out, provided there are no damages to the property and all house rules are followed during your stay.</p>
+                        </div>
+                    </div>
+
+                    <div class="cancellation-notice">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Cancellation Policy:</strong>
+                            <p>If guest verification is not completed successfully, your payment (excluding the application fee) will be fully refunded within 24 hours. The ₦15,000 application fee covers verification costs and is non-refundable.</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="modal-actions">
                     <button class="btn-secondary" id="downloadReceiptBtn">
                         <i class="fas fa-download"></i>
-                        Download Receipt
+                        Download Booking Receipt
                     </button>
                     <button class="btn-primary" id="goToDashboardBtn">
-                        Go to Dashboard
+                        Go to Shortlet Dashboard
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -481,6 +556,6 @@
     </div>
 
     <!-- JavaScript Files -->
-    <script src="/JAVASCRIPT/application-payment.js"></script>
+    <script src="/JAVASCRIPT/application-payment-shortlet.js"></script>
 </body>
 </html>

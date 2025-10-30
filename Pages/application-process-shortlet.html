@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Shortlet Application - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-process-shortlet.css">
+    <link rel="stylesheet" href="/CSS/application-process.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Application Main Content -->
+    <main class="application-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Booking Details</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToPrevious">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Property
+                </button>
+                <div class="application-context">
+                    Step 1: Booking Details • <span id="applicationContextType">Shortlet Application</span>
+                </div>
+            </div>
+
+            <!-- Property Summary -->
+            <section class="property-summary">
+                <div class="summary-header">
+                    <h1>Complete Your Shortlet Booking</h1>
+                    <p id="applicationSubtitle">Step 1: Provide your short-term stay details and guest information</p>
+                </div>
+
+                <div class="property-card">
+                    <div class="property-image">
+                        <img src="/ASSECT/shortlet-apartment.jpg" alt="Shortlet Property Image" id="applicationPropertyImage">
+                    </div>
+                    <div class="property-info">
+                        <h3 id="applicationPropertyTitle">Luxury Serviced Apartment in Lekki</h3>
+                        <div class="property-price" id="applicationPropertyPrice">₦85,000/night</div>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="applicationPropertyLocation">Lekki Phase 1, Lagos</span>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature">
+                                <i class="fas fa-bed"></i>
+                                <span id="applicationBedrooms">2</span> bed
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-bath"></i>
+                                <span id="applicationBathrooms">2</span> bath
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-ruler-combined"></i>
+                                <span id="applicationSize">120 sqm</span>
+                            </span>
+                            <span class="feature">
+                                <i class="fas fa-wifi"></i>
+                                <span>WiFi</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shortlet Application Form -->
+            <section class="application-form-section">
+                <div class="form-container">
+                    <form id="shortletApplicationForm" class="application-form">
+                        <!-- Hidden Fields for Tracking -->
+                        <input type="hidden" id="dashboardSource" name="dashboardSource" value="dashboard-shortlet">
+                        <input type="hidden" id="propertyId" name="propertyId">
+                        <input type="hidden" id="userId" name="userId">
+                        <input type="hidden" id="bookingId" name="bookingId">
+
+                        <!-- Section 1: Personal Information -->
+                        <div class="form-section">
+                            <h3>Guest Information</h3>
+                            <p class="section-description">We'll use your account information for basic details</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="required">Full Name</label>
+                                    <div class="prefilled-data" id="prefilledFullName">Loading...</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Email Address</label>
+                                    <div class="prefilled-data" id="prefilledEmail">Loading...</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Phone Number</label>
+                                    <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                </div>
+                            </div>
+
+                            <!-- Shortlet Specific Personal Details -->
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="dateOfBirth" class="required">Date of Birth</label>
+                                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nationality" class="required">Nationality</label>
+                                    <select id="nationality" name="nationality" required>
+                                        <option value="">Select nationality</option>
+                                        <option value="nigerian">Nigerian</option>
+                                        <option value="other-african">Other African</option>
+                                        <option value="european">European</option>
+                                        <option value="american">American</option>
+                                        <option value="asian">Asian</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="idType" class="required">ID Type</label>
+                                    <select id="idType" name="idType" required>
+                                        <option value="">Select ID type</option>
+                                        <option value="passport">International Passport</option>
+                                        <option value="nin">National ID (NIN)</option>
+                                        <option value="drivers-license">Driver's License</option>
+                                        <option value="voters-card">Voter's Card</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="idNumber" class="required">ID Number</label>
+                                    <input type="text" id="idNumber" name="idNumber" placeholder="Enter your ID number" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Booking Details -->
+                        <div class="form-section">
+                            <h3>Booking Details</h3>
+                            <p class="section-description">Select your preferred dates and number of guests</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="checkInDate" class="required">Check-in Date</label>
+                                    <input type="date" id="checkInDate" name="checkInDate" required min="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkOutDate" class="required">Check-out Date</label>
+                                    <input type="date" id="checkOutDate" name="checkOutDate" required min="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="numberOfGuests" class="required">Number of Guests</label>
+                                    <select id="numberOfGuests" name="numberOfGuests" required>
+                                        <option value="">Select guests</option>
+                                        <option value="1">1 Guest</option>
+                                        <option value="2">2 Guests</option>
+                                        <option value="3">3 Guests</option>
+                                        <option value="4">4 Guests</option>
+                                        <option value="5">5 Guests</option>
+                                        <option value="6">6+ Guests</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="purposeOfStay" class="required">Purpose of Stay</label>
+                                    <select id="purposeOfStay" name="purposeOfStay" required>
+                                        <option value="">Select purpose</option>
+                                        <option value="vacation">Vacation/Holiday</option>
+                                        <option value="business">Business Trip</option>
+                                        <option value="relocation">Temporary Relocation</option>
+                                        <option value="event">Special Event</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="booking-summary" id="bookingSummary" style="display: none;">
+                                <h4>Booking Summary</h4>
+                                <div class="summary-details">
+                                    <div class="summary-item">
+                                        <span>Duration:</span>
+                                        <span id="stayDuration">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span>Total Nights:</span>
+                                        <span id="totalNights">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span>Nightly Rate:</span>
+                                        <span id="nightlyRate">-</span>
+                                    </div>
+                                    <div class="summary-item total">
+                                        <span>Estimated Total:</span>
+                                        <span id="estimatedTotal">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Additional Guests -->
+                        <div class="form-section">
+                            <h3>Additional Guests</h3>
+                            <p class="section-description">Provide details for other guests staying with you</p>
+                            
+                            <div id="additionalGuestsSection">
+                                <div class="guest-form" id="guest1">
+                                    <h4>Guest 1 Details</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="guest1Name" class="required">Full Name</label>
+                                            <input type="text" id="guest1Name" name="guest1Name" placeholder="Guest full name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="guest1Relationship" class="required">Relationship</label>
+                                            <select id="guest1Relationship" name="guest1Relationship">
+                                                <option value="">Select relationship</option>
+                                                <option value="spouse">Spouse/Partner</option>
+                                                <option value="child">Child</option>
+                                                <option value="friend">Friend</option>
+                                                <option value="colleague">Colleague</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-secondary" id="addGuestBtn" style="margin-top: 1rem;">
+                                <i class="fas fa-plus"></i>
+                                Add Another Guest
+                            </button>
+                        </div>
+
+                        <!-- Section 4: Special Requirements -->
+                        <div class="form-section">
+                            <h3>Special Requirements</h3>
+                            <p class="section-description">Let us know about any special needs or preferences</p>
+                            
+                            <div class="form-group full-width">
+                                <label for="specialRequirements">Special Requests</label>
+                                <textarea id="specialRequirements" name="specialRequirements" rows="4" placeholder="Any special requirements, accessibility needs, or preferences..."></textarea>
+                                <span class="input-note">Optional: Early check-in, late check-out, dietary restrictions, etc.</span>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="checkInTime" class="required">Estimated Check-in Time</label>
+                                    <select id="checkInTime" name="checkInTime" required>
+                                        <option value="">Select time</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="transportation" class="required">Need Airport Transfer?</label>
+                                    <select id="transportation" name="transportation" required>
+                                        <option value="">Select option</option>
+                                        <option value="no">No, I'll arrange my own</option>
+                                        <option value="yes-arrival">Yes, arrival only</option>
+                                        <option value="yes-departure">Yes, departure only</option>
+                                        <option value="yes-both">Yes, both arrival and departure</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Emergency Contact -->
+                        <div class="form-section">
+                            <h3>Emergency Contact</h3>
+                            <p class="section-description">Provide emergency contact information for your stay</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="emergencyContactName" class="required">Full Name</label>
+                                    <input type="text" id="emergencyContactName" name="emergencyContactName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergencyContactPhone" class="required">Phone Number</label>
+                                    <input type="tel" id="emergencyContactPhone" name="emergencyContactPhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergencyContactRelationship" class="required">Relationship</label>
+                                    <input type="text" id="emergencyContactRelationship" name="emergencyContactRelationship" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergencyContactEmail">Email Address (Optional)</label>
+                                    <input type="email" id="emergencyContactEmail" name="emergencyContactEmail">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 6: Terms and Agreements -->
+                        <div class="form-section">
+                            <h3>Shortlet Terms and Agreements</h3>
+                            
+                            <div class="terms-agreement">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeHouseRules" name="agreeHouseRules" required>
+                                    <span class="checkmark"></span>
+                                    I agree to abide by the property's house rules and terms of stay
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeDamagePolicy" name="agreeDamagePolicy" required>
+                                    <span class="checkmark"></span>
+                                    I understand I will be responsible for any damages to the property during my stay
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeCancellationPolicy" name="agreeCancellationPolicy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to the <a href="#" class="terms-link">Cancellation Policy</a> and understand the refund terms
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreePrivacyPolicy" name="agreePrivacyPolicy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to the <a href="#" class="terms-link">Privacy Policy</a> and consent to the processing of my booking information
+                                </label>
+                            </div>
+
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Secure Booking Process</strong>
+                                    <p>Your personal information is protected and your booking is secured with our payment protection system.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToPreviousBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Property
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-arrow-right"></i>
+                                Proceed to Document Upload
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-process-shortlet.js"></script>
+</body>
+</html>

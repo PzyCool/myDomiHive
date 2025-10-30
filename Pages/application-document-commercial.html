@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Commercial Documents - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-document-commercial.css">
+    <link rel="stylesheet" href="/CSS/application-document.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Document Upload Main Content -->
+    <main class="document-upload-page">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Business Details</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Document Upload</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="back-navigation">
+                <button class="back-btn" id="backToApplication">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Application
+                </button>
+                <div class="application-context">
+                    Step 2: Document Upload • <span id="applicationContextType">Commercial Property Application</span>
+                </div>
+            </div>
+
+            <!-- Application Summary -->
+            <section class="application-summary">
+                <div class="summary-header">
+                    <h1>Upload Required Commercial Documents</h1>
+                    <p id="applicationSubtitle">Step 2: Upload your business registration, financial documents, and identification</p>
+                </div>
+
+                <div class="application-card">
+                    <div class="application-info">
+                        <h3 id="applicationPropertyTitle">Prime Retail Space in Victoria Island</h3>
+                        <div class="applicant-details">
+                            <div class="detail-item">
+                                <strong>Business:</strong>
+                                <span id="businessName">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Application ID:</strong>
+                                <span id="applicationId">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Contact Person:</strong>
+                                <span id="contactPerson">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-status">
+                        <div class="status-badge completed">Step 1 Complete</div>
+                        <div class="status-badge active">Step 2 in Progress</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Document Upload Form -->
+            <section class="document-upload-section">
+                <div class="form-container">
+                    <form id="commercialDocumentUploadForm" class="document-form">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" id="applicationId" name="applicationId">
+                        <input type="hidden" id="propertyId" name="propertyId">
+                        <input type="hidden" id="userId" name="userId">
+
+                        <!-- Section 1: Business Registration Documents -->
+                        <div class="form-section">
+                            <h3>Business Registration Documents</h3>
+                            <p class="section-description">Upload your business registration and incorporation documents</p>
+                            
+                            <!-- Certificate of Incorporation -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="certificateOfIncorporation" class="required">Certificate of Incorporation *</label>
+                                    <span class="upload-status" id="certificateOfIncorporationStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Upload your CAC Certificate of Incorporation or Business Name Registration</p>
+                                <div class="upload-area" id="certificateOfIncorporationArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-file-contract"></i>
+                                        <p>Click to upload Certificate of Incorporation</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="certificateOfIncorporation" name="certificateOfIncorporation" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="certificateOfIncorporationPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Clear, readable copy</li>
+                                        <li>All details visible</li>
+                                        <li>Current and valid</li>
+                                        <li>File size under 5MB</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Articles of Association -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="articlesOfAssociation" class="required">Articles of Association *</label>
+                                    <span class="upload-status" id="articlesOfAssociationStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Upload your company's Articles of Association or Constitution</p>
+                                <div class="upload-area" id="articlesOfAssociationArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-gavel"></i>
+                                        <p>Click to upload Articles of Association</p>
+                                        <span class="file-types">Accepted: PDF (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="articlesOfAssociation" name="articlesOfAssociation" accept=".pdf" required>
+                                </div>
+                                <div class="file-preview" id="articlesOfAssociationPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Financial Documents -->
+                        <div class="form-section">
+                            <h3>Financial Documents</h3>
+                            <p class="section-description">Upload financial statements and tax documents</p>
+                            
+                            <!-- Bank Statements -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="bankStatements" class="required">Business Bank Statements *</label>
+                                    <span class="upload-status" id="bankStatementsStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Last 6 months of business bank statements</p>
+                                <div class="upload-area" id="bankStatementsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        <p>Click to upload Bank Statements</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 10MB total)</span>
+                                    </div>
+                                    <input type="file" id="bankStatements" name="bankStatements" accept=".pdf,.jpg,.jpeg,.png" required multiple>
+                                </div>
+                                <div class="file-preview" id="bankStatementsPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>Last 6 months of statements</li>
+                                        <li>Clearly shows business name</li>
+                                        <li>Shows consistent business activity</li>
+                                        <li>Multiple files accepted (up to 10MB total)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Tax Clearance Certificate -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="taxClearance" class="required">Tax Clearance Certificate *</label>
+                                    <span class="upload-status" id="taxClearanceStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Current year tax clearance certificate from FIRS</p>
+                                <div class="upload-area" id="taxClearanceArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-receipt"></i>
+                                        <p>Click to upload Tax Clearance</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="taxClearance" name="taxClearance" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="taxClearancePreview"></div>
+                            </div>
+
+                            <!-- Audited Financial Statements -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="financialStatements" class="required">Audited Financial Statements *</label>
+                                    <span class="upload-status" id="financialStatementsStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Last 2 years audited financial statements</p>
+                                <div class="upload-area" id="financialStatementsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-chart-line"></i>
+                                        <p>Click to upload Financial Statements</p>
+                                        <span class="file-types">Accepted: PDF (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="financialStatements" name="financialStatements" accept=".pdf" required multiple>
+                                </div>
+                                <div class="file-preview" id="financialStatementsPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Identification Documents -->
+                        <div class="form-section">
+                            <h3>Identification Documents</h3>
+                            <p class="section-description">Upload identification for directors and authorized signatories</p>
+                            
+                            <!-- Director IDs -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="directorIds" class="required">Director Identification *</label>
+                                    <span class="upload-status" id="directorIdsStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Government-issued ID for all directors (Passport, Driver's License, or National ID)</p>
+                                <div class="upload-area" id="directorIdsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-id-card"></i>
+                                        <p>Click to upload Director IDs</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="directorIds" name="directorIds" accept=".pdf,.jpg,.jpeg,.png" required multiple>
+                                </div>
+                                <div class="file-preview" id="directorIdsPreview"></div>
+                                <div class="upload-requirements">
+                                    <h4>Requirements:</h4>
+                                    <ul>
+                                        <li>All directors must be included</li>
+                                        <li>Clear, readable copies</li>
+                                        <li>Current and valid IDs</li>
+                                        <li>Multiple files accepted</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Proof of Address -->
+                            <div class="upload-group required">
+                                <div class="upload-header">
+                                    <label for="proofOfAddress" class="required">Proof of Business Address *</label>
+                                    <span class="upload-status" id="proofOfAddressStatus">Not uploaded</span>
+                                </div>
+                                <p class="upload-description">Utility bill or business address verification document</p>
+                                <div class="upload-area" id="proofOfAddressArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <p>Click to upload Proof of Address</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="proofOfAddress" name="proofOfAddress" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                                <div class="file-preview" id="proofOfAddressPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Additional Business Documents -->
+                        <div class="form-section">
+                            <h3>Additional Business Documents (Optional)</h3>
+                            <p class="section-description">You may upload additional documents to support your application</p>
+                            
+                            <!-- Business Plan -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="businessPlan">Business Plan</label>
+                                    <span class="upload-status" id="businessPlanStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Business plan or operational strategy document</p>
+                                <div class="upload-area" id="businessPlanArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-briefcase"></i>
+                                        <p>Click to upload Business Plan</p>
+                                        <span class="file-types">Accepted: PDF, DOC, DOCX (Max: 5MB)</span>
+                                    </div>
+                                    <input type="file" id="businessPlan" name="businessPlan" accept=".pdf,.doc,.docx">
+                                </div>
+                                <div class="file-preview" id="businessPlanPreview"></div>
+                            </div>
+
+                            <!-- Trade References -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="tradeReferences">Trade References</label>
+                                    <span class="upload-status" id="tradeReferencesStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Reference letters from suppliers or business partners</p>
+                                <div class="upload-area" id="tradeReferencesArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-handshake"></i>
+                                        <p>Click to upload Trade References</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="tradeReferences" name="tradeReferences" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                </div>
+                                <div class="file-preview" id="tradeReferencesPreview"></div>
+                            </div>
+
+                            <!-- Licenses and Permits -->
+                            <div class="upload-group optional">
+                                <div class="upload-header">
+                                    <label for="licensesPermits">Business Licenses & Permits</label>
+                                    <span class="upload-status" id="licensesPermitsStatus">No files</span>
+                                </div>
+                                <p class="upload-description">Industry-specific licenses and permits</p>
+                                <div class="upload-area" id="licensesPermitsArea">
+                                    <div class="upload-placeholder">
+                                        <i class="fas fa-certificate"></i>
+                                        <p>Click to upload Licenses & Permits</p>
+                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB each)</span>
+                                    </div>
+                                    <input type="file" id="licensesPermits" name="licensesPermits" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                </div>
+                                <div class="file-preview" id="licensesPermitsPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Terms and Agreements -->
+                        <div class="form-section">
+                            <h3>Commercial Terms and Agreements</h3>
+                            
+                            <div class="terms-agreement">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeDocumentTerms" name="agreeDocumentTerms" required>
+                                    <span class="checkmark"></span>
+                                    I certify that all uploaded business documents are authentic, current, and belong to the business entity
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreePrivacy" name="agreePrivacy" required>
+                                    <span class="checkmark"></span>
+                                    I agree to DomiHive's <a href="#" class="terms-link">Privacy Policy</a> and understand how business documents will be used for commercial verification
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeBusinessVerification" name="agreeBusinessVerification" required>
+                                    <span class="checkmark"></span>
+                                    I consent to comprehensive business verification, credit checks, and document validation with CAC, FIRS, and other relevant authorities
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeCACVerification" name="agreeCACVerification" required>
+                                    <span class="checkmark"></span>
+                                    I authorize DomiHive to verify my business registration details with the Corporate Affairs Commission (CAC)
+                                </label>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeFIRSVerification" name="agreeFIRSVerification" required>
+                                    <span class="checkmark"></span>
+                                    I authorize DomiHive to verify my tax clearance certificate with the Federal Inland Revenue Service (FIRS)
+                                </label>
+                            </div>
+
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Your business documents are secure and confidential</strong>
+                                    <p>All uploaded documents are encrypted and stored securely. They will only be used for your commercial property application and business verification process. Documents will be permanently deleted after the application process is complete or if the application is withdrawn.</p>
+                                </div>
+                            </div>
+
+                            <div class="compliance-notice">
+                                <i class="fas fa-balance-scale"></i>
+                                <div>
+                                    <strong>Business Compliance Notice</strong>
+                                    <p>By submitting these documents, you confirm compliance with all relevant Nigerian business laws and regulations. Providing false business information may result in legal consequences and application rejection.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="backToApplicationBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Application
+                            </button>
+                            <button type="submit" class="btn-primary" id="proceedToPaymentBtn">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Upload Progress Modal -->
+    <div class="upload-progress-modal" id="uploadProgressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Processing Your Commercial Documents</h2>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Validating business documents...</div>
+                </div>
+                <div class="upload-details">
+                    <div class="upload-item" id="uploadCertificateOfIncorporation">
+                        <i class="fas fa-file-contract"></i>
+                        <span>Certificate of Incorporation</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadArticlesOfAssociation">
+                        <i class="fas fa-gavel"></i>
+                        <span>Articles of Association</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadBankStatements">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Bank Statements</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadTaxClearance">
+                        <i class="fas fa-receipt"></i>
+                        <span>Tax Clearance</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadFinancialStatements">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Financial Statements</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadDirectorIds">
+                        <i class="fas fa-id-card"></i>
+                        <span>Director IDs</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                    <div class="upload-item" id="uploadProofOfAddress">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Proof of Address</span>
+                        <i class="fas fa-spinner fa-spin status-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/application-document-commercial.js"></script>
+</body>
+</html>
