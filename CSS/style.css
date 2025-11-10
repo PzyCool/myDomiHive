@@ -2726,6 +2726,53 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Social Company Section Styles */
+.social-company {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.social-company span {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.social-link {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-link:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(159, 117, 57, 0.3);
+}
+
+.social-link i {
+    font-size: 1rem;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
     .container {
