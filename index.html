@@ -13,7 +13,6 @@
         <div class="nav-container">
             <!-- Logo Section -->
             <div class="logo-hierarchy">
-                <!-- DomiHive (Product) -->
                 <div class="main-product">
                     <img src="/ASSECT/Logo Design_ DomiHive saas 2.png" alt="DomiHive" class="hierarchy-logo domihive-logo">
                     <span class="company-tooltip">DomiHive</span>
@@ -22,34 +21,18 @@
 
             <!-- Navigation Links -->
             <nav class="nav-links">
-                <a href="/index.html" class="nav-link active">Home</a>
-                <a href="/Pages/rent.html" class="nav-link">Rent</a>
+                <a href="#home" class="nav-link active" data-section="home">Home</a>
+                <a href="#features" class="nav-link" data-section="features">Features</a>
+                <a href="#properties" class="nav-link" data-section="properties">Properties</a>
+                <a href="#how-it-works" class="nav-link" data-section="how-it-works">How It Works</a>
+                <a href="#security" class="nav-link" data-section="security">Security</a>
+                <a href="#download" class="nav-link" data-section="download">Download</a>
 
                 <!-- Vertical Separator -->
                 <div class="nav-separator"></div>
 
-                <!-- Login Dropdown -->
-                <div class="nav-dropdown">
-                    <a href="/Pages/signup.html" class="nav-link">Sign up</a>
-                    <!--<div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-graduation-cap"></i>
-                            Student Login
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-home"></i>
-                            Tenant Login
-                        </a>
-                    </div>-->
-                </div>
-
-                <!-- Navigation Icons -->
-                <div class="nav-icons">
-                    <!-- Theme Toggle -->
-                    <button class="nav-icon theme-toggle" title="Toggle Theme">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
+                <!-- Signup -->
+                <a href="/Pages/signup.html" class="nav-link">Sign up</a>
             </nav>
 
             <!-- Mobile Menu Button -->
@@ -59,7 +42,8 @@
         </div>
     </header>
 
-    <section class="hero">
+    <!-- Home/Hero Section -->
+    <section id="home" class="hero">
         <div class="hero-content">
             <div class="hero-text">
                 <h1>Your Peace of Mind,<br>Our Professional Promise</h1>
@@ -68,7 +52,7 @@
 
                 <!-- CTA Buttons -->
                 <div class="hero-buttons">
-                    <button class="cta-primary" onclick="window.location.href='/rent.html'">
+                    <button class="cta-primary" onclick="scrollToSection('properties')">
                         Browse Properties
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -111,7 +95,7 @@
     <!-- Main Content Area -->
     <main>
         <!-- Section 1: Key Features -->
-        <section class="features-section">
+        <section id="features" class="features-section">
             <div class="container">
                 <div class="section-header">
                     <h2>Why Choose DomiHive?</h2>
@@ -149,10 +133,10 @@
                     <!-- Feature 4 -->
                     <div class="feature-card" data-feature="4">
                         <div class="feature-icon">
-                            <i class="fas fa-graduation-cap"></i>
+                            <i class="fas fa-home"></i>
                         </div>
-                        <h3>Student-Focused</h3>
-                        <p>Specialized packages and verification process for students. Affordable, secure accommodation near campuses.</p>
+                        <h3>Buyer-Focused</h3>
+                        <p>Tailored property options for buyers, offering verified listings, transparent pricing, and expert support through the purchase process.</p>
                     </div>
 
                     <!-- Feature 5 -->
@@ -176,8 +160,388 @@
             </div>
         </section>
 
-        <!-- Section 2: For Different Users -->
-        <section class="users-section">
+        <!-- Section 2: Properties Section (Merged from rent.html) -->
+        <section id="properties" class="properties-section">
+            <div class="container">
+                <!-- Rent Hero Section -->
+                <div class="rent-hero">
+                    <div class="hero-inner">
+                        <h1 class="hero-title">Find Your Perfect Property</h1>
+                        <p class="hero-subtitle">Discover verified properties across Lagos with professional management</p>
+                    </div>
+
+                    <!-- Search wrapper -->
+                    <div class="search-wrap" role="search" aria-label="Property search box">
+                        <div class="search-box">
+                            <!-- Tabs - Property Categories -->
+                            <div class="tabs" role="tablist" aria-label="Property type">
+                                <button class="tab active" data-type="rent" role="tab" aria-selected="true">🏠 For Rent</button>
+                                <button class="tab" data-type="shortlet" role="tab" aria-selected="false">🏨 Short Lets</button>
+                                <button class="tab" data-type="commercial" role="tab" aria-selected="false">🏢 Commercial</button>
+                                <button class="tab" data-type="buy" role="tab" aria-selected="false">💰 Buy</button>
+                            </div>
+
+                            <!-- Filters grid -->
+                            <div class="filters" id="filtersGrid">
+                                <!-- Area Type -->
+                                <div class="filter-select-wrapper">
+                                    <select id="areaTypeSelect" aria-label="Choose Mainland or Island">
+                                        <option value="">Area Type</option>
+                                        <option value="mainland">Lagos Mainland</option>
+                                        <option value="island">Lagos Island</option>
+                                    </select>
+                                </div>
+
+                                <!-- Location -->
+                                <div class="filter-select-wrapper">
+                                    <select id="locationSelect" aria-label="Choose location">
+                                        <option value="">Location</option>
+                                    </select>
+                                </div>
+
+                                <!-- Property Type -->
+                                <div class="filter-select-wrapper">
+                                    <select id="typeSelect" aria-label="Property type">
+                                        <option value="">Property Type</option>
+                                    </select>
+                                </div>
+
+                                <!-- Bedrooms -->
+                                <div class="filter-select-wrapper">
+                                    <select id="bedroomsSelect" aria-label="Bedrooms">
+                                        <option value="">Bedrooms</option>
+                                        <option value="1">1 Bedroom</option>
+                                        <option value="2">2 Bedrooms</option>
+                                        <option value="3">3 Bedrooms</option>
+                                        <option value="4">4+ Bedrooms</option>
+                                    </select>
+                                </div>
+
+                                <!-- Min Price -->
+                                <div class="filter-select-wrapper">
+                                    <select id="minPriceSelect" aria-label="Minimum price">
+                                        <option value="">Min. Price</option>
+                                        <option value="50000">₦50,000/year</option>
+                                        <option value="100000">₦100,000/year</option>
+                                        <option value="300000">₦300,000/year</option>
+                                        <option value="500000">₦500,000/year</option>
+                                        <option value="1000000">₦1,000,000/year</option>
+                                    </select>
+                                </div>
+
+                                <!-- Max Price -->
+                                <div class="filter-select-wrapper">
+                                    <select id="maxPriceSelect" aria-label="Maximum price">
+                                        <option value="">Max. Price</option>
+                                        <option value="200000">₦200,000/year</option>
+                                        <option value="500000">₦500,000/year</option>
+                                        <option value="1000000">₦1,000,000/year</option>
+                                        <option value="2000000">₦2,000,000/year</option>
+                                        <option value="5000000">₦5,000,000+</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Search input row -->
+                            <div class="search-row">
+                                <input id="searchInput" class="search-input" type="search" placeholder="Search by property name, estate, or features (e.g. 'Lekki 3 bedroom')" aria-label="Search input" />
+                                <button class="search-btn" id="doSearch" aria-label="Search">
+                                    <i class="fas fa-search"></i>
+                                    Search
+                                </button>
+                            </div>
+
+                            <div class="helper">Choose <strong>Area Type</strong> first to see available locations. All properties are <strong>verified by DomiHive</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Properties Grid Section -->
+                <div class="properties-content">
+                    <div class="properties-header">
+                        <div class="header-left">
+                            <h2>Available Properties</h2>
+                            <div class="results-info">
+                                <span id="results-count">80+</span> properties found
+                            </div>
+                        </div>
+                        
+                        <div class="header-right">
+                            <!-- Advanced Filters Toggle -->
+                            <button class="filter-toggle" id="filterToggle" aria-expanded="false">
+                                <i class="fas fa-sliders-h"></i>
+                                <span class="toggle-text">Advanced Filters</span>
+                                <i class="fas fa-chevron-down toggle-arrow"></i>
+                            </button>
+
+                            <!-- Sort Options -->
+                            <div class="sort-options">
+                                <span class="sort-label">Sort by:</span>
+                                <select id="sortSelect" class="sort-select">
+                                    <option value="newest">Newest First</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="popular">Most Popular</option>
+                                    <option value="verified">Verified First</option>
+                                </select>
+
+                                <!-- View Options -->
+                                <div class="view-options">
+                                    <button class="view-btn active" data-view="grid">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button class="view-btn" data-view="list">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Properties Grid Container -->
+                    <div class="properties-grid-container">
+                        <!-- Properties Grid -->
+                        <div class="properties-grid" id="propertiesGrid">
+                            <!-- Property cards will be dynamically loaded here -->
+                        </div>
+
+                        <!-- Loading More -->
+                        <div class="load-more-container">
+                            <button class="load-more-btn" id="loadMore">
+                                <i class="fas fa-spinner"></i>
+                                Load More Properties
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Filters Modal -->
+        <div id="advancedFiltersModal" class="filters-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Advanced Filters</h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="filters-grid">
+                        <!-- Price Range -->
+                        <div class="filter-group">
+                            <h4>Price Range (₦/year)</h4>
+                            <div class="price-inputs">
+                                <input type="number" id="minPrice" placeholder="Min" class="price-input">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="Max" class="price-input">
+                            </div>
+                            <div class="price-slider">
+                                <input type="range" id="priceRange" min="0" max="10000000" step="100000" class="range-slider">
+                            </div>
+                        </div>
+
+                        <!-- Bedrooms & Bathrooms -->
+                        <div class="filter-group">
+                            <h4>Bedrooms</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="1">
+                                    <span>1 Bedroom</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="2">
+                                    <span>2 Bedrooms</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="3">
+                                    <span>3 Bedrooms</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="4">
+                                    <span>4+ Bedrooms</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <h4>Bathrooms</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bathrooms" value="1">
+                                    <span>1 Bathroom</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bathrooms" value="2">
+                                    <span>2 Bathrooms</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bathrooms" value="3">
+                                    <span>3+ Bathrooms</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Property Type -->
+                        <div class="filter-group">
+                            <h4>Property Type</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="apartment">
+                                    <span>Apartment</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="house">
+                                    <span>House</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="duplex">
+                                    <span>Duplex</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="studio">
+                                    <span>Studio</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="shared">
+                                    <span>Shared</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Furnishing -->
+                        <div class="filter-group">
+                            <h4>Furnishing</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="furnishing" value="furnished">
+                                    <span>Furnished</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="furnishing" value="semi-furnished">
+                                    <span>Semi-Furnished</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="furnishing" value="unfurnished">
+                                    <span>Unfurnished</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Amenities -->
+                        <div class="filter-group">
+                            <h4>Amenities</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="wifi">
+                                    <span>WiFi</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="parking">
+                                    <span>Parking</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="security">
+                                    <span>24/7 Security</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="pool">
+                                    <span>Swimming Pool</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="gym">
+                                    <span>Gym</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="ac">
+                                    <span>Air Conditioning</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="generator">
+                                    <span>Generator</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="water">
+                                    <span>Constant Water</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Location Areas -->
+                        <div class="filter-group">
+                            <h4>Location Areas</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="area" value="mainland">
+                                    <span>Mainland Areas</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="area" value="island">
+                                    <span>Island Areas</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Pet Policy -->
+                        <div class="filter-group">
+                            <h4>Pet Policy</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="pets" value="allowed">
+                                    <span>Pets Allowed</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="pets" value="not-allowed">
+                                    <span>No Pets</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Property Age -->
+                        <div class="filter-group">
+                            <h4>Property Age</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="age" value="new">
+                                    <span>New (0-2 years)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="age" value="modern">
+                                    <span>Modern (3-10 years)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="age" value="established">
+                                    <span>Established (10+ years)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Actions -->
+                <div class="modal-footer">
+                    <button class="btn-clear-filters" id="clearFilters">
+                        <i class="fas fa-times"></i>
+                        Clear All Filters
+                    </button>
+                    <button class="btn-apply-filters" id="applyFilters">
+                        <i class="fas fa-check"></i>
+                        Apply Filters
+                    </button>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Applying Filters...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: For Different Users -->
+        <section id="how-it-works" class="users-section">
             <div class="container">
                 <div class="section-header">
                     <h2>Designed for Your Needs</h2>
@@ -203,7 +567,7 @@
                                 <li><i class="fas fa-check"></i> Digital rent payments and documentation</li>
                             </ul>
                             <div class="user-cta">
-                                <button class="btn btn-primary" onclick="window.location.href='/rent.html'">
+                                <button class="btn btn-primary" onclick="scrollToSection('properties')">
                                     Browse Properties
                                     <i class="fas fa-arrow-right"></i>
                                 </button>
@@ -211,26 +575,26 @@
                         </div>
                     </div>
 
-                    <!-- For Students -->
-                    <div class="user-card" data-user="student">
+                    <!-- For Buyers -->
+                    <div class="user-card" data-user="buyer">
                         <div class="user-header">
                             <div class="user-icon">
-                                <i class="fas fa-graduation-cap"></i>
+                                <i class="fas fa-home"></i>
                             </div>
-                            <h3>For Students</h3>
-                            <div class="user-badge student-badge">Campus Focused</div>
+                            <h3>For Buyers</h3>
+                            <div class="user-badge buyer-badge">Property Ownership</div>
                         </div>
                         <div class="user-content">
                             <ul class="user-benefits">
-                                <li><i class="fas fa-check"></i> Affordable accommodation near campuses</li>
-                                <li><i class="fas fa-check"></i> Student ID verification for exclusive deals</li>
-                                <li><i class="fas fa-check"></i> Roommate matching service</li>
-                                <li><i class="fas fa-check"></i> Semester-based payment plans</li>
-                                <li><i class="fas fa-check"></i> Secure hostels with study facilities</li>
+                                <li><i class="fas fa-check"></i> Verified listings with genuine property owners</li>
+                                <li><i class="fas fa-check"></i> Affordable properties across prime locations</li>
+                                <li><i class="fas fa-check"></i> Expert assistance through the buying process</li>
+                                <li><i class="fas fa-check"></i> Transparent pricing and documentation</li>
+                                <li><i class="fas fa-check"></i> Secure payment and title verification</li>
                             </ul>
                             <div class="user-cta">
-                                <button class="btn btn-accent" onclick="window.location.href='/student.html'">
-                                    Find Student Housing
+                                <button class="btn btn-accent" onclick="scrollToSection('properties')">
+                                    Explore Properties for Sale
                                     <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
@@ -244,8 +608,8 @@
             </div>
         </section>
 
-        <!-- Section 3: Trust & Security -->
-        <section class="trust-section">
+        <!-- Section 4: Trust & Security -->
+        <section id="security" class="trust-section">
             <div class="container">
                 <div class="section-header">
                     <h2>Your Security is Our Priority</h2>
@@ -280,15 +644,15 @@
                                 <div class="verification-steps">
                                     <div class="verification-step">
                                         <span class="step-number">1</span>
-                                        <span>Document Verification</span>
-                                    </div>
-                                    <div class="verification-step">
-                                        <span class="step-number">2</span>
                                         <span>Physical Inspection</span>
                                     </div>
                                     <div class="verification-step">
-                                        <span class="step-number">3</span>
+                                        <span class="step-number">2</span>
                                         <span>Quality Assessment</span>
+                                    </div>
+                                    <div class="verification-step">
+                                        <span class="step-number">3</span>
+                                        <span>Document Verification</span>
                                     </div>
                                     <div class="verification-step">
                                         <span class="step-number">4</span>
@@ -330,8 +694,8 @@
             </div>
         </section>
 
-        <!-- Section 4: Mobile App -->
-        <section class="app-section">
+        <!-- Section 5: Mobile App -->
+        <section id="download" class="app-section">
             <div class="container">
                 <div class="section-header">
                     <h2>Manage Everything On The Go</h2>
@@ -388,166 +752,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="app-screen" data-screen="properties">
-                                        <div class="app-properties">
-                                            <div class="app-header">
-                                                <i class="fas fa-arrow-left back-btn"></i>
-                                                <h4>Browse Properties</h4>
-                                                <i class="fas fa-filter filter-btn"></i>
-                                            </div>
-                                            <div class="search-bar">
-                                                <i class="fas fa-search"></i>
-                                                <input type="text" placeholder="Search locations...">
-                                            </div>
-                                            <div class="property-list">
-                                                <div class="property-item featured">
-                                                    <div class="property-badge">Verified</div>
-                                                    <div class="property-image" style="background: linear-gradient(135deg, #a8d5e5, #7bc6e5);"></div>
-                                                    <div class="property-info">
-                                                        <h5>3-Bedroom Apartment</h5>
-                                                        <p><i class="fas fa-map-marker-alt"></i> Lekki Phase 1</p>
-                                                        <div class="property-meta">
-                                                            <span>🛏️ 3</span>
-                                                            <span>🚿 2</span>
-                                                            <span class="price">₦450,000/yr</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="property-item">
-                                                    <div class="property-badge">Available</div>
-                                                    <div class="property-image" style="background: linear-gradient(135deg, #f5c1bc, #f2a9a3);"></div>
-                                                    <div class="property-info">
-                                                        <h5>2-Bedroom Flat</h5>
-                                                        <p><i class="fas fa-map-marker-alt"></i> Yaba</p>
-                                                        <div class="property-meta">
-                                                            <span>🛏️ 2</span>
-                                                            <span>🚿 1</span>
-                                                            <span class="price">₦280,000/yr</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="app-screen" data-screen="payments">
-                                        <div class="app-payments">
-                                            <div class="app-header">
-                                                <i class="fas fa-arrow-left back-btn"></i>
-                                                <h4>Payments</h4>
-                                                <i class="fas fa-history history-btn"></i>
-                                            </div>
-                                            <div class="balance-card">
-                                                <div class="balance-label">Current Balance</div>
-                                                <div class="balance-amount">₦0.00</div>
-                                                <div class="balance-note">All payments up to date</div>
-                                            </div>
-                                            <div class="payment-card">
-                                                <div class="payment-header">
-                                                    <h5>Next Payment</h5>
-                                                    <div class="payment-due">Due Dec 15</div>
-                                                </div>
-                                                <div class="payment-details">
-                                                    <div class="payment-amount">₦150,000</div>
-                                                    <div class="payment-description">December Rent - 2 Bedroom Apartment</div>
-                                                </div>
-                                                <button class="pay-now-btn">Pay Now</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="app-screen" data-screen="maintenance">
-                                        <div class="app-maintenance">
-                                            <div class="app-header">
-                                                <i class="fas fa-arrow-left back-btn"></i>
-                                                <h4>Maintenance</h4>
-                                                <i class="fas fa-plus add-btn"></i>
-                                            </div>
-                                            <div class="maintenance-list">
-                                                <div class="maintenance-item completed">
-                                                    <div class="maintenance-icon">
-                                                        <i class="fas fa-faucet"></i>
-                                                    </div>
-                                                    <div class="maintenance-info">
-                                                        <h5>Leaking Faucet</h5>
-                                                        <p>Kitchen sink - Submitted 2 days ago</p>
-                                                        <span class="status completed">Completed</span>
-                                                    </div>
-                                                </div>
-                                                <div class="maintenance-item in-progress">
-                                                    <div class="maintenance-icon">
-                                                        <i class="fas fa-snowflake"></i>
-                                                    </div>
-                                                    <div class="maintenance-info">
-                                                        <h5>AC Repair</h5>
-                                                        <p>Living room unit - Submitted yesterday</p>
-                                                        <span class="status in-progress">In Progress</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="app-screen" data-screen="student-dashboard">
-                                        <div class="app-student">
-                                            <div class="app-header">
-                                                <h4>Student Dashboard</h4>
-                                                <div class="user-avatar student">S</div>
-                                            </div>
-                                            <div class="student-welcome">
-                                                <div class="welcome-badge">
-                                                    <i class="fas fa-graduation-cap"></i>
-                                                    <span>UNILAG Student</span>
-                                                </div>
-                                                <p>Your campus accommodation managed</p>
-                                            </div>
-                                            <div class="student-stats">
-                                                <div class="stat">
-                                                    <div class="stat-number">45</div>
-                                                    <div class="stat-label">Days Left</div>
-                                                </div>
-                                                <div class="stat">
-                                                    <div class="stat-number">2</div>
-                                                    <div class="stat-label">Roommates</div>
-                                                </div>
-                                            </div>
-                                            <div class="student-features">
-                                                <div class="student-btn">
-                                                    <i class="fas fa-bed"></i>
-                                                    <span>My Hostel</span>
-                                                </div>
-                                                <div class="student-btn">
-                                                    <i class="fas fa-users"></i>
-                                                    <span>Roommates</span>
-                                                </div>
-                                                <div class="student-btn">
-                                                    <i class="fas fa-wifi"></i>
-                                                    <span>Campus WiFi</span>
-                                                </div>
-                                                <div class="student-btn">
-                                                    <i class="fas fa-utensils"></i>
-                                                    <span>Meal Plans</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Demo Controls -->
-                        <div class="demo-controls">
-                            <div class="demo-dots">
-                                <span class="dot active" data-screen="splash"></span>
-                                <span class="dot" data-screen="home"></span>
-                                <span class="dot" data-screen="properties"></span>
-                                <span class="dot" data-screen="payments"></span>
-                                <span class="dot" data-screen="maintenance"></span>
-                                <span class="dot" data-screen="student-dashboard"></span>
-                            </div>
-                            <div class="demo-info">
-                                <span class="current-screen">App Launch</span>
                             </div>
                         </div>
                     </div>
@@ -583,44 +788,10 @@
                                     <p>Report issues and track repair progress in real-time</p>
                                 </div>
                             </div>
-                            <div class="feature-item" data-feature="4">
-                                <div class="feature-icon">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <div class="feature-text">
-                                    <h4>Direct Communication</h4>
-                                    <p>Chat directly with property managers and support team</p>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- QR Code & Download -->
                         <div class="app-download">
-                            <div class="qr-container">
-                                <div class="qr-code">
-                                    <div class="qr-grid">
-                                        <div class="qr-row">
-                                            <div class="qr-cell black"></div><div class="qr-cell black"></div><div class="qr-cell black"></div><div class="qr-cell black"></div><div class="qr-cell black"></div>
-                                        </div>
-                                        <div class="qr-row">
-                                            <div class="qr-cell black"></div><div class="qr-cell white"></div><div class="qr-cell white"></div><div class="qr-cell white"></div><div class="qr-cell black"></div>
-                                        </div>
-                                        <div class="qr-row">
-                                            <div class="qr-cell black"></div><div class="qr-cell white"></div><div class="qr-cell black"></div><div class="qr-cell white"></div><div class="qr-cell black"></div>
-                                        </div>
-                                        <div class="qr-row">
-                                            <div class="qr-cell black"></div><div class="qr-cell white"></div><div class="qr-cell white"></div><div class="qr-cell white"></div><div class="qr-cell black"></div>
-                                        </div>
-                                        <div class="qr-row">
-                                            <div class="qr-cell black"></div><div class="qr-cell black"></div><div class="qr-cell black"></div><div class="qr-cell black"></div><div class="qr-cell black"></div>
-                                        </div>
-                                    </div>
-                                    <div class="qr-logo-center">
-                                        <img src="/ASSECT/Logo Design_ DomiHive saas 2.png" alt="DomiHive">
-                                    </div>
-                                </div>
-                                <p class="qr-text">Scan to download DomiHive app</p>
-                            </div>
                             <div class="download-buttons">
                                 <button class="download-btn play-store">
                                     <i class="fab fa-google-play"></i>
@@ -642,8 +813,8 @@
                 </div>
             </div>
         </section>
-        
-        <!-- Section 5: How DomiHive Works -->
+
+        <!-- Section 6: How DomiHive Works -->
         <section class="process-section">
             <div class="container">
                 <div class="section-header">
@@ -703,7 +874,7 @@
             </div>
         </section>
 
-        <!-- Section 6: Final CTA -->
+        <!-- Section 7: Final CTA -->
         <section class="final-cta">
             <div class="container">
                 <div class="cta-content">
@@ -722,21 +893,21 @@
                             </div>
                             <h3>Find Your Home</h3>
                             <p>Browse verified properties with professional management and secure payments</p>
-                            <button class="card-btn primary" onclick="window.location.href='/rent.html'">
+                            <button class="card-btn primary" onclick="scrollToSection('properties')">
                                 Browse Properties
                                 <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
 
-                        <!-- For Students -->
-                        <div class="cta-card" data-card="student">
+                        <!-- For Buyers -->
+                        <div class="cta-card" data-card="buyer">
                             <div class="card-icon">
-                                <i class="fas fa-graduation-cap"></i>
+                                <i class="fas fa-home"></i>
                             </div>
-                            <h3>Student Housing</h3>
-                            <p>Secure, affordable accommodation near campuses with student-friendly features</p>
-                            <button class="card-btn accent" onclick="window.location.href='/student.html'">
-                                Find Student Housing
+                            <h3>Buy Property</h3>
+                            <p>Discover verified homes and properties for sale with transparent pricing and trusted agents.</p>
+                            <button class="card-btn accent" onclick="scrollToSection('properties')">
+                                Explore Properties
                                 <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -748,7 +919,7 @@
                             </div>
                             <h3>Get The App</h3>
                             <p>Manage everything on the go with our mobile app for tenants and students</p>
-                            <button class="card-btn secondary" onclick="scrollToSection('app-section')">
+                            <button class="card-btn secondary" onclick="scrollToSection('download')">
                                 Download App
                                 <i class="fas fa-download"></i>
                             </button>
@@ -767,13 +938,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Background Elements -->
-            <div class="cta-bg-elements">
-                <div class="bg-circle circle-1"></div>
-                <div class="bg-circle circle-2"></div>
-                <div class="bg-circle circle-3"></div>
             </div>
         </section>
     </main>
@@ -814,10 +978,6 @@
                         </a>
                     </div>
                 </div>
-
-                <div class="hierarchy-connector">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
             </div>
 
             <!-- Main Footer Content -->
@@ -832,18 +992,6 @@
                         
                         <p><strong>DomiHive</strong> is our flagship property management platform, designed to make rental experiences secure and hassle-free for Nigerians.</p>
                     </div>
-
-                    <!-- Upcoming Projects from BBW Tech Innovations -->
-                    <div class="upcoming-projects">
-                        <h6>More Innovation Coming Soon</h6>
-                        <div class="project-tags">
-                            <span class="project-tag">Fixlyn</span>
-                            <span class="project-tag">SilentVibe</span>
-                            <span class="project-tag">HFWT</span>
-                            <span class="project-tag">Annieworld</span>
-                        </div>
-                        <p class="project-note">More SaaS solutions launching soon from BBW Tech Innovations</p>
-                    </div>
                 </div>
 
                 <!-- Quick Links -->
@@ -853,31 +1001,19 @@
                         <div class="link-column">
                             <h6>DomiHive</h6>
                             <ul>
-                                <li><a href="/">Home</a></li>
-                                <li><a href="/rent.html">Browse Properties</a></li>
-                                <li><a href="/student.html">Student Housing</a></li>
-                                <li><a href="/how-it-works.html">How It Works</a></li>
-                                <li><a href="/about.html">About DomiHive</a></li>
+                                <li><a href="#home">Home</a></li>
+                                <li><a href="#properties">Browse Properties</a></li>
+                                <li><a href="#features">Features</a></li>
+                                <li><a href="#how-it-works">How It Works</a></li>
                             </ul>
                         </div>
                         <div class="link-column">
                             <h6>Support</h6>
                             <ul>
-                                <li><a href="/help.html">Help Center</a></li>
-                                <li><a href="/faq.html">FAQ</a></li>
-                                <li><a href="/contact.html">Contact Us</a></li>
-                                <li><a href="/safety.html">Safety Tips</a></li>
-                                <li><a href="/privacy.html">Privacy Policy</a></li>
-                            </ul>
-                        </div>
-                        <div class="link-column">
-                            <h6>Resources</h6>
-                            <ul>
-                                <li><a href="/blog.html">Blog</a></li>
-                                <li><a href="/guides.html">Rental Guides</a></li>
-                                <li><a href="/news.html">News & Updates</a></li>
-                                <li><a href="/careers.html">Careers</a></li>
-                                <li><a href="/partners.html">Partners</a></li>
+                                <li><a href="#">Help Center</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">Safety Tips</a></li>
                             </ul>
                         </div>
                     </div>
@@ -889,20 +1025,6 @@
                     
                     <!-- Contact Information -->
                     <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <span>BBW Multi-Skills Ltd</span>
-                                <a href="mailto:bbw@builtbywill.org">bbw@builtbywill.org</a>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <span>BBW Tech Innovations</span>
-                                <a href="mailto:bbw@techinnovations.com">bbw@techinnovations.com</a>
-                            </div>
-                        </div>
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
                             <div>
@@ -918,64 +1040,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Social Media -->
-                    <div class="social-section">
-                        <h6>Follow Our Journey</h6>
-                        <div class="social-companies">
-                            <div class="social-company">
-                                <span>BBW Multi-Skills</span>
-                                <div class="social-links">
-                                    <a href="#" class="social-link" title="LinkedIn">
-                                        <i class="fab fa-linkedin"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="YouTube">
-                                        <i class="fab fa-youtube"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="Facebook">
-                                        <i class="fab fa-facebook"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="Instagram">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="social-company">
-                                <span>BBW Tech Innovations</span>
-                                <div class="social-links">
-                                    <a href="#" class="social-link" title="LinkedIn">
-                                        <i class="fab fa-linkedin"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="YouTube">
-                                        <i class="fab fa-youtube"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="Facebook">
-                                        <i class="fab fa-facebook"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="Instagram">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="social-company">
-                                <span>DomiHive</span>
-                                <div class="social-links">
-                                    <a href="#" class="social-link" title="LinkedIn">
-                                        <i class="fab fa-linkedin"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="YouTube">
-                                        <i class="fab fa-youtube"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="Facebook">
-                                        <i class="fab fa-facebook"></i>
-                                    </a>
-                                    <a href="#" class="social-link" title="Instagram">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -985,11 +1049,6 @@
                 <div class="bottom-content">
                     <div class="copyright">
                         <p>&copy; 2025 BBW Multi-Skills Ltd. All rights reserved. DomiHive is a product of BBW Tech Innovations.</p>
-                    </div>
-                    <div class="legal-links">
-                        <a href="/privacy.html">Privacy Policy</a>
-                        <a href="/terms.html">Terms of Service</a>
-                        <a href="/cookies.html">Cookie Policy</a>
                     </div>
                 </div>
             </div>

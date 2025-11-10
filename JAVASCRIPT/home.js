@@ -1,707 +1,1144 @@
-// ===== DARK THEME TOGGLE FUNCTIONALITY =====
-function initDarkTheme() {
-    const themeToggle = document.querySelector('.theme-toggle');
-    const themeIcon = themeToggle?.querySelector('i');
-    
-    // Check for saved theme preference or default to light
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    // Set initial theme
-    if (savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark)) {
-        document.body.classList.add('dark-mode');
-        if (themeIcon) {
-            themeIcon.className = 'fas fa-sun';
-        }
-    }
-
-    // Theme toggle event listener
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            if (themeIcon) {
-                themeIcon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
-            }
-            
-            // Save preference
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        });
-    }
-}
-
-// ===== MOBILE MENU FUNCTIONALITY =====
-function initMobileMenu() {
+// ===== NAVIGATION AND SCROLL FUNCTIONALITY =====
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    const sections = document.querySelectorAll('section[id]');
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    const mobileSearch = document.querySelector('.mobile-search');
+    const navLinksContainer = document.querySelector('.nav-links');
 
-    if (mobileMenuBtn && navLinks) {
+    // Mobile menu toggle
+    if (mobileMenuBtn && navLinksContainer) {
         mobileMenuBtn.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
+            navLinksContainer.classList.toggle('active');
             mobileMenuBtn.classList.toggle('active');
         });
     }
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        if (navLinks?.classList.contains('active') && 
-            !event.target.closest('.nav-links') && 
-            !event.target.closest('.mobile-menu-btn')) {
-            navLinks.classList.remove('active');
-            mobileMenuBtn?.classList.remove('active');
-        }
+    // Smooth scroll to section
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('data-section');
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                // Close mobile menu if open
+                if (navLinksContainer.classList.contains('active')) {
+                    navLinksContainer.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                }
+
+                // Smooth scroll to section
+                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+
+                // Update active nav link
+                updateActiveNavLink(targetId);
+            }
+        });
     });
 
-    // Handle mobile search
-    if (mobileSearch) {
-        mobileSearch.addEventListener('click', function() {
-            alert('Search functionality will be implemented soon!');
+    // Update active nav link on scroll
+    function updateActiveNavOnScroll() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + 100;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSection = section.getAttribute('id');
+            }
         });
+
+        if (currentSection) {
+            updateActiveNavLink(currentSection);
+        }
+    }
+
+    // Update active nav link
+    function updateActiveNavLink(sectionId) {
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === sectionId) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // Listen for scroll events
+    window.addEventListener('scroll', updateActiveNavOnScroll);
+
+    // Initial active section check
+    updateActiveNavOnScroll();
+}
+
+// ===== PROPERTIES FUNCTIONALITY =====
+let allProperties = [];
+let filteredProperties = [];
+let currentPage = 1;
+const propertiesPerPage = 12;
+
+class PropertyStorageSystem {
+    constructor() {
+        this.initializeStorage();
+    }
+
+    initializeStorage() {
+        if (!localStorage.getItem('domihive_property_interests')) {
+            const initialData = {
+                viewed_properties: [],
+                saved_properties: [],
+                recent_searches: []
+            };
+            localStorage.setItem('domihive_property_interests', JSON.stringify(initialData));
+        }
+    }
+
+    storePropertyForOverview(property, action = 'viewed') {
+        try {
+            const storage = this.getStorage();
+            const timestamp = new Date().toISOString();
+            
+            const propertyData = {
+                property: property,
+                action: action,
+                timestamp: timestamp,
+                stored_at: new Date().toLocaleString(),
+                ready_for_dashboard: true
+            };
+
+            storage.viewed_properties.unshift(propertyData);
+            
+            if (storage.viewed_properties.length > 10) {
+                storage.viewed_properties = storage.viewed_properties.slice(0, 10);
+            }
+
+            this.saveStorage(storage);
+            
+            console.log('💾 Property stored for overview:', property.id);
+            return true;
+            
+        } catch (error) {
+            console.error('❌ Error storing property:', error);
+            return false;
+        }
+    }
+
+    storeFavoriteProperty(property) {
+        return this.storePropertyForOverview(property, 'saved');
+    }
+
+    getStorage() {
+        return JSON.parse(localStorage.getItem('domihive_property_interests'));
+    }
+
+    saveStorage(data) {
+        localStorage.setItem('domihive_property_interests', JSON.stringify(data));
+    }
+
+    getRecentProperties(limit = 5) {
+        const storage = this.getStorage();
+        return storage.viewed_properties.slice(0, limit);
     }
 }
 
-// ===== SCROLL TO SECTION FUNCTION =====
+let propertyStorage;
+
+function initPropertiesGrid() {
+    console.log('🏠 Initializing Properties Grid...');
+    
+    propertyStorage = new PropertyStorageSystem();
+    generateSampleProperties();
+    applySavedSearchCriteria();
+    displayProperties();
+    initPropertiesEventListeners();
+    
+    console.log(`✅ Loaded ${allProperties.length} properties`);
+}
+
+function generateSampleProperties() {
+    const propertyTypes = ['apartment', 'house', 'duplex', 'studio', 'shared'];
+    const locations = {
+        mainland: [
+            'Ikeja GRA', 'Yaba', 'Surulere', 'Ojota', 'Oshodi', 'Ilupeju',
+            'Egbeda', 'Maryland', 'Ikorodu', 'Agege', 'Festac Town', 'Gbagada',
+            'Mushin', 'Mende', 'Ogba', 'Alausa', 'Anthony', 'Palmgroove'
+        ],
+        island: [
+            'Ikoyi', 'Lekki Phase 1', 'Victoria Island', 'Ajah', 'Sangotedo',
+            'Chevron', 'Oniru', 'Banana Island', 'Lekki Phase 2', 'VGC'
+        ]
+    };
+    
+    const amenitiesList = ['wifi', 'parking', 'security', 'pool', 'gym', 'ac', 'generator', 'water'];
+    const propertyImages = [
+        'https://images.unsplash.com/photo-1545323157-f6f63c0d66a7?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1564019471349-34e8a875c5c8?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1560448078-8b7a9c7b7c7c?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&h=600&fit=crop'
+    ];
+    
+    for (let i = 1; i <= 84; i++) {
+        const isMainland = Math.random() > 0.5;
+        const area = isMainland ? 'mainland' : 'island';
+        const locationArray = locations[area];
+        const randomLocation = locationArray[Math.floor(Math.random() * locationArray.length)];
+        
+        let propertyCategory = 'rent';
+        if (i > 60) propertyCategory = 'buy';
+        else if (i > 45) propertyCategory = 'commercial';
+        else if (i > 30) propertyCategory = 'shortlet';
+        
+        const img1 = propertyImages[Math.floor(Math.random() * propertyImages.length)];
+        const img2 = propertyImages[Math.floor(Math.random() * propertyImages.length)];
+        const img3 = propertyImages[Math.floor(Math.random() * propertyImages.length)];
+        
+        const property = {
+            id: i,
+            title: `${getRandomPropertyType()} in ${randomLocation}`,
+            price: getRandomPrice(area, propertyCategory),
+            location: randomLocation,
+            area: area,
+            category: propertyCategory,
+            type: propertyTypes[Math.floor(Math.random() * propertyTypes.length)],
+            bedrooms: Math.floor(Math.random() * 4) + 1,
+            bathrooms: Math.floor(Math.random() * 3) + 1,
+            size: `${Math.floor(Math.random() * 200) + 50} sqm`,
+            furnishing: ['furnished', 'semi-furnished', 'unfurnished'][Math.floor(Math.random() * 3)],
+            amenities: getRandomAmenities(amenitiesList),
+            petsAllowed: Math.random() > 0.7,
+            age: ['new', 'modern', 'established'][Math.floor(Math.random() * 3)],
+            images: [img1, img2, img3],
+            isVerified: Math.random() > 0.2,
+            isFeatured: Math.random() > 0.8,
+            isNew: i > 60,
+            description: `Beautiful ${getRandomPropertyType()} located in the heart of ${randomLocation}. This property offers modern amenities and comfortable living spaces.`,
+            dateAdded: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000)
+        };
+        
+        allProperties.push(property);
+    }
+
+    filteredProperties = [...allProperties];
+}
+
+function getRandomPropertyType() {
+    const types = ['Apartment', 'House', 'Duplex', 'Studio', 'Shared Apartment'];
+    return types[Math.floor(Math.random() * types.length)];
+}
+
+function getRandomPrice(area, category) {
+    let basePrice = 400000;
+    
+    switch(category) {
+        case 'buy':
+            basePrice = area === 'island' ? 80000000 : 40000000;
+            break;
+        case 'shortlet':
+            basePrice = area === 'island' ? 1200000 : 600000;
+            break;
+        case 'commercial':
+            basePrice = area === 'island' ? 1500000 : 800000;
+            break;
+        default:
+            basePrice = area === 'island' ? 800000 : 400000;
+    }
+    
+    const variation = Math.random() * (basePrice * 0.5);
+    return Math.floor(basePrice + variation);
+}
+
+function getRandomAmenities(amenitiesList) {
+    const count = Math.floor(Math.random() * 4) + 3;
+    const shuffled = [...amenitiesList].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+function applySavedSearchCriteria() {
+    const savedSearch = sessionStorage.getItem('domihive_search_criteria');
+    if (savedSearch) {
+        try {
+            const criteria = JSON.parse(savedSearch);
+            console.log('🔍 Applying saved search criteria:', criteria);
+            
+            if (criteria.action) {
+                filteredProperties = allProperties.filter(property => 
+                    property.category === criteria.action
+                );
+            }
+            
+            applyHeroSearch(criteria);
+            sessionStorage.removeItem('domihive_search_criteria');
+        } catch (error) {
+            console.error('Error applying saved search criteria:', error);
+        }
+    }
+}
+
+function initPropertiesEventListeners() {
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const sortSelect = document.getElementById('sortSelect');
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const loadMoreBtn = document.getElementById('loadMore');
+
+    if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', clearAllFilters);
+    if (sortSelect) sortSelect.addEventListener('change', sortProperties);
+    if (loadMoreBtn) loadMoreBtn.addEventListener('click', loadMoreProperties);
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => switchView(btn.dataset.view));
+    });
+}
+
+function applyFilters() {
+    console.log('🎯 Applying filters...');
+    
+    const filters = getCurrentFilters();
+    filteredProperties = allProperties.filter(property => {
+        return matchesAllFilters(property, filters);
+    });
+    
+    currentPage = 1;
+    sortProperties();
+    displayProperties();
+    
+    console.log(`📊 Filtered to ${filteredProperties.length} properties`);
+}
+
+function getCurrentFilters() {
+    const minPriceValue = parseInt(document.getElementById('minPrice').value) || 0;
+    const maxPriceValue = parseInt(document.getElementById('maxPrice').value) || 100000000;
+    
+    const filters = {
+        priceRange: {
+            min: minPriceValue,
+            max: maxPriceValue
+        },
+        bedrooms: getCheckedValues('bedrooms'),
+        bathrooms: getCheckedValues('bathrooms'),
+        propertyType: getCheckedValues('propertyType'),
+        furnishing: getCheckedValues('furnishing'),
+        amenities: getCheckedValues('amenities'),
+        area: getCheckedValues('area'),
+        pets: getCheckedValues('pets'),
+        age: getCheckedValues('age')
+    };
+    
+    return filters;
+}
+
+function getCheckedValues(name) {
+    const checked = document.querySelectorAll(`#advancedFiltersModal input[name="${name}"]:checked`);
+    return Array.from(checked).map(input => input.value);
+}
+
+function matchesAllFilters(property, filters) {
+    // Price range
+    if (property.price < filters.priceRange.min || property.price > filters.priceRange.max) {
+        return false;
+    }
+    
+    // Bedrooms
+    if (filters.bedrooms.length > 0) {
+        const bedroomValue = property.bedrooms >= 4 ? '4' : property.bedrooms.toString();
+        if (!filters.bedrooms.includes(bedroomValue)) return false;
+    }
+    
+    // Bathrooms
+    if (filters.bathrooms.length > 0) {
+        const bathroomValue = property.bathrooms >= 3 ? '3' : property.bathrooms.toString();
+        if (!filters.bathrooms.includes(bathroomValue)) return false;
+    }
+    
+    // Property type
+    if (filters.propertyType.length > 0 && !filters.propertyType.includes(property.type)) {
+        return false;
+    }
+    
+    // Furnishing
+    if (filters.furnishing.length > 0 && !filters.furnishing.includes(property.furnishing)) {
+        return false;
+    }
+    
+    // Amenities
+    if (filters.amenities.length > 0) {
+        const hasAllAmenities = filters.amenities.every(amenity => 
+            property.amenities.includes(amenity)
+        );
+        if (!hasAllAmenities) return false;
+    }
+    
+    // Area
+    if (filters.area.length > 0 && !filters.area.includes(property.area)) {
+        return false;
+    }
+    
+    // Pets
+    if (filters.pets.length > 0) {
+        if (filters.pets.includes('allowed') && !property.petsAllowed) return false;
+        if (filters.pets.includes('not-allowed') && property.petsAllowed) return false;
+    }
+    
+    // Age
+    if (filters.age.length > 0 && !filters.age.includes(property.age)) {
+        return false;
+    }
+    
+    return true;
+}
+
+function sortProperties() {
+    const sortBy = document.getElementById('sortSelect').value;
+    
+    filteredProperties.sort((a, b) => {
+        switch (sortBy) {
+            case 'price-low':
+                return a.price - b.price;
+            case 'price-high':
+                return b.price - a.price;
+            case 'newest':
+                return new Date(b.dateAdded) - new Date(a.dateAdded);
+            case 'popular':
+                return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
+            case 'verified':
+                return (b.isVerified ? 1 : 0) - (a.isVerified ? 1 : 0);
+            default:
+                return 0;
+        }
+    });
+    
+    displayProperties();
+}
+
+function displayProperties() {
+    const propertiesGrid = document.getElementById('propertiesGrid');
+    const resultsCount = document.getElementById('results-count');
+    const loadMoreBtn = document.getElementById('loadMore');
+    
+    const startIndex = (currentPage - 1) * propertiesPerPage;
+    const endIndex = startIndex + propertiesPerPage;
+    const propertiesToShow = filteredProperties.slice(0, endIndex);
+    
+    propertiesGrid.innerHTML = '';
+    
+    if (propertiesToShow.length === 0) {
+        showNoResultsMessage();
+    } else {
+        propertiesToShow.forEach(property => {
+            const propertyCard = createPropertyCard(property);
+            propertiesGrid.appendChild(propertyCard);
+        });
+    }
+    
+    if (resultsCount) {
+        resultsCount.textContent = filteredProperties.length + '+';
+    }
+    
+    const totalDisplayed = Math.min(endIndex, filteredProperties.length);
+    const hasMoreProperties = totalDisplayed < filteredProperties.length;
+    
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = hasMoreProperties ? 'flex' : 'none';
+        
+        if (hasMoreProperties) {
+            const remaining = filteredProperties.length - totalDisplayed;
+            const nextBatch = Math.min(remaining, propertiesPerPage);
+            loadMoreBtn.innerHTML = `<i class="fas fa-arrow-down"></i> Load ${nextBatch} More Properties`;
+        } else if (filteredProperties.length > 0) {
+            loadMoreBtn.innerHTML = `<i class="fas fa-check"></i> All ${filteredProperties.length} Properties Loaded`;
+        }
+    }
+    
+    console.log(`📄 Displaying ${totalDisplayed} of ${filteredProperties.length} properties (Page ${currentPage})`);
+}
+
+function showNoResultsMessage() {
+    const propertiesGrid = document.getElementById('propertiesGrid');
+    propertiesGrid.innerHTML = `
+        <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>No properties found</h3>
+            <p>Try adjusting your filters to see more results, or let us know what you're looking for.</p>
+            <button class="btn-view-details" onclick="clearAllFilters()" style="margin-top: 1rem; display: inline-block;">Clear All Filters</button>
+            
+            <div class="request-form">
+                <h4>Can't find what you're looking for?</h4>
+                <p>Let us help you find your perfect property</p>
+                <input type="text" placeholder="Your Name" id="requestName">
+                <input type="email" placeholder="Your Email" id="requestEmail">
+                <input type="tel" placeholder="Your Phone" id="requestPhone">
+                <textarea placeholder="Tell us about your property requirements..." rows="4" id="requestMessage"></textarea>
+                <button onclick="submitPropertyRequest()">Submit Request</button>
+            </div>
+        </div>
+    `;
+}
+
+function createPropertyCard(property) {
+    const isListView = document.getElementById('propertiesGrid').classList.contains('list-view');
+    
+    const card = document.createElement('div');
+    card.className = `property-card ${isListView ? 'list-view' : ''}`;
+    card.innerHTML = `
+        <div class="property-image">
+            <div class="property-carousel" data-property-id="${property.id}">
+                ${property.images.map((img, index) => `
+                    <div class="carousel-slide ${index === 0 ? 'active' : ''}" 
+                         style="background-image: url('${img}')"></div>
+                `).join('')}
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-btn prev-btn" onclick="navCarousel(${property.id}, -1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn next-btn" onclick="navCarousel(${property.id}, 1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="carousel-dots">
+                ${property.images.map((_, index) => `
+                    <span class="carousel-dot ${index === 0 ? 'active' : ''}" 
+                          onclick="goToSlide(${property.id}, ${index})"></span>
+                `).join('')}
+            </div>
+            
+            <div class="property-badges">
+                ${property.isVerified ? '<span class="property-badge badge-verified">Verified</span>' : ''}
+                ${property.isFeatured ? '<span class="property-badge badge-featured">Featured</span>' : ''}
+                ${property.isNew ? '<span class="property-badge badge-new">New</span>' : ''}
+            </div>
+            
+            <button class="favorite-btn" onclick="handleFavoriteClick(${property.id}, this)">
+                <i class="fas fa-heart"></i>
+            </button>
+        </div>
+        
+        <div class="property-details">
+            <div class="property-price">₦${property.price.toLocaleString()}/year</div>
+            <h3 class="property-title">${property.title}</h3>
+            <div class="property-location">
+                <i class="fas fa-map-marker-alt"></i>
+                ${property.location}
+            </div>
+            
+            <div class="property-features">
+                <span class="property-feature">
+                    <i class="fas fa-bed"></i> ${property.bedrooms} bed
+                </span>
+                <span class="property-feature">
+                    <i class="fas fa-bath"></i> ${property.bathrooms} bath
+                </span>
+                <span class="property-feature">
+                    <i class="fas fa-ruler-combined"></i> ${property.size}
+                </span>
+            </div>
+            
+            <p class="property-description">${property.description}</p>
+            
+            <div class="property-actions">
+                <button class="btn-view-details" onclick="handleViewDetailsClick(${property.id})">
+                    View Details
+                </button>
+                <button class="btn-save" onclick="handleFavoriteClick(${property.id}, this)">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+function loadMoreProperties() {
+    currentPage++;
+    displayProperties();
+    
+    setTimeout(() => {
+        const newProperties = document.getElementById('propertiesGrid').children;
+        if (newProperties.length > 0) {
+            const lastNewProperty = newProperties[newProperties.length - 1];
+            lastNewProperty.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }, 100);
+    
+    console.log(`📄 Loaded page ${currentPage}, showing ${Math.min(currentPage * propertiesPerPage, filteredProperties.length)} properties`);
+}
+
+function switchView(view) {
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const propertiesGrid = document.getElementById('propertiesGrid');
+    
+    viewBtns.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    if (view === 'list') {
+        propertiesGrid.classList.add('list-view');
+    } else {
+        propertiesGrid.classList.remove('list-view');
+    }
+    
+    displayProperties();
+}
+
+function clearAllFilters() {
+    document.querySelectorAll('#advancedFiltersModal input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    const minPriceInput = document.getElementById('minPrice');
+    const maxPriceInput = document.getElementById('maxPrice');
+    if (minPriceInput) minPriceInput.value = '';
+    if (maxPriceInput) maxPriceInput.value = '';
+    
+    const priceRange = document.getElementById('priceRange');
+    if (priceRange) {
+        priceRange.value = 5000000;
+    }
+    
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) sortSelect.value = 'newest';
+    
+    applyFilters();
+    console.log('🧹 All filters cleared');
+}
+
+// ===== HERO SEARCH FUNCTIONALITY =====
+function initHeroSearch() {
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const searchInput = document.getElementById('searchInput');
+    const typeSelect = document.getElementById('typeSelect');
+    const areaTypeSelect = document.getElementById('areaTypeSelect');
+    const locationSelect = document.getElementById('locationSelect');
+    const doSearchBtn = document.getElementById('doSearch');
+
+    const propertyOptions = {
+        rent: [
+            "Apartment", 
+            "Self Contain", 
+            "Mini Flat", 
+            "Duplex", 
+            "Bungalow",
+            "Terrace House",
+            "Detached House",
+            "Shared Apartment"
+        ],
+        shortlet: [
+            "Studio Apartment",
+            "1 Bedroom Shortlet", 
+            "2 Bedroom Shortlet", 
+            "3 Bedroom Shortlet",
+            "Luxury Apartment", 
+            "Serviced Apartment",
+            "Executive Suite"
+        ],
+        commercial: [
+            "Office Space",
+            "Shop", 
+            "Warehouse",
+            "Commercial Building",
+            "Co-working Space",
+            "Retail Space",
+            "Industrial Property"
+        ],
+        buy: [
+            "Residential Apartment",
+            "Detached House",
+            "Semi-Detached House", 
+            "Terrace House",
+            "Duplex",
+            "Bungalow",
+            "Land/Plot",
+            "Commercial Property"
+        ]
+    };
+
+    const lagosAreas = {
+        mainland: [
+            "Ikeja", "Ikeja GRA", "Yaba", "Surulere", "Ojota", "Oshodi", "Ilupeju",
+            "Egbeda", "Maryland", "Ikorodu", "Agege", "Festac Town", "Gbagada",
+            "Mushin", "Mende", "Ogba", "Alausa", "Anthony", "Palmgroove", "Somolu",
+            "Bariga", "Ketu", "Magodo", "Omole", "Isolo", "Ejigbo", "Amuwo Odofin",
+            "Satellite Town", "Apapa", "Mile 2", "Alaba", "Ojo", "Badagry", "Agbara"
+        ],
+        island: [
+            "Ikoyi", "Lekki Phase 1", "Victoria Island", "Ajah", "Sangotedo",
+            "Chevron", "Oniru", "Epe", "Banana Island", "Lekki Phase 2", 
+            "Victoria Garden City (VGC)", "Lekki Scheme 2", "Osapa London",
+            "Jakande", "Awoyaya", "Abraham Adesanya", "Lakowe", "Ibeju Lekki",
+            "Marina", "Dolphin Estate", "1004 Estate", "Parkview Estate"
+        ]
+    };
+
+    function populateTypeOptions(type) {
+        console.log('🔄 Populating property types for:', type);
+        typeSelect.innerHTML = "";
+        const placeholder = document.createElement('option');
+        placeholder.value = "";
+        placeholder.textContent = "Property Type";
+        typeSelect.appendChild(placeholder);
+
+        const options = propertyOptions[type] || [];
+        console.log('📋 Available options:', options);
+        
+        options.forEach(optText => {
+            const opt = document.createElement('option');
+            opt.value = optText.toLowerCase().replace(/\s+/g,'-');
+            opt.textContent = optText;
+            typeSelect.appendChild(opt);
+        });
+        
+        console.log(`✅ Loaded ${options.length} property types for ${type}`);
+    }
+
+    function populateLocations(areaKey) {
+        locationSelect.innerHTML = "";
+        const placeholder = document.createElement('option');
+        placeholder.value = "";
+        placeholder.textContent = "Location";
+        locationSelect.appendChild(placeholder);
+
+        if (!areaKey || !lagosAreas[areaKey]) return;
+
+        const sortedLocations = lagosAreas[areaKey].sort();
+        
+        sortedLocations.forEach(loc => {
+            const option = document.createElement('option');
+            option.value = loc.toLowerCase().replace(/\s+/g,'-');
+            option.textContent = loc;
+            locationSelect.appendChild(option);
+        });
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+
+            const selectedType = tab.getAttribute('data-type');
+            console.log('🏠 Tab switched to:', selectedType);
+            populateTypeOptions(selectedType);
+            
+            const placeholders = {
+                rent: 'Search for rental properties — e.g. "Lekki 3 bedroom"',
+                shortlet: 'Search for shortlet properties — e.g. "VI luxury apartment"',
+                commercial: 'Search for commercial properties — e.g. "Ikeja office space"',
+                buy: 'Search for properties to buy — e.g. "Lekki 4 bedroom house"'
+            };
+            
+            searchInput.placeholder = placeholders[selectedType] || 'Search properties...';
+        });
+    });
+
+    areaTypeSelect.addEventListener('change', () => {
+        const area = areaTypeSelect.value;
+        populateLocations(area);
+        
+        if (area) {
+            console.log(`📍 Area type selected: ${area}`);
+        }
+    });
+
+    doSearchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const activeTab = document.querySelector('.tab.active')?.getAttribute('data-type') || 'rent';
+        const query = searchInput.value.trim();
+        const areaType = areaTypeSelect.value;
+        const location = locationSelect.value;
+        const propType = typeSelect.value;
+        const bedrooms = document.getElementById('bedroomsSelect').value;
+        const minPrice = document.getElementById('minPriceSelect').value;
+        const maxPrice = document.getElementById('maxPriceSelect').value;
+
+        const searchCriteria = {
+            action: activeTab,
+            query: query,
+            areaType: areaType,
+            location: location,
+            propertyType: propType,
+            bedrooms: bedrooms,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            timestamp: new Date().toISOString()
+        };
+
+        sessionStorage.setItem('domihive_search_criteria', JSON.stringify(searchCriteria));
+        
+        console.log('🔍 Search submitted:', searchCriteria);
+        
+        applyHeroSearch(searchCriteria);
+        
+        document.querySelector('.properties-section')?.scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            doSearchBtn.click();
+        }
+    });
+
+    function initHeroSearch() {
+        console.log('🎯 Initializing hero search');
+        populateTypeOptions('rent');
+        populateLocations('mainland');
+        
+        searchInput.value = '';
+        
+        console.log('✅ Hero Search Initialized with 4 tabs');
+    }
+
+    initHeroSearch();
+}
+
+function applyHeroSearch(searchCriteria) {
+    console.log('🎯 Applying hero search criteria:', searchCriteria);
+    
+    clearAllFilters();
+    
+    if (searchCriteria.action) {
+        filteredProperties = allProperties.filter(property => 
+            property.category === searchCriteria.action
+        );
+    }
+    
+    if (searchCriteria.areaType) {
+        const areaCheckbox = document.querySelector(`#advancedFiltersModal input[name="area"][value="${searchCriteria.areaType}"]`);
+        if (areaCheckbox) areaCheckbox.checked = true;
+    }
+    
+    if (searchCriteria.propertyType) {
+        const typeCheckbox = document.querySelector(`#advancedFiltersModal input[name="propertyType"][value="${searchCriteria.propertyType}"]`);
+        if (typeCheckbox) typeCheckbox.checked = true;
+    }
+    
+    if (searchCriteria.bedrooms) {
+        const bedroomCheckbox = document.querySelector(`#advancedFiltersModal input[name="bedrooms"][value="${searchCriteria.bedrooms}"]`);
+        if (bedroomCheckbox) bedroomCheckbox.checked = true;
+    }
+    
+    if (searchCriteria.minPrice) {
+        const minPriceInput = document.getElementById('minPrice');
+        if (minPriceInput) minPriceInput.value = searchCriteria.minPrice;
+    }
+    
+    if (searchCriteria.maxPrice) {
+        const maxPriceInput = document.getElementById('maxPrice');
+        if (maxPriceInput) maxPriceInput.value = searchCriteria.maxPrice;
+    }
+    
+    setTimeout(() => {
+        applyFilters();
+        console.log('✅ Hero search filters applied successfully');
+    }, 100);
+}
+
+// ===== MODAL FILTERS FUNCTIONALITY =====
+function initModalFilters() {
+    const filterToggle = document.getElementById('filterToggle');
+    const modal = document.getElementById('advancedFiltersModal');
+    const modalClose = document.getElementById('modalClose');
+    const applyFiltersBtn = document.getElementById('applyFilters');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+
+    if (filterToggle && modal) {
+        filterToggle.addEventListener('click', function() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal || e.target.classList.contains('modal-overlay')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', function() {
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('active');
+            }
+            
+            setTimeout(() => {
+                applyFilters();
+                
+                if (loadingIndicator) {
+                    loadingIndicator.classList.remove('active');
+                }
+                
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                showSimpleNotification('Filters applied successfully!', 'success');
+            }, 1500);
+        });
+    }
+
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+            clearAllFilters();
+            showSimpleNotification('All filters cleared!', 'success');
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
+// ===== PROPERTY INTERACTION HANDLERS =====
+function handleViewDetailsClick(propertyId) {
+    console.log(`👀 View details clicked for property ${propertyId}`);
+    
+    const property = allProperties.find(p => p.id === propertyId);
+    if (!property) {
+        console.error('❌ Property not found:', propertyId);
+        return;
+    }
+
+    propertyStorage.storePropertyForOverview(property, 'viewed');
+    
+    localStorage.setItem('current_property_view', JSON.stringify(property));
+    
+    window.location.href = '/Pages/property-details-rent.html?id=' + propertyId;
+}
+
+function handleFavoriteClick(propertyId, buttonElement) {
+    console.log(`💖 Favorite clicked for property ${propertyId}`);
+    
+    const property = allProperties.find(p => p.id === propertyId);
+    if (!property) {
+        console.error('❌ Property not found:', propertyId);
+        return;
+    }
+
+    const success = propertyStorage.storePropertyForOverview(property, 'saved');
+    
+    if (success) {
+        sessionStorage.setItem('domihive_redirect_after_login', 'dashboard-overview');
+        sessionStorage.setItem('domihive_favorite_property_id', propertyId);
+        sessionStorage.setItem('domihive_previous_page', 'index.html');
+        
+        buttonElement.classList.toggle('active');
+        
+        updateFavoritesCount();
+        
+        showSimpleNotification(`Added to favorites! We'll save it for your dashboard.`);
+        
+        setTimeout(() => {
+            window.location.href = './signup.html';
+        }, 1000);
+    } else {
+        buttonElement.classList.toggle('active');
+        updateFavoritesCount();
+        showSimpleNotification('Added to favorites!', 'success');
+        setTimeout(() => {
+            window.location.href = './signup.html';
+        }, 500);
+    }
+}
+
+// ===== CAROUSEL FUNCTIONS =====
+function navCarousel(propertyId, direction) {
+    const carousel = document.querySelector(`.property-carousel[data-property-id="${propertyId}"]`);
+    if (!carousel) return;
+    
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.parentElement.querySelectorAll('.carousel-dot');
+    
+    let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+    let newIndex = (currentIndex + direction + slides.length) % slides.length;
+    
+    slides[currentIndex].classList.remove('active');
+    slides[newIndex].classList.add('active');
+    
+    dots[currentIndex].classList.remove('active');
+    dots[newIndex].classList.add('active');
+}
+
+function goToSlide(propertyId, slideIndex) {
+    const carousel = document.querySelector(`.property-carousel[data-property-id="${propertyId}"]`);
+    if (!carousel) return;
+    
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.parentElement.querySelectorAll('.carousel-dot');
+    
+    slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === slideIndex);
+    });
+    
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === slideIndex);
+    });
+}
+
+// ===== UTILITY FUNCTIONS =====
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
-        section.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
+        const offsetTop = section.offsetTop - 80;
+        window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
         });
-    } else {
-        console.warn(`Section with id '${sectionId}' not found`);
     }
 }
 
-// ===== FEATURES SECTION ANIMATIONS =====
-function initFeaturesAnimations() {
-    const featureCards = document.querySelectorAll('.feature-card');
+function showSimpleNotification(message, type = 'success') {
+    const existingNotification = document.querySelector('.simple-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `simple-notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+    `;
     
-    if (featureCards.length === 0) return;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
 
-    const featureObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const card = entry.target;
-                const cardNumber = parseInt(card.dataset.feature) || 0;
-                const delay = (cardNumber - 1) * 100;
-                
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, delay);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
+    document.body.appendChild(notification);
 
-    // Initial state and observe
-    featureCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'all 0.6s ease';
-        featureObserver.observe(card);
-    });
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 3000);
 }
 
-// ===== USERS SECTION ANIMATIONS =====
-function initUsersAnimations() {
-    const userCards = document.querySelectorAll('.user-card');
-    
-    if (userCards.length === 0) return;
-
-    const usersObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const card = entry.target;
-                const delay = card.dataset.user === 'tenant' ? 0 : 200;
-                
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, delay);
-            }
-        });
-    }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    // Initial state and observe
-    userCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'all 0.6s ease';
-        usersObserver.observe(card);
-    });
+function updateFavoritesCount() {
+    const favoriteBadge = document.querySelector('.favorite-badge');
+    if (favoriteBadge) {
+        const currentCount = parseInt(favoriteBadge.textContent) || 0;
+        favoriteBadge.textContent = currentCount + 1;
+        favoriteBadge.style.display = 'flex';
+    }
 }
 
-// ===== TRUST SECTION ANIMATIONS =====
-function initTrustAnimations() {
-    const trustFeatures = document.querySelectorAll('.trust-feature');
-    const trustStats = document.querySelectorAll('.trust-stat');
+function submitPropertyRequest() {
+    const name = document.getElementById('requestName')?.value || '';
+    const email = document.getElementById('requestEmail')?.value || '';
+    const phone = document.getElementById('requestPhone')?.value || '';
+    const message = document.getElementById('requestMessage')?.value || '';
     
-    if (trustFeatures.length === 0) return;
-
-    const trustObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const element = entry.target;
-                const delay = (parseInt(element.dataset.trust) || parseInt(element.dataset.stat) || 0) * 200;
-                
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                    element.style.transform = element.classList.contains('trust-feature') ? 'translateX(0)' : 'translateY(0)';
-                }, delay);
-            }
-        });
-    }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    // Initial state and observe trust features
-    trustFeatures.forEach(feature => {
-        feature.style.opacity = '0';
-        feature.style.transform = 'translateX(-50px)';
-        feature.style.transition = 'all 0.6s ease';
-        trustObserver.observe(feature);
-    });
-
-    // Initial state and observe trust stats
-    trustStats.forEach(stat => {
-        stat.style.opacity = '0';
-        stat.style.transform = 'translateY(30px)';
-        stat.style.transition = 'all 0.6s ease';
-        trustObserver.observe(stat);
-    });
+    if (!name || !email || !message) {
+        const errorElement = document.createElement('div');
+        errorElement.style.background = '#fee2e2';
+        errorElement.style.color = '#dc2626';
+        errorElement.style.padding = '1rem';
+        errorElement.style.borderRadius = '8px';
+        errorElement.style.marginTop = '1rem';
+        errorElement.innerHTML = 'Please fill in all required fields: Name, Email, and Message';
+        
+        const requestForm = document.querySelector('.request-form');
+        if (requestForm) {
+            requestForm.appendChild(errorElement);
+            setTimeout(() => errorElement.remove(), 5000);
+        }
+        return;
+    }
+    
+    console.log('📧 Property Request Submitted:', { name, email, phone, message });
+    
+    const successElement = document.createElement('div');
+    successElement.style.background = '#d1fae5';
+    successElement.style.color = '#065f46';
+    successElement.style.padding = '1rem';
+    successElement.style.borderRadius = '8px';
+    successElement.style.marginTop = '1rem';
+    successElement.innerHTML = 'Thank you! Your property request has been submitted to DomiHive support. We\'ll contact you soon!';
+    
+    const requestForm = document.querySelector('.request-form');
+    if (requestForm) {
+        requestForm.appendChild(successElement);
+    }
+    
+    document.getElementById('requestName').value = '';
+    document.getElementById('requestEmail').value = '';
+    document.getElementById('requestPhone').value = '';
+    document.getElementById('requestMessage').value = '';
 }
 
-// ===== MOBILE APP DEMO FUNCTIONALITY =====
-function initAppSection() {
-    const appSection = document.querySelector('.app-section');
-    const appScreens = document.querySelectorAll('.app-screen');
-    const demoDots = document.querySelectorAll('.demo-dots .dot');
-    const featureItems = document.querySelectorAll('.feature-item');
-    const currentScreenElement = document.querySelector('.current-screen');
-    
-    if (appScreens.length === 0) return;
-
-    // Demo configuration
-    const config = {
-        screenDuration: 3000,
-        transitionDuration: 600,
-        autoPlay: true
-    };
-
-    let currentScreenIndex = 0;
-    let screenInterval = null;
-    let isAnimating = false;
-
-    // Screen names for display
-    const screenNames = {
-        'splash': 'App Launch',
-        'home': 'Dashboard',
-        'properties': 'Property Search',
-        'payments': 'Payment Management', 
-        'maintenance': 'Maintenance Tracking',
-        'student-dashboard': 'Student Portal'
-    };
-
-    // Initialize the demo
-    function initDemo() {
-        // Reset all screens
-        appScreens.forEach((screen, index) => {
-            screen.style.opacity = '0';
-            screen.style.transform = 'translateX(100%)';
-            screen.classList.remove('active');
-        });
-
-        // Show first screen
-        appScreens[0].style.opacity = '1';
-        appScreens[0].style.transform = 'translateX(0)';
-        appScreens[0].classList.add('active');
-
-        // Update dots
-        updateDots(0);
-
-        // Start auto-rotation if enabled
-        if (config.autoPlay) {
-            startAutoRotation();
-        }
-    }
-
-    // Start auto-rotating through screens
-    function startAutoRotation() {
-        if (screenInterval) {
-            clearInterval(screenInterval);
-        }
-
-        screenInterval = setInterval(() => {
-            showNextScreen();
-        }, config.screenDuration);
-    }
-
-    // Show next screen in sequence
-    function showNextScreen() {
-        if (isAnimating) return;
-        
-        const nextIndex = (currentScreenIndex + 1) % appScreens.length;
-        showScreen(nextIndex);
-    }
-
-    // Show specific screen
-    function showScreen(newIndex) {
-        if (isAnimating || newIndex === currentScreenIndex) return;
-
-        isAnimating = true;
-        const currentScreen = appScreens[currentScreenIndex];
-        const newScreen = appScreens[newIndex];
-
-        // Exit current screen
-        currentScreen.style.transition = `all ${config.transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-        currentScreen.style.opacity = '0';
-        currentScreen.style.transform = 'translateX(-100%)';
-        currentScreen.classList.remove('active');
-
-        // Enter new screen
-        newScreen.style.transition = `all ${config.transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-        newScreen.style.opacity = '1';
-        newScreen.style.transform = 'translateX(0)';
-        newScreen.classList.add('active');
-
-        // Update current index and dots
-        currentScreenIndex = newIndex;
-        updateDots(newIndex);
-
-        // Update screen name display
-        if (currentScreenElement) {
-            const screenName = newScreen.getAttribute('data-screen');
-            currentScreenElement.textContent = screenNames[screenName] || 'App Screen';
-        }
-
-        // Reset animation flag after transition
-        setTimeout(() => {
-            isAnimating = false;
-        }, config.transitionDuration);
-    }
-
-    // Update dot indicators
-    function updateDots(activeIndex) {
-        demoDots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === activeIndex);
-        });
-    }
-
-    // Manual dot controls
-    demoDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            // Stop auto-rotation temporarily
-            clearInterval(screenInterval);
-            
-            // Show selected screen
-            showScreen(index);
-            
-            // Restart auto-rotation after longer delay
-            setTimeout(() => {
-                if (config.autoPlay) {
-                    startAutoRotation();
-                }
-            }, 10000);
-        });
-    });
-
-    // Feature item animations
-    function initFeatureAnimations() {
-        featureItems.forEach((item, index) => {
-            item.style.opacity = '0';
-            item.style.transform = 'translateX(-30px)';
-            item.style.transition = `all 0.6s ease ${index * 100}ms`;
-        });
-    }
-
-    function animateFeatures() {
-        featureItems.forEach((item, index) => {
-            setTimeout(() => {
-                item.style.opacity = '1';
-                item.style.transform = 'translateX(0)';
-            }, index * 100 + 200);
-        });
-    }
-
-    // Download button handlers
-    function initDownloadButtons() {
-        const downloadButtons = document.querySelectorAll('.download-btn');
-        
-        downloadButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const isPlayStore = this.classList.contains('play-store');
-                const storeName = isPlayStore ? 'Google Play Store' : 'Apple App Store';
-                
-                // Show loading state
-                const originalHTML = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><div><span>Preparing</span><strong>Download...</strong></div>';
-                this.disabled = true;
-                
-                // Simulate download process
-                setTimeout(() => {
-                    alert(`DomiHive app download for ${storeName} will be available soon!\n\nThis will redirect to the actual app store when the app is published.`);
-                    
-                    // Restore button
-                    this.innerHTML = originalHTML;
-                    this.disabled = false;
-                }, 1000);
-            });
-        });
-    }
-
-    // QR code interaction
-    function initQRCode() {
-        const qrCode = document.querySelector('.qr-code');
-        
-        if (qrCode) {
-            qrCode.addEventListener('click', function() {
-                // Add click animation
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
-                
-                alert('When the DomiHive app is published, this QR code will direct users to download the app from their respective app stores.');
-            });
-        }
-    }
-
-    // Intersection Observer for scroll animations
-    const appObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Start demo
-                initDemo();
-                animateFeatures();
-                
-            } else {
-                // Stop demo and reset
-                clearInterval(screenInterval);
-                
-                // Reset to first screen when leaving view
-                setTimeout(() => {
-                    if (!entry.isIntersecting) {
-                        showScreen(0);
-                    }
-                }, config.transitionDuration);
-            }
-        });
-    }, {
-        threshold: 0.3,
-        rootMargin: '0px 0px -100px 0px'
-    });
-
-    // Initialize everything
-    function init() {
-        initFeatureAnimations();
-        initDownloadButtons();
-        initQRCode();
-        
-        // Observe the app section
-        if (appSection) {
-            appObserver.observe(appSection);
-        }
-    }
-
-    // Start initialization
-    init();
-
-    // Return control functions for external use
-    return {
-        showScreen: (index) => showScreen(index),
-        play: () => startAutoRotation(),
-        pause: () => clearInterval(screenInterval),
-        next: () => showNextScreen(),
-        getCurrentScreen: () => currentScreenIndex
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
     };
 }
 
-// ===== PROCESS SECTION ANIMATIONS =====
-function initProcessAnimations() {
-    const processSteps = document.querySelectorAll('.process-step');
-    
-    if (processSteps.length === 0) return;
-
-    // Initial state
-    processSteps.forEach(step => {
-        step.style.opacity = '0';
-        step.style.transform = 'translateX(-50px)';
-        
-        // For even steps (right side)
-        if (parseInt(step.dataset.step) % 2 === 0) {
-            step.style.transform = 'translateX(50px)';
-        }
-        
-        // Reset to inactive state
-        const stepIcon = step.querySelector('.step-icon');
-        const stepIconI = step.querySelector('.step-icon i');
-        const stepContent = step.querySelector('.step-content');
-        
-        if (stepIcon) {
-            stepIcon.style.background = 'var(--white)';
-            stepIcon.style.boxShadow = 'none';
-            stepIcon.style.transform = 'scale(1)';
-        }
-        
-        if (stepIconI) {
-            stepIconI.style.color = 'var(--accent-color)';
-        }
-        
-        if (stepContent) {
-            stepContent.style.background = 'var(--light-gray)';
-            stepContent.style.boxShadow = 'none';
-            stepContent.style.transform = 'translateY(0)';
-        }
-    });
-
-    // Create Intersection Observer
-    const processObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateStepIn(entry.target);
-            } else {
-                animateStepOut(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.3
-    });
-
-    // Observe each process step
-    processSteps.forEach(step => {
-        processObserver.observe(step);
-    });
-
-    function animateStepIn(step) {
-        const stepNumber = parseInt(step.dataset.step);
-        const delay = (stepNumber - 1) * 200;
-        
-        setTimeout(() => {
-            // Animate main step container
-            step.style.transition = 'all 0.8s ease';
-            step.style.opacity = '1';
-            step.style.transform = 'translateX(0)';
-            
-            // Animate icon
-            const stepIcon = step.querySelector('.step-icon');
-            const stepIconI = step.querySelector('.step-icon i');
-            if (stepIcon && stepIconI) {
-                stepIcon.style.transition = 'all 0.5s ease 0.3s';
-                stepIcon.style.background = 'var(--accent-color)';
-                stepIcon.style.boxShadow = '0 10px 30px rgba(159, 117, 57, 0.3)';
-                stepIcon.style.transform = 'scale(1.1)';
-                stepIconI.style.transition = 'all 0.5s ease 0.3s';
-                stepIconI.style.color = 'var(--white)';
-            }
-            
-            // Animate content card
-            const stepContent = step.querySelector('.step-content');
-            if (stepContent) {
-                stepContent.style.transition = 'all 0.5s ease 0.5s';
-                stepContent.style.background = 'var(--white)';
-                stepContent.style.boxShadow = '0 10px 40px rgba(14, 31, 66, 0.1)';
-                stepContent.style.transform = 'translateY(-5px)';
-            }
-            
-        }, delay);
-    }
-
-    function animateStepOut(step) {
-        const stepNumber = parseInt(step.dataset.step);
-        
-        // Reset main step container
-        step.style.transition = 'all 0.6s ease';
-        step.style.opacity = '0';
-        if (stepNumber % 2 === 0) {
-            step.style.transform = 'translateX(50px)';
-        } else {
-            step.style.transform = 'translateX(-50px)';
-        }
-        
-        // Reset icon
-        const stepIcon = step.querySelector('.step-icon');
-        const stepIconI = step.querySelector('.step-icon i');
-        if (stepIcon && stepIconI) {
-            stepIcon.style.transition = 'all 0.4s ease';
-            stepIcon.style.background = 'var(--white)';
-            stepIcon.style.boxShadow = 'none';
-            stepIcon.style.transform = 'scale(1)';
-            stepIconI.style.transition = 'all 0.4s ease';
-            stepIconI.style.color = 'var(--accent-color)';
-        }
-        
-        // Reset content card
-        const stepContent = step.querySelector('.step-content');
-        if (stepContent) {
-            stepContent.style.transition = 'all 0.4s ease';
-            stepContent.style.background = 'var(--light-gray)';
-            stepContent.style.boxShadow = 'none';
-            stepContent.style.transform = 'translateY(0)';
-        }
-    }
-}
-
-// ===== FINAL CTA ANIMATIONS =====
-function initFinalCTA() {
-    const finalCTASection = document.querySelector('.final-cta');
-    const ctaCards = document.querySelectorAll('.cta-card');
-    const trustBadge = document.querySelector('.final-cta .trust-badge');
-    
-    if (!finalCTASection) return;
-
-    // Initial state
-    ctaCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(50px)';
-        card.style.transition = 'all 0.6s ease';
-    });
-
-    if (trustBadge) {
-        trustBadge.style.opacity = '0';
-        trustBadge.style.transform = 'translateY(30px)';
-        trustBadge.style.transition = 'all 0.6s ease';
-    }
-
-    // Intersection Observer
-    const ctaObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Animate cards with stagger
-                ctaCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 200);
-                });
-
-                // Animate trust badge
-                if (trustBadge) {
-                    setTimeout(() => {
-                        trustBadge.style.opacity = '1';
-                        trustBadge.style.transform = 'translateY(0)';
-                    }, 600);
-                }
-
-                // Stop observing after animation
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.3,
-        rootMargin: '0px 0px -100px 0px'
-    });
-
-    // Observe final CTA section
-    ctaObserver.observe(finalCTASection);
-
-    // Card button interactions
-    const cardButtons = document.querySelectorAll('.card-btn');
-    cardButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Add click animation
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-        });
-    });
-}
-
-// ===== FOOTER ANIMATIONS =====
-function initFooterAnimations() {
-    const footer = document.querySelector('.main-footer');
-    const hierarchyItems = document.querySelectorAll('.hierarchy-item');
-    
-    if (!footer) return;
-
-    // Simple fade-in animation for hierarchy items
-    const footerObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                hierarchyItems.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transform = 'translateY(0)';
-                    }, index * 200);
-                });
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    // Initial state
-    hierarchyItems.forEach(item => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateY(20px)';
-        item.style.transition = 'all 0.6s ease';
-    });
-
-    footerObserver.observe(footer);
-}
-
-// ===== INITIALIZE EVERYTHING =====
+// ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initializing DomiHive Homepage');
     
-    // Initialize all functionalities
-    initDarkTheme();
-    initMobileMenu();
-    initFeaturesAnimations();
-    initUsersAnimations();
-    initTrustAnimations();
-    initAppSection();
-    initProcessAnimations();
-    initFinalCTA();
-    initFooterAnimations();
+    initNavigation();
+    initHeroSearch();
+    initPropertiesGrid();
+    initModalFilters();
     
     console.log('✅ All homepage functionalities initialized successfully');
 });
 
-// ===== PERFORMANCE OPTIMIZATIONS =====
-// Pause animations when page is not visible
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        // Any cleanup for when page is hidden can go here
-        console.log('⏸️ Page hidden - animations paused');
-    } else {
-        console.log('▶️ Page visible');
-    }
-});
+// ===== GLOBAL FUNCTIONS =====
+window.navCarousel = navCarousel;
+window.goToSlide = goToSlide;
+window.handleViewDetailsClick = handleViewDetailsClick;
+window.handleFavoriteClick = handleFavoriteClick;
+window.clearAllFilters = clearAllFilters;
+window.submitPropertyRequest = submitPropertyRequest;
+window.scrollToSection = scrollToSection;
 
-// ===== ERROR HANDLING =====
-window.addEventListener('error', function(e) {
-    console.error('JavaScript Error:', e.error);
-});
+// Make property storage globally available
+window.propertyStorage = propertyStorage;
 
-// Make app demo controller available globally for debugging
-window.appDemo = {
-    getController: () => window.appDemoController,
-    showScreen: (index) => window.appDemoController?.showScreen(index)
-};
-
-// Export functions for potential module use
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        initDarkTheme,
-        initMobileMenu,
-        initFeaturesAnimations,
-        initUsersAnimations,
-        initTrustAnimations,
-        initAppSection,
-        initProcessAnimations,
-        initFinalCTA,
-        initFooterAnimations
-    };
-}
+console.log('🎉 DomiHive Homepage Ready! All functionalities loaded.');
