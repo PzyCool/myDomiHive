@@ -1,5 +1,72 @@
 // property-details-shortlet.js - CUSTOMIZED FOR SHORTLET PROPERTIES WITH SPA FIX
 
+// ===== CHECK IF USER IS COMING FROM HOMEPAGE =====
+function isComingFromHomepage() {
+    const referrer = document.referrer;
+    const fromHomepage = referrer.includes('index.html') || referrer.includes('/') && !referrer.includes('dashboard');
+    const fromDirectAccess = !referrer; // User typed URL directly
+    
+    console.log('Referrer:', referrer);
+    console.log('From homepage:', fromHomepage);
+    console.log('Direct access:', fromDirectAccess);
+    
+    return fromHomepage || fromDirectAccess;
+}
+
+// ===== REDIRECT TO SIGNUP IF COMING FROM HOMEPAGE =====
+function setupBookingButtonRedirect(buttonId) {
+    const button = document.getElementById(buttonId);
+    if (button && isComingFromHomepage()) {
+        console.log(`🔄 Setting up ${buttonId} to redirect to signup`);
+        
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log(`📅 ${buttonId} clicked - user not logged in, redirecting to signup`);
+            
+            // Store the current property for after signup
+            const currentProperty = localStorage.getItem('current_property_view');
+            if (currentProperty) {
+                sessionStorage.setItem('domihive_redirect_after_signup', window.location.pathname);
+                sessionStorage.setItem('domihive_booking_intent', 'true');
+            }
+            
+            window.location.href = '/Pages/signup.html';
+        });
+        
+        // Optional: Change button text to indicate signup required
+        button.innerHTML = button.innerHTML.replace('Book', 'Sign Up to Book');
+    }
+}
+
+// ===== INITIALIZE BASED ON USER SOURCE =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🏠 Checking user source...');
+    
+    // Setup booking button redirects if coming from homepage
+    const bookingButtons = {
+        'property-details-rent.html': 'bookInspectionBtn',
+        'property-details-shortlet.html': 'bookShortletBtn', 
+        'property-details-commercial.html': 'scheduleTourBtn',
+        'property-details-buy.html': 'bookViewingBtn'
+    };
+    
+    const currentPage = window.location.pathname.split('/').pop();
+    const buttonId = bookingButtons[currentPage];
+    
+    if (buttonId) {
+        setupBookingButtonRedirect(buttonId);
+    }
+    
+    // Update back button based on source
+    const backButton = document.getElementById('backToDashboard');
+    if (backButton && isComingFromHomepage()) {
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Home';
+        backButton.addEventListener('click', function() {
+            window.location.href = '/index.html';
+        });
+    }
+});
+
 // ===== SPA INTEGRATION =====
 window.spaPropertyDetailsShortletInit = function() {
     console.log('🎯 SPA: Initializing Property Details Shortlet Content');

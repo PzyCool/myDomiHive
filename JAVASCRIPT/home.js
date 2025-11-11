@@ -28,7 +28,7 @@ function initNavigation() {
                 }
 
                 // Smooth scroll to section
-                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+                const offsetTop = targetSection.offsetTop - 80;
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
@@ -153,6 +153,7 @@ function initPropertiesGrid() {
     
     propertyStorage = new PropertyStorageSystem();
     generateSampleProperties();
+    initTabFiltering();
     applySavedSearchCriteria();
     displayProperties();
     initPropertiesEventListeners();
@@ -257,6 +258,48 @@ function getRandomAmenities(amenitiesList) {
     const count = Math.floor(Math.random() * 4) + 3;
     const shuffled = [...amenitiesList].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
+}
+
+function initTabFiltering() {
+    const tabs = document.querySelectorAll('.tab[data-type]');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+            
+            // Filter properties by category
+            const category = this.getAttribute('data-type');
+            filterPropertiesByCategory(category);
+        });
+    });
+}
+
+function filterPropertiesByCategory(category) {
+    console.log(`🏠 Filtering properties by category: ${category}`);
+    
+    if (category === 'rent') {
+        filteredProperties = allProperties.filter(property => property.category === 'rent');
+    } else if (category === 'shortlet') {
+        filteredProperties = allProperties.filter(property => property.category === 'shortlet');
+    } else if (category === 'commercial') {
+        filteredProperties = allProperties.filter(property => property.category === 'commercial');
+    } else if (category === 'buy') {
+        filteredProperties = allProperties.filter(property => property.category === 'buy');
+    }
+    
+    currentPage = 1;
+    sortProperties();
+    displayProperties();
+    
+    console.log(`📊 Filtered to ${filteredProperties.length} ${category} properties`);
 }
 
 function applySavedSearchCriteria() {
@@ -465,16 +508,6 @@ function showNoResultsMessage() {
             <h3>No properties found</h3>
             <p>Try adjusting your filters to see more results, or let us know what you're looking for.</p>
             <button class="btn-view-details" onclick="clearAllFilters()" style="margin-top: 1rem; display: inline-block;">Clear All Filters</button>
-            
-            <div class="request-form">
-                <h4>Can't find what you're looking for?</h4>
-                <p>Let us help you find your perfect property</p>
-                <input type="text" placeholder="Your Name" id="requestName">
-                <input type="email" placeholder="Your Email" id="requestEmail">
-                <input type="tel" placeholder="Your Phone" id="requestPhone">
-                <textarea placeholder="Tell us about your property requirements..." rows="4" id="requestMessage"></textarea>
-                <button onclick="submitPropertyRequest()">Submit Request</button>
-            </div>
         </div>
     `;
 }
@@ -513,6 +546,7 @@ function createPropertyCard(property) {
                 ${property.isVerified ? '<span class="property-badge badge-verified">Verified</span>' : ''}
                 ${property.isFeatured ? '<span class="property-badge badge-featured">Featured</span>' : ''}
                 ${property.isNew ? '<span class="property-badge badge-new">New</span>' : ''}
+                <span class="property-badge badge-category">${property.category.toUpperCase()}</span>
             </div>
             
             <button class="favorite-btn" onclick="handleFavoriteClick(${property.id}, this)">
@@ -543,7 +577,7 @@ function createPropertyCard(property) {
             <p class="property-description">${property.description}</p>
             
             <div class="property-actions">
-                <button class="btn-view-details" onclick="handleViewDetailsClick(${property.id})">
+                <button class="btn-view-details" onclick="window.handleViewDetailsClick(${property.id}, '${property.category}')">
                     View Details
                 </button>
                 <button class="btn-save" onclick="handleFavoriteClick(${property.id}, this)">
@@ -555,7 +589,6 @@ function createPropertyCard(property) {
     
     return card;
 }
-
 function loadMoreProperties() {
     currentPage++;
     displayProperties();
@@ -915,8 +948,8 @@ function initModalFilters() {
 }
 
 // ===== PROPERTY INTERACTION HANDLERS =====
-function handleViewDetailsClick(propertyId) {
-    console.log(`👀 View details clicked for property ${propertyId}`);
+function handleViewDetailsClick(propertyId, category) {
+    console.log(`👀 View details clicked for ${category} property ${propertyId}`);
     
     const property = allProperties.find(p => p.id === propertyId);
     if (!property) {
@@ -928,7 +961,24 @@ function handleViewDetailsClick(propertyId) {
     
     localStorage.setItem('current_property_view', JSON.stringify(property));
     
-    window.location.href = '/Pages/property-details-rent.html?id=' + propertyId;
+    // Determine the correct details page based on category
+    let detailsPage = '';
+    switch(category) {
+        case 'shortlet':
+            detailsPage = '/Pages/property-details-shortlet.html';
+            break;
+        case 'commercial':
+            detailsPage = '/Pages/property-details-commercial.html';
+            break;
+        case 'buy':
+            detailsPage = '/Pages/property-details-buy.html';
+            break;
+        default:
+            detailsPage = '/Pages/property-details-rent.html';
+    }
+    
+    console.log(`🔗 Redirecting to: ${detailsPage}`);
+    window.location.href = detailsPage;
 }
 
 function handleFavoriteClick(propertyId, buttonElement) {
@@ -1061,62 +1111,6 @@ function updateFavoritesCount() {
     }
 }
 
-function submitPropertyRequest() {
-    const name = document.getElementById('requestName')?.value || '';
-    const email = document.getElementById('requestEmail')?.value || '';
-    const phone = document.getElementById('requestPhone')?.value || '';
-    const message = document.getElementById('requestMessage')?.value || '';
-    
-    if (!name || !email || !message) {
-        const errorElement = document.createElement('div');
-        errorElement.style.background = '#fee2e2';
-        errorElement.style.color = '#dc2626';
-        errorElement.style.padding = '1rem';
-        errorElement.style.borderRadius = '8px';
-        errorElement.style.marginTop = '1rem';
-        errorElement.innerHTML = 'Please fill in all required fields: Name, Email, and Message';
-        
-        const requestForm = document.querySelector('.request-form');
-        if (requestForm) {
-            requestForm.appendChild(errorElement);
-            setTimeout(() => errorElement.remove(), 5000);
-        }
-        return;
-    }
-    
-    console.log('📧 Property Request Submitted:', { name, email, phone, message });
-    
-    const successElement = document.createElement('div');
-    successElement.style.background = '#d1fae5';
-    successElement.style.color = '#065f46';
-    successElement.style.padding = '1rem';
-    successElement.style.borderRadius = '8px';
-    successElement.style.marginTop = '1rem';
-    successElement.innerHTML = 'Thank you! Your property request has been submitted to DomiHive support. We\'ll contact you soon!';
-    
-    const requestForm = document.querySelector('.request-form');
-    if (requestForm) {
-        requestForm.appendChild(successElement);
-    }
-    
-    document.getElementById('requestName').value = '';
-    document.getElementById('requestEmail').value = '';
-    document.getElementById('requestPhone').value = '';
-    document.getElementById('requestMessage').value = '';
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initializing DomiHive Homepage');
@@ -1135,7 +1129,6 @@ window.goToSlide = goToSlide;
 window.handleViewDetailsClick = handleViewDetailsClick;
 window.handleFavoriteClick = handleFavoriteClick;
 window.clearAllFilters = clearAllFilters;
-window.submitPropertyRequest = submitPropertyRequest;
 window.scrollToSection = scrollToSection;
 
 // Make property storage globally available
