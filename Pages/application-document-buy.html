@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Purchase Documents - DomiHive</title>
     <link rel="stylesheet" href="/CSS/application-document.css">
-    <link rel="stylesheet" href="/CSS/application-docunment-buy.css">
+    <link rel="stylesheet" href="/CSS/application-document-buy.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -162,48 +162,11 @@
                                     </ul>
                                 </div>
                             </div>
-
-                            <!-- Tax Clearance Certificate -->
-                            <div class="upload-group required">
-                                <div class="upload-header">
-                                    <label for="taxClearance" class="required">Tax Clearance Certificate *</label>
-                                    <span class="upload-status" id="taxClearanceStatus">Not uploaded</span>
-                                </div>
-                                <p class="upload-description">Current year tax clearance certificate from FIRS</p>
-                                <div class="upload-area" id="taxClearanceArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-receipt"></i>
-                                        <p>Click to upload Tax Clearance</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
-                                    </div>
-                                    <input type="file" id="taxClearance" name="taxClearance" accept=".pdf,.jpg,.jpeg,.png" required>
-                                </div>
-                                <div class="file-preview" id="taxClearancePreview"></div>
-                            </div>
-
-                            <!-- Proof of Income -->
-                            <div class="upload-group required">
-                                <div class="upload-header">
-                                    <label for="proofOfIncome" class="required">Proof of Income *</label>
-                                    <span class="upload-status" id="proofOfIncomeStatus">Not uploaded</span>
-                                </div>
-                                <p class="upload-description">Pay slips, employment letter, or business income proof</p>
-                                <div class="upload-area" id="proofOfIncomeArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-money-check"></i>
-                                        <p>Click to upload Proof of Income</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
-                                    </div>
-                                    <input type="file" id="proofOfIncome" name="proofOfIncome" accept=".pdf,.jpg,.jpeg,.png" required>
-                                </div>
-                                <div class="file-preview" id="proofOfIncomePreview"></div>
-                            </div>
                         </div>
 
                         <!-- Section 3: Legal & Additional Documents -->
                         <div class="form-section">
                             <h3>Legal & Additional Documents</h3>
-                            <p class="section-description">Additional documents required for property purchase verification</p>
                             
                             <!-- Utility Bill -->
                             <div class="upload-group required">
@@ -221,42 +184,6 @@
                                     <input type="file" id="utilityBill" name="utilityBill" accept=".pdf,.jpg,.jpeg,.png" required>
                                 </div>
                                 <div class="file-preview" id="utilityBillPreview"></div>
-                            </div>
-
-                            <!-- Reference Letters -->
-                            <div class="upload-group optional">
-                                <div class="upload-header">
-                                    <label for="referenceLetters">Reference Letters (Optional)</label>
-                                    <span class="upload-status" id="referenceLettersStatus">No files</span>
-                                </div>
-                                <p class="upload-description">Professional or personal reference letters</p>
-                                <div class="upload-area" id="referenceLettersArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-envelope-open-text"></i>
-                                        <p>Click to upload Reference Letters</p>
-                                        <span class="file-types">Accepted: PDF, DOC, DOCX (Max: 5MB each)</span>
-                                    </div>
-                                    <input type="file" id="referenceLetters" name="referenceLetters" accept=".pdf,.doc,.docx" multiple>
-                                </div>
-                                <div class="file-preview" id="referenceLettersPreview"></div>
-                            </div>
-
-                            <!-- Additional Legal Documents -->
-                            <div class="upload-group optional">
-                                <div class="upload-header">
-                                    <label for="additionalLegalDocs">Additional Legal Documents (Optional)</label>
-                                    <span class="upload-status" id="additionalLegalDocsStatus">No files</span>
-                                </div>
-                                <p class="upload-description">Any other legal documents you'd like to include</p>
-                                <div class="upload-area" id="additionalLegalDocsArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-gavel"></i>
-                                        <p>Click to upload Legal Documents</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG, DOC, DOCX (Max: 5MB each)</span>
-                                    </div>
-                                    <input type="file" id="additionalLegalDocs" name="additionalLegalDocs" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple>
-                                </div>
-                                <div class="file-preview" id="additionalLegalDocsPreview"></div>
                             </div>
                         </div>
 
@@ -298,7 +225,7 @@
                                 </div>
                             </div>
 
-                            <div classlegal-notice>
+                            <div class="legal-notice">
                                 <i class="fas fa-balance-scale"></i>
                                 <div>
                                     <strong>Legal Compliance Notice</strong>
@@ -351,16 +278,6 @@
                     <div class="upload-item" id="uploadProofOfFunds">
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span>Proof of Funds</span>
-                        <i class="fas fa-spinner fa-spin status-icon"></i>
-                    </div>
-                    <div class="upload-item" id="uploadTaxClearance">
-                        <i class="fas fa-receipt"></i>
-                        <span>Tax Clearance</span>
-                        <i class="fas fa-spinner fa-spin status-icon"></i>
-                    </div>
-                    <div class="upload-item" id="uploadProofOfIncome">
-                        <i class="fas fa-money-check"></i>
-                        <span>Proof of Income</span>
                         <i class="fas fa-spinner fa-spin status-icon"></i>
                     </div>
                     <div class="upload-item" id="uploadUtilityBill">

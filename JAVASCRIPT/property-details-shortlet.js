@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
 // ===== SPA INTEGRATION =====
 window.spaPropertyDetailsShortletInit = function() {
     console.log('🎯 SPA: Initializing Property Details Shortlet Content');

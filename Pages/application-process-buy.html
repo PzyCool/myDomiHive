@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Purchase Application - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/application-process.css">
     <link rel="stylesheet" href="/CSS/application-process-buy.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -100,7 +101,29 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="required">Phone Number</label>
-                                    <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                    <div class="phone-input-group">
+                                        <div class="country-code-select">
+                                            <select id="userCountryCode" class="country-code">
+                                                <option value="+234">NG +234</option>
+                                                <option value="+233">GH +233</option>
+                                                <option value="+254">KE +254</option>
+                                                <option value="+27">ZA +27</option>
+                                                <option value="+1">US +1</option>
+                                                <option value="+44">UK +44</option>
+                                                <option value="+33">FR +33</option>
+                                                <option value="+49">DE +49</option>
+                                                <option value="+39">IT +39</option>
+                                                <option value="+34">ES +34</option>
+                                                <option value="+91">IN +91</option>
+                                                <option value="+86">CN +86</option>
+                                                <option value="+81">JP +81</option>
+                                                <option value="+82">KR +82</option>
+                                                <option value="+61">AU +61</option>
+                                                <option value="+55">BR +55</option>
+                                            </select>
+                                        </div>
+                                        <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -120,16 +143,6 @@
                                         <option value="american">American</option>
                                         <option value="asian">Asian</option>
                                         <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="maritalStatus" class="required">Marital Status</label>
-                                    <select id="maritalStatus" name="maritalStatus" required>
-                                        <option value="">Select status</option>
-                                        <option value="single">Single</option>
-                                        <option value="married">Married</option>
-                                        <option value="divorced">Divorced</option>
-                                        <option value="widowed">Widowed</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -156,191 +169,19 @@
                             </div>
                         </div>
 
-                        <!-- Section 2: Purchase Intent & Financing -->
-                        <div class="form-section">
-                            <h3>Purchase Intent & Financing</h3>
-                            <p class="section-description">Tell us about your purchase plans and financing method</p>
-                            
-                            <div class="form-group full-width">
-                                <label class="required">How do you plan to finance this purchase?</label>
-                                <div class="financing-options">
-                                    <label class="radio-option">
-                                        <input type="radio" name="financingMethod" value="cash" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-money-bill-wave"></i>
-                                            <strong>Cash Payment</strong>
-                                            <span>Full payment with personal funds</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="financingMethod" value="mortgage" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-home"></i>
-                                            <strong>Mortgage/Bank Loan</strong>
-                                            <span>Financing through bank or mortgage institution</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="financingMethod" value="installment" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-calendar-alt"></i>
-                                            <strong>Installment Plan</strong>
-                                            <span>Structured payment plan with the seller</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Financing Details -->
-                            <div id="financingDetails" style="display: none;">
-                                <div class="form-grid">
-                                    <div class="form-group">
-                                        <label for="downPayment" class="required">Available Down Payment</label>
-                                        <input type="text" id="downPayment" name="downPayment" placeholder="₦0.00">
-                                        <span class="input-note">Amount you can pay upfront</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="loanAmount" class="required">Loan Amount Required</label>
-                                        <input type="text" id="loanAmount" name="loanAmount" placeholder="₦0.00">
-                                        <span class="input-note">If applying for mortgage</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="preApproved" class="required">Do you have mortgage pre-approval?</label>
-                                        <select id="preApproved" name="preApproved">
-                                            <option value="">Select option</option>
-                                            <option value="yes">Yes, pre-approved</option>
-                                            <option value="applied">Applied, waiting</option>
-                                            <option value="no">Not yet applied</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="purchaseTimeline" class="required">What is your preferred purchase timeline?</label>
-                                <select id="purchaseTimeline" name="purchaseTimeline" required>
-                                    <option value="">Select timeline</option>
-                                    <option value="immediate">Immediate (0-30 days)</option>
-                                    <option value="short-term">Short-term (1-3 months)</option>
-                                    <option value="medium-term">Medium-term (3-6 months)</option>
-                                    <option value="long-term">Long-term (6+ months)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Section 3: Financial Capacity -->
-                        <div class="form-section">
-                            <h3>Financial Capacity Assessment</h3>
-                            <p class="section-description">Provide information about your financial standing</p>
-                            
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="annualIncome" class="required">Annual Income</label>
-                                    <select id="annualIncome" name="annualIncome" required>
-                                        <option value="">Select income range</option>
-                                        <option value="0-5000000">₦0 - ₦5,000,000</option>
-                                        <option value="5000000-10000000">₦5M - ₦10M</option>
-                                        <option value="10000000-20000000">₦10M - ₦20M</option>
-                                        <option value="20000000-50000000">₦20M - ₦50M</option>
-                                        <option value="50000000-100000000">₦50M - ₦100M</option>
-                                        <option value="100000000+">₦100M+</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="netWorth" class="required">Estimated Net Worth</label>
-                                    <select id="netWorth" name="netWorth" required>
-                                        <option value="">Select net worth range</option>
-                                        <option value="0-10000000">₦0 - ₦10,000,000</option>
-                                        <option value="10000000-50000000">₦10M - ₦50M</option>
-                                        <option value="50000000-100000000">₦50M - ₦100M</option>
-                                        <option value="100000000-500000000">₦100M - ₦500M</option>
-                                        <option value="500000000+">₦500M+</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="sourceOfFunds" class="required">Primary Source of Funds</label>
-                                    <select id="sourceOfFunds" name="sourceOfFunds" required>
-                                        <option value="">Select source</option>
-                                        <option value="salary">Salary/Employment</option>
-                                        <option value="business">Business Income</option>
-                                        <option value="investment">Investment Returns</option>
-                                        <option value="inheritance">Inheritance</option>
-                                        <option value="savings">Personal Savings</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="employmentStatus" class="required">Employment Status</label>
-                                    <select id="employmentStatus" name="employmentStatus" required>
-                                        <option value="">Select status</option>
-                                        <option value="employed">Employed</option>
-                                        <option value="self-employed">Self-Employed</option>
-                                        <option value="business-owner">Business Owner</option>
-                                        <option value="retired">Retired</option>
-                                        <option value="investor">Investor</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="currentProperties" class="required">Do you currently own any properties?</label>
-                                <select id="currentProperties" name="currentProperties" required>
-                                    <option value="">Select option</option>
-                                    <option value="none">No, first-time buyer</option>
-                                    <option value="one">Yes, 1 property</option>
-                                    <option value="multiple">Yes, multiple properties</option>
-                                    <option value="commercial">Yes, commercial properties</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Section 4: Property Usage -->
+                        <!-- Section 4: Property Usage - Converted to Dropdown -->
                         <div class="form-section">
                             <h3>Property Usage Intent</h3>
                             
                             <div class="form-group full-width">
-                                <label class="required">How do you intend to use this property?</label>
-                                <div class="usage-options">
-                                    <label class="radio-option">
-                                        <input type="radio" name="propertyUsage" value="primary-residence" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-home"></i>
-                                            <strong>Primary Residence</strong>
-                                            <span>Will live in the property as main home</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="propertyUsage" value="investment" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-chart-line"></i>
-                                            <strong>Investment Property</strong>
-                                            <span>For rental income or capital appreciation</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="propertyUsage" value="secondary-home" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-umbrella-beach"></i>
-                                            <strong>Secondary/Vacation Home</strong>
-                                            <span>Occasional use or vacation property</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="propertyUsage" value="commercial-use" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-building"></i>
-                                            <strong>Commercial Use</strong>
-                                            <span>For business or commercial purposes</span>
-                                        </span>
-                                    </label>
-                                </div>
+                                <label for="propertyUsage" class="required">How do you intend to use this property?</label>
+                                <select id="propertyUsage" name="propertyUsage" required>
+                                    <option value="">Select property usage</option>
+                                    <option value="primary-residence">Primary Residence - Will live in the property as main home</option>
+                                    <option value="investment">Investment Property - For rental income or capital appreciation</option>
+                                    <option value="secondary-home">Secondary/Vacation Home - Occasional use or vacation property</option>
+                                    <option value="commercial-use">Commercial Use - For business or commercial purposes</option>
+                                </select>
                             </div>
 
                             <div class="form-group full-width">

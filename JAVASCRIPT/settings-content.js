@@ -205,13 +205,35 @@ function applySettingsToUI() {
         document.getElementById('fullName').value = userSettings.profile.fullName || '';
         document.getElementById('userBio').value = userSettings.profile.bio || '';
         document.getElementById('userEmail').value = userSettings.profile.email || '';
-        document.getElementById('userPhone').value = userSettings.profile.phone || '';
+        
+        // Handle phone with country code
+        const phoneValue = userSettings.profile.phone || '';
+        if (phoneValue) {
+            // Extract country code and phone number
+            const countryCodeMatch = phoneValue.match(/^(\+\d+)/);
+            if (countryCodeMatch) {
+                const countryCode = countryCodeMatch[1];
+                const phoneNumber = phoneValue.replace(countryCode, '').trim();
+                
+                document.getElementById('userCountryCode').value = countryCode;
+                document.getElementById('userPhone').value = phoneNumber;
+            } else {
+                // Default to Nigeria if no country code found
+                document.getElementById('userCountryCode').value = '+234';
+                document.getElementById('userPhone').value = phoneValue;
+            }
+        } else {
+            // Default values
+            document.getElementById('userCountryCode').value = '+234';
+            document.getElementById('userPhone').value = '';
+        }
         
         // Load profile photo if exists
         if (userSettings.profile.photo) {
             loadProfilePhoto(userSettings.profile.photo);
         }
     }
+    
     
     // Security settings
     if (userSettings.security) {
@@ -320,7 +342,9 @@ function saveProfileSettings() {
     const fullName = document.getElementById('fullName').value.trim();
     const bio = document.getElementById('userBio').value.trim();
     const email = document.getElementById('userEmail').value.trim();
-    const phone = document.getElementById('userPhone').value.trim();
+    const countryCode = document.getElementById('userCountryCode').value;
+    const phoneNumber = document.getElementById('userPhone').value.trim();
+    const phone = phoneNumber ? `${countryCode} ${phoneNumber}` : '';
     
     // Basic validation
     if (!fullName) {
@@ -338,7 +362,7 @@ function saveProfileSettings() {
         return;
     }
     
-    if (phone && !isValidPhone(phone)) {
+    if (phoneNumber && !isValidPhone(phoneNumber)) {
         showNotification('Please enter a valid phone number', 'error');
         return;
     }
@@ -355,6 +379,18 @@ function saveProfileSettings() {
     
     saveUserSettings();
     showNotification('Profile settings saved successfully!', 'success');
+}
+
+// Update phone validation to handle numbers without country code
+function isValidPhone(phoneNumber) {
+    // Remove any non-digit characters for validation
+    const cleanNumber = phoneNumber.replace(/\D/g, '');
+    
+    // Basic phone validation - adjust based on your requirements
+    // This example validates Nigerian phone numbers (10 digits starting with 7,8,9)
+    const nigerianRegex = /^[789][01]\d{8}$/;
+    
+    return cleanNumber.length >= 10 && nigerianRegex.test(cleanNumber);
 }
 
 function isValidEmail(email) {

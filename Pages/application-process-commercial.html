@@ -110,10 +110,6 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="businessRegistration" class="required">Business Registration Number</label>
-                                    <input type="text" id="businessRegistration" name="businessRegistration" placeholder="CAC/BN number" required>
-                                </div>
-                                <div class="form-group">
                                     <label for="businessIndustry" class="required">Industry</label>
                                     <select id="businessIndustry" name="businessIndustry" required>
                                         <option value="">Select industry</option>
@@ -182,7 +178,29 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="required">Phone Number</label>
-                                    <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                    <div class="phone-input-group">
+                                        <div class="country-code-select">
+                                            <select id="userCountryCode" class="country-code">
+                                                <option value="+234">NG +234</option>
+                                                <option value="+233">GH +233</option>
+                                                <option value="+254">KE +254</option>
+                                                <option value="+27">ZA +27</option>
+                                                <option value="+1">US +1</option>
+                                                <option value="+44">UK +44</option>
+                                                <option value="+33">FR +33</option>
+                                                <option value="+49">DE +49</option>
+                                                <option value="+39">IT +39</option>
+                                                <option value="+34">ES +34</option>
+                                                <option value="+91">IN +91</option>
+                                                <option value="+86">CN +86</option>
+                                                <option value="+81">JP +81</option>
+                                                <option value="+82">KR +82</option>
+                                                <option value="+61">AU +61</option>
+                                                <option value="+55">BR +55</option>
+                                            </select>
+                                        </div>
+                                        <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -210,68 +228,17 @@
                             <p class="section-description">Tell us about your commercial space needs</p>
                             
                             <div class="form-group full-width">
-                                <label class="required">Intended Use of Space</label>
-                                <div class="usage-options">
-                                    <label class="radio-option">
-                                        <input type="radio" name="spaceUsage" value="primary-business" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-store"></i>
-                                            <strong>Primary Business Location</strong>
-                                            <span>Main business operations and customer-facing</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="spaceUsage" value="branch-office" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-code-branch"></i>
-                                            <strong>Branch Office/Outlet</strong>
-                                            <span>Additional location for existing business</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="spaceUsage" value="storage" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-warehouse"></i>
-                                            <strong>Storage/Warehouse</strong>
-                                            <span>Inventory storage and logistics operations</span>
-                                        </span>
-                                    </label>
-                                    <label class="radio-option">
-                                        <input type="radio" name="spaceUsage" value="showroom" required>
-                                        <span class="radio-checkmark"></span>
-                                        <span class="radio-label">
-                                            <i class="fas fa-eye"></i>
-                                            <strong>Showroom/Display</strong>
-                                            <span>Product display and customer demonstration</span>
-                                        </span>
-                                    </label>
-                                </div>
+                                <label for="spaceUsage" class="required">Intended Use of Space</label>
+                                <select id="spaceUsage" name="spaceUsage" required>
+                                    <option value="">Select intended use</option>
+                                    <option value="primary-business">Primary Business Location - Main business operations and customer-facing</option>
+                                    <option value="branch-office">Branch Office/Outlet - Additional location for existing business</option>
+                                    <option value="storage">Storage/Warehouse - Inventory storage and logistics operations</option>
+                                    <option value="showroom">Showroom/Display - Product display and customer demonstration</option>
+                                </select>
                             </div>
 
                             <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="operatingHours" class="required">Expected Operating Hours</label>
-                                    <select id="operatingHours" name="operatingHours" required>
-                                        <option value="">Select hours</option>
-                                        <option value="standard">Standard Business Hours (9AM-6PM)</option>
-                                        <option value="extended">Extended Hours (7AM-10PM)</option>
-                                        <option value="24-7">24/7 Operations</option>
-                                        <option value="flexible">Flexible/Variable Hours</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="customerTraffic" class="required">Expected Customer Traffic</label>
-                                    <select id="customerTraffic" name="customerTraffic" required>
-                                        <option value="">Select traffic level</option>
-                                        <option value="low">Low (0-50 customers/day)</option>
-                                        <option value="medium">Medium (50-200 customers/day)</option>
-                                        <option value="high">High (200-500 customers/day)</option>
-                                        <option value="very-high">Very High (500+ customers/day)</option>
-                                    </select>
-                                </div>
                                 <div class="form-group">
                                     <label for="leaseTerm" class="required">Preferred Lease Term</label>
                                     <select id="leaseTerm" name="leaseTerm" required>
@@ -284,66 +251,12 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="form-group full-width">
-                                <label for="businessDescription" class="required">Business Description & Operations</label>
-                                <textarea id="businessDescription" name="businessDescription" rows="4" placeholder="Describe your business operations, products/services, and how you intend to use the space..." required></textarea>
-                            </div>
                         </div>
 
-                        <!-- Section 4: Financial Information -->
+                        <!-- Section 4: References & Additional Information -->
                         <div class="form-section">
-                            <h3>Business Financial Information</h3>
-                            <p class="section-description">Provide financial details for business verification</p>
+                            <h3>Additional Information</h3>
                             
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="bankName" class="required">Primary Bank</label>
-                                    <input type="text" id="bankName" name="bankName" placeholder="Bank name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="accountName" class="required">Business Account Name</label>
-                                    <input type="text" id="accountName" name="accountName" placeholder="Account name as registered" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="accountNumber" class="required">Business Account Number</label>
-                                    <input type="text" id="accountNumber" name="accountNumber" placeholder="10-digit account number" required maxlength="10">
-                                </div>
-                            </div>
-
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="taxIdentification" class="required">Tax Identification Number (TIN)</label>
-                                    <input type="text" id="taxIdentification" name="taxIdentification" placeholder="TIN number" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="vatRegistered" class="required">VAT Registered?</label>
-                                    <select id="vatRegistered" name="vatRegistered" required>
-                                        <option value="">Select option</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                        <option value="pending">Application in Process</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Section 5: References & Additional Information -->
-                        <div class="form-section">
-                            <h3>Business References & Additional Information</h3>
-                            
-                            <div class="form-group full-width">
-                                <label for="previousLandlord" class="required">Previous Commercial Landlord (if any)</label>
-                                <input type="text" id="previousLandlord" name="previousLandlord" placeholder="Landlord/Management company name">
-                                <span class="input-note">Leave blank if this is your first commercial space</span>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="referenceContact">Reference Contact Details</label>
-                                <input type="text" id="referenceContact" name="referenceContact" placeholder="Name and phone number of reference">
-                                <span class="input-note">Business reference or previous landlord contact</span>
-                            </div>
-
                             <div class="form-group full-width">
                                 <label for="additionalNotes">Additional Business Information (Optional)</label>
                                 <textarea id="additionalNotes" name="additionalNotes" rows="4" placeholder="Any additional information about your business, special requirements, or questions..."></textarea>

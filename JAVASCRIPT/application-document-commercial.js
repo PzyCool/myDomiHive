@@ -10,15 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
 let currentApplication = null;
 let uploadedFiles = {
     certificateOfIncorporation: null,
-    articlesOfAssociation: null,
     bankStatements: [],
-    taxClearance: null,
-    financialStatements: [],
-    directorIds: [],
-    proofOfAddress: null,
-    businessPlan: null,
-    tradeReferences: [],
-    licensesPermits: []
+    directorIds: []
 };
 
 function initializeCommercialDocumentUpload() {
@@ -119,59 +112,17 @@ function initializeFileUploads() {
     incorporationInput.addEventListener('change', (e) => handleFileUpload(e, 'certificateOfIncorporation'));
     setupDragAndDrop(incorporationArea, incorporationInput, 'certificateOfIncorporation');
     
-    // Articles of Association upload
-    const articlesInput = document.getElementById('articlesOfAssociation');
-    const articlesArea = document.getElementById('articlesOfAssociationArea');
-    articlesInput.addEventListener('change', (e) => handleFileUpload(e, 'articlesOfAssociation'));
-    setupDragAndDrop(articlesArea, articlesInput, 'articlesOfAssociation');
-    
-    // Bank Statements upload (multiple files)
+    // Bank Statements upload (multiple files) - NOW OPTIONAL
     const bankStatementsInput = document.getElementById('bankStatements');
     const bankStatementsArea = document.getElementById('bankStatementsArea');
     bankStatementsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'bankStatements'));
     setupDragAndDrop(bankStatementsArea, bankStatementsInput, 'bankStatementsMultiple');
-    
-    // Tax Clearance upload
-    const taxClearanceInput = document.getElementById('taxClearance');
-    const taxClearanceArea = document.getElementById('taxClearanceArea');
-    taxClearanceInput.addEventListener('change', (e) => handleFileUpload(e, 'taxClearance'));
-    setupDragAndDrop(taxClearanceArea, taxClearanceInput, 'taxClearance');
-    
-    // Financial Statements upload (multiple files)
-    const financialStatementsInput = document.getElementById('financialStatements');
-    const financialStatementsArea = document.getElementById('financialStatementsArea');
-    financialStatementsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'financialStatements'));
-    setupDragAndDrop(financialStatementsArea, financialStatementsInput, 'financialStatementsMultiple');
     
     // Director IDs upload (multiple files)
     const directorIdsInput = document.getElementById('directorIds');
     const directorIdsArea = document.getElementById('directorIdsArea');
     directorIdsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'directorIds'));
     setupDragAndDrop(directorIdsArea, directorIdsInput, 'directorIdsMultiple');
-    
-    // Proof of Address upload
-    const proofOfAddressInput = document.getElementById('proofOfAddress');
-    const proofOfAddressArea = document.getElementById('proofOfAddressArea');
-    proofOfAddressInput.addEventListener('change', (e) => handleFileUpload(e, 'proofOfAddress'));
-    setupDragAndDrop(proofOfAddressArea, proofOfAddressInput, 'proofOfAddress');
-    
-    // Business Plan upload (optional)
-    const businessPlanInput = document.getElementById('businessPlan');
-    const businessPlanArea = document.getElementById('businessPlanArea');
-    businessPlanInput.addEventListener('change', (e) => handleFileUpload(e, 'businessPlan'));
-    setupDragAndDrop(businessPlanArea, businessPlanInput, 'businessPlan');
-    
-    // Trade References upload (multiple, optional)
-    const tradeReferencesInput = document.getElementById('tradeReferences');
-    const tradeReferencesArea = document.getElementById('tradeReferencesArea');
-    tradeReferencesInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'tradeReferences'));
-    setupDragAndDrop(tradeReferencesArea, tradeReferencesInput, 'tradeReferencesMultiple');
-    
-    // Licenses & Permits upload (multiple, optional)
-    const licensesPermitsInput = document.getElementById('licensesPermits');
-    const licensesPermitsArea = document.getElementById('licensesPermitsArea');
-    licensesPermitsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'licensesPermits'));
-    setupDragAndDrop(licensesPermitsArea, licensesPermitsInput, 'licensesPermitsMultiple');
 }
 
 function setupDragAndDrop(uploadArea, fileInput, fileType) {
@@ -204,18 +155,6 @@ function setupDragAndDrop(uploadArea, fileInput, fileType) {
                 switch (fileType) {
                     case 'certificateOfIncorporation':
                         handleFileUpload(event, 'certificateOfIncorporation');
-                        break;
-                    case 'articlesOfAssociation':
-                        handleFileUpload(event, 'articlesOfAssociation');
-                        break;
-                    case 'taxClearance':
-                        handleFileUpload(event, 'taxClearance');
-                        break;
-                    case 'proofOfAddress':
-                        handleFileUpload(event, 'proofOfAddress');
-                        break;
-                    case 'businessPlan':
-                        handleFileUpload(event, 'businessPlan');
                         break;
                 }
             }
@@ -310,28 +249,14 @@ function handleMultipleFileUpload(event, fileType) {
 function validateCommercialFile(file, fileType) {
     const maxSizes = {
         certificateOfIncorporation: 5 * 1024 * 1024,
-        articlesOfAssociation: 5 * 1024 * 1024,
         bankStatements: 10 * 1024 * 1024,
-        taxClearance: 5 * 1024 * 1024,
-        financialStatements: 5 * 1024 * 1024,
-        directorIds: 5 * 1024 * 1024,
-        proofOfAddress: 5 * 1024 * 1024,
-        businessPlan: 5 * 1024 * 1024,
-        tradeReferences: 5 * 1024 * 1024,
-        licensesPermits: 5 * 1024 * 1024
+        directorIds: 5 * 1024 * 1024
     };
     
     const allowedTypes = {
         certificateOfIncorporation: ['.pdf', '.jpg', '.jpeg', '.png'],
-        articlesOfAssociation: ['.pdf'],
         bankStatements: ['.pdf', '.jpg', '.jpeg', '.png'],
-        taxClearance: ['.pdf', '.jpg', '.jpeg', '.png'],
-        financialStatements: ['.pdf'],
-        directorIds: ['.pdf', '.jpg', '.jpeg', '.png'],
-        proofOfAddress: ['.pdf', '.jpg', '.jpeg', '.png'],
-        businessPlan: ['.pdf', '.doc', '.docx'],
-        tradeReferences: ['.pdf', '.jpg', '.jpeg', '.png'],
-        licensesPermits: ['.pdf', '.jpg', '.jpeg', '.png']
+        directorIds: ['.pdf', '.jpg', '.jpeg', '.png']
     };
     
     // Check file size
@@ -351,31 +276,14 @@ function validateCommercialFile(file, fileType) {
         };
     }
     
-    // Special validation for Articles of Association (must be PDF)
-    if (fileType === 'articlesOfAssociation' && !file.type.includes('pdf')) {
-        return { isValid: false, message: 'Articles of Association must be in PDF format' };
-    }
-    
-    // Special validation for Financial Statements (must be PDF)
-    if (fileType === 'financialStatements' && !file.type.includes('pdf')) {
-        return { isValid: false, message: 'Financial Statements must be in PDF format' };
-    }
-    
     return { isValid: true, message: 'File is valid' };
 }
 
 function formatCommercialFileTypeName(fileType) {
     const nameMap = {
         certificateOfIncorporation: 'Certificate of Incorporation',
-        articlesOfAssociation: 'Articles of Association',
         bankStatements: 'Bank Statement',
-        taxClearance: 'Tax Clearance',
-        financialStatements: 'Financial Statement',
-        directorIds: 'Director ID',
-        proofOfAddress: 'Proof of Address',
-        businessPlan: 'Business Plan',
-        tradeReferences: 'Trade Reference',
-        licensesPermits: 'License/Permit'
+        directorIds: 'Director ID'
     };
     
     return nameMap[fileType] || fileType;
@@ -489,15 +397,10 @@ function validateForm() {
     // Clear previous errors
     clearValidationErrors();
     
-    // Validate required files
+    // Validate required files (only Certificate of Incorporation and Director IDs are required)
     const requiredFiles = [
         'certificateOfIncorporation',
-        'articlesOfAssociation',
-        'bankStatements',
-        'taxClearance',
-        'financialStatements',
-        'directorIds',
-        'proofOfAddress'
+        'directorIds'
     ];
     
     requiredFiles.forEach(fileType => {
@@ -513,6 +416,8 @@ function validateForm() {
             }
         }
     });
+    
+    // Bank Statements are now optional - no validation needed
     
     // Validate terms agreements
     const requiredCheckboxes = [
@@ -582,56 +487,33 @@ function processDocumentUpload() {
     // Simulate upload process
     let progress = 0;
     const uploadInterval = setInterval(() => {
-        progress += 6;
+        progress += 20;
         progressFill.style.width = progress + '%';
         
-        if (progress <= 12) {
+        if (progress <= 20) {
             progressText.textContent = 'Validating business registration documents...';
             updateUploadItem('certificateOfIncorporation', 'processing');
-            updateUploadItem('articlesOfAssociation', 'processing');
         } 
-        else if (progress <= 24) {
+        else if (progress <= 40) {
             progressText.textContent = 'Processing financial documents...';
             updateUploadItem('certificateOfIncorporation', 'completed');
-            updateUploadItem('articlesOfAssociation', 'completed');
             updateUploadItem('bankStatements', 'processing');
-            updateUploadItem('financialStatements', 'processing');
         } 
-        else if (progress <= 36) {
-            progressText.textContent = 'Verifying tax clearance...';
-            updateUploadItem('bankStatements', 'completed');
-            updateUploadItem('financialStatements', 'completed');
-            updateUploadItem('taxClearance', 'processing');
-        }
-        else if (progress <= 48) {
-            progressText.textContent = 'Checking director identification...';
-            updateUploadItem('taxClearance', 'completed');
-            updateUploadItem('directorIds', 'processing');
-        }
         else if (progress <= 60) {
-            progressText.textContent = 'Validating business address...';
-            updateUploadItem('directorIds', 'completed');
-            updateUploadItem('proofOfAddress', 'processing');
-        }
-        else if (progress <= 72) {
-            progressText.textContent = 'Processing additional documents...';
-            updateUploadItem('proofOfAddress', 'completed');
-            updateUploadItem('businessPlan', 'processing');
-            updateUploadItem('tradeReferences', 'processing');
-            updateUploadItem('licensesPermits', 'processing');
+            progressText.textContent = 'Checking director identification...';
+            updateUploadItem('bankStatements', 'completed');
+            updateUploadItem('directorIds', 'processing');
         }
         else {
             progressText.textContent = 'Finalizing commercial verification...';
-            updateUploadItem('businessPlan', 'completed');
-            updateUploadItem('tradeReferences', 'completed');
-            updateUploadItem('licensesPermits', 'completed');
+            updateUploadItem('directorIds', 'completed');
         }
         
         if (progress >= 100) {
             clearInterval(uploadInterval);
             completeDocumentUpload();
         }
-    }, 300);
+    }, 400);
 }
 
 function updateUploadItem(itemId, status) {
@@ -691,47 +573,12 @@ function saveDocumentData() {
                 size: uploadedFiles.certificateOfIncorporation.size,
                 type: uploadedFiles.certificateOfIncorporation.type
             } : null,
-            articlesOfAssociation: uploadedFiles.articlesOfAssociation ? {
-                name: uploadedFiles.articlesOfAssociation.name,
-                size: uploadedFiles.articlesOfAssociation.size,
-                type: uploadedFiles.articlesOfAssociation.type
-            } : null,
             bankStatements: uploadedFiles.bankStatements.map(file => ({
                 name: file.name,
                 size: file.size,
                 type: file.type
             })),
-            taxClearance: uploadedFiles.taxClearance ? {
-                name: uploadedFiles.taxClearance.name,
-                size: uploadedFiles.taxClearance.size,
-                type: uploadedFiles.taxClearance.type
-            } : null,
-            financialStatements: uploadedFiles.financialStatements.map(file => ({
-                name: file.name,
-                size: file.size,
-                type: file.type
-            })),
             directorIds: uploadedFiles.directorIds.map(file => ({
-                name: file.name,
-                size: file.size,
-                type: file.type
-            })),
-            proofOfAddress: uploadedFiles.proofOfAddress ? {
-                name: uploadedFiles.proofOfAddress.name,
-                size: uploadedFiles.proofOfAddress.size,
-                type: uploadedFiles.proofOfAddress.type
-            } : null,
-            businessPlan: uploadedFiles.businessPlan ? {
-                name: uploadedFiles.businessPlan.name,
-                size: uploadedFiles.businessPlan.size,
-                type: uploadedFiles.businessPlan.type
-            } : null,
-            tradeReferences: uploadedFiles.tradeReferences.map(file => ({
-                name: file.name,
-                size: file.size,
-                type: file.type
-            })),
-            licensesPermits: uploadedFiles.licensesPermits.map(file => ({
                 name: file.name,
                 size: file.size,
                 type: file.type

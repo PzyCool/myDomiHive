@@ -112,10 +112,18 @@ function updateApplicationDisplay() {
 }
 
 function updatePaymentDetails() {
-    // Update bank amount
-    document.getElementById('bankAmount').textContent = '₦100,000';
+    if (!currentApplication) return;
     
-    console.log('💰 Commercial payment details updated');
+    // Calculate total amount based on property price
+    const totalAmount = currentApplication.propertyPrice || 0;
+    const formattedAmount = `₦${totalAmount.toLocaleString()}`;
+    
+    // Update all amount displays
+    document.getElementById('totalAmount').textContent = formattedAmount;
+    document.getElementById('bankAmount').textContent = formattedAmount;
+    document.getElementById('totalPaymentAmount').value = totalAmount;
+    
+    console.log('💰 Commercial payment details updated:', formattedAmount);
 }
 
 function initializeEventListeners() {
@@ -129,12 +137,11 @@ function initializeEventListeners() {
     // Modal buttons
     document.getElementById('closeModalBtn').addEventListener('click', closeSuccessModal);
     document.getElementById('downloadReceiptBtn').addEventListener('click', downloadCommercialReceipt);
-    document.getElementById('goToDashboardBtn').addEventListener('click', redirectToDashboard);
+    document.getElementById('goToDashboardBtn').addEventListener('click', redirectToNotification);
     
     // Commercial terms checkboxes validation
     document.getElementById('agreeCommercialEscrow').addEventListener('change', validateForm);
     document.getElementById('agreeBusinessVerification').addEventListener('change', validateForm);
-    document.getElementById('agreeRefundPolicy').addEventListener('change', validateForm);
     document.getElementById('agreeCommercialTerms').addEventListener('change', validateForm);
     document.getElementById('agreePrivacyPolicy').addEventListener('change', validateForm);
     
@@ -253,34 +260,6 @@ function formatExpiryDate(event) {
     }
     
     event.target.value = input;
-    
-    // Validate expiry date
-    if (input.length === 5) {
-        validateExpiryDate(input);
-    }
-}
-
-function validateExpiryDate(expiryDate) {
-    const [month, year] = expiryDate.split('/');
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear() % 100;
-    const currentMonth = currentDate.getMonth() + 1;
-    
-    const expMonth = parseInt(month);
-    const expYear = parseInt(year);
-    
-    if (expMonth < 1 || expMonth > 12) {
-        showFieldError(document.getElementById('expiryDate'), 'Invalid month');
-        return false;
-    }
-    
-    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-        showFieldError(document.getElementById('expiryDate'), 'Card has expired');
-        return false;
-    }
-    
-    clearFieldError(document.getElementById('expiryDate'));
-    return true;
 }
 
 function formatCVV(event) {
@@ -346,7 +325,6 @@ function validateForm() {
     const requiredCheckboxes = [
         'agreeCommercialEscrow',
         'agreeBusinessVerification',
-        'agreeRefundPolicy',
         'agreeCommercialTerms',
         'agreePrivacyPolicy'
     ];
@@ -387,12 +365,9 @@ function validateCardPayment() {
     const expiryDate = document.getElementById('expiryDate').value;
     const cvv = document.getElementById('cvv').value;
     
-    // Validate card number (basic Luhn check)
+    // Validate card number (accept any 16-digit number)
     if (!cardNumber || cardNumber.length < 16) {
-        showFieldError(document.getElementById('cardNumber'), 'Valid card number is required');
-        isValid = false;
-    } else if (!luhnCheck(cardNumber)) {
-        showFieldError(document.getElementById('cardNumber'), 'Invalid card number');
+        showFieldError(document.getElementById('cardNumber'), 'Valid card number is required (16 digits)');
         isValid = false;
     }
     
@@ -404,40 +379,17 @@ function validateCardPayment() {
     
     // Validate expiry date
     if (!expiryDate || expiryDate.length !== 5) {
-        showFieldError(document.getElementById('expiryDate'), 'Valid expiry date is required');
-        isValid = false;
-    } else if (!validateExpiryDate(expiryDate)) {
+        showFieldError(document.getElementById('expiryDate'), 'Valid expiry date is required (MM/YY)');
         isValid = false;
     }
     
     // Validate CVV
     if (!cvv || cvv.length < 3) {
-        showFieldError(document.getElementById('cvv'), 'Valid CVV is required');
+        showFieldError(document.getElementById('cvv'), 'Valid CVV is required (3-4 digits)');
         isValid = false;
     }
     
     return isValid;
-}
-
-function luhnCheck(cardNumber) {
-    let sum = 0;
-    let isEven = false;
-    
-    for (let i = cardNumber.length - 1; i >= 0; i--) {
-        let digit = parseInt(cardNumber[i]);
-        
-        if (isEven) {
-            digit *= 2;
-            if (digit > 9) {
-                digit -= 9;
-            }
-        }
-        
-        sum += digit;
-        isEven = !isEven;
-    }
-    
-    return sum % 10 === 0;
 }
 
 function validateBankTransfer() {
@@ -498,11 +450,9 @@ function processPayment() {
     // Simulate payment processing
     let progress = 0;
     const steps = [
-        { progress: 20, text: 'Processing payment transaction...', step: 0 },
-        { progress: 40, text: 'Securing funds in commercial escrow...', step: 1 },
-        { progress: 60, text: 'Initiating CAC registration verification...', step: 2 },
-        { progress: 80, text: 'Starting FIRS tax clearance check...', step: 3 },
-        { progress: 100, text: 'Finalizing commercial application...', step: 4 }
+        { progress: 33, text: 'Processing payment transaction...', step: 0 },
+        { progress: 66, text: 'Confirming payment details...', step: 1 },
+        { progress: 100, text: 'Finalizing commercial application...', step: 2 }
     ];
     
     let currentStep = 0;
@@ -528,7 +478,7 @@ function processPayment() {
             clearInterval(processInterval);
             completePayment();
         }
-    }, 1000);
+    }, 800);
 }
 
 function completePayment() {
@@ -536,7 +486,8 @@ function completePayment() {
     
     // Generate transaction details
     const transactionId = 'TXN-COM-' + Date.now() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-    const paidAmount = '₦100,000';
+    const totalAmount = currentApplication.propertyPrice || 0;
+    const paidAmount = `₦${totalAmount.toLocaleString()}`;
     
     // Save payment data
     savePaymentData(transactionId);
@@ -557,12 +508,10 @@ function savePaymentData(transactionId) {
         applicationId: currentApplication.applicationId,
         transactionId: transactionId,
         paymentMethod: selectedPaymentMethod,
-        amount: 100000,
+        amount: currentApplication.propertyPrice || 0,
         paymentDate: new Date().toISOString(),
         status: 'completed',
-        escrowStatus: 'commercial_escrow_held',
-        businessVerificationStatus: 'in_progress',
-        verificationTimeline: '5_business_days'
+        applicationStatus: 'under_business_verification'
     };
     
     // Update application data with payment info
@@ -570,11 +519,6 @@ function savePaymentData(transactionId) {
     currentApplication.currentStep = 'payment_completed';
     currentApplication.status = 'under_business_verification';
     currentApplication.businessVerificationStartDate = new Date().toISOString();
-    
-    // Calculate expected completion date (5 business days from now)
-    const completionDate = new Date();
-    completionDate.setDate(completionDate.getDate() + 5);
-    currentApplication.expectedCompletionDate = completionDate.toISOString();
     
     // Save to sessionStorage
     sessionStorage.setItem('current_commercial_application', JSON.stringify(currentApplication));
@@ -614,7 +558,6 @@ function formatPaymentMethod(method) {
     const methodNames = {
         'card': 'Credit/Debit Card',
         'bank': 'Bank Transfer',
-        'flutterwave': 'Flutterwave',
         'paystack': 'Paystack'
     };
     
@@ -627,21 +570,21 @@ function createCommercialPaymentNotification(transactionId) {
     const notification = {
         id: 'notif_com_' + Date.now(),
         type: 'commercial_payment_completed',
-        title: 'Commercial Payment & Business Verification Initiated',
-        message: `Your commercial payment of ₦100,000 for ${currentApplication.propertyTitle} has been processed. Business verification is now in progress. Transaction ID: ${transactionId}`,
+        title: 'Commercial Payment Successful',
+        message: `Your commercial payment of ₦${(currentApplication.propertyPrice || 0).toLocaleString()} for ${currentApplication.propertyTitle} has been processed. Business verification is now in progress.`,
         timestamp: new Date().toISOString(),
         read: false,
         applicationId: currentApplication.applicationId,
         transactionId: transactionId,
         actions: [
             {
-                text: 'View Business Verification Status',
-                action: 'view_business_verification',
+                text: 'View Application Status',
+                action: 'view_application_status',
                 applicationId: currentApplication.applicationId
             },
             {
-                text: 'Download Commercial Receipt',
-                action: 'download_commercial_receipt',
+                text: 'Download Receipt',
+                action: 'download_receipt',
                 transactionId: transactionId
             }
         ]
@@ -668,58 +611,44 @@ function copyToClipboard(elementId) {
 }
 
 function downloadCommercialReceipt() {
-    // In a real app, this would generate and download a PDF commercial receipt
     showNotification('Generating commercial receipt...', 'success');
     console.log('📄 Commercial receipt download triggered');
     
-    // Simulate receipt generation with commercial details
+    // Simulate receipt generation
     setTimeout(() => {
         showNotification('Commercial receipt downloaded successfully!', 'success');
         
-        // Create a simple receipt file (in real app, this would be a PDF)
+        // Create receipt content
         const receiptContent = `
 DOMIHIVE COMMERCIAL PROPERTY RECEIPT
 =====================================
 
 Transaction ID: ${document.getElementById('transactionId').textContent}
 Application ID: ${currentApplication.applicationId}
-Business Name: ${currentApplication.businessInfo.businessName}
-Date: ${new Date().toLocaleDateString()}
-Time: ${new Date().toLocaleTimeString()}
+Payment Date: ${new Date().toLocaleDateString()}
+Payment Time: ${new Date().toLocaleTimeString()}
 
 BUSINESS DETAILS:
 -----------------
 Business Name: ${currentApplication.businessInfo.businessName}
 Business Type: ${currentApplication.businessInfo.businessType}
-Registration: ${currentApplication.businessInfo.businessRegistration}
 Contact Person: ${currentApplication.contactInfo.fullName}
 
 PROPERTY DETAILS:
 -----------------
-Address: ${currentApplication.propertyTitle}
+Property: ${currentApplication.propertyTitle}
 Location: ${currentApplication.propertyLocation}
 Lease Term: ${document.getElementById('leaseTerm').textContent}
 
-COMMERCIAL PAYMENT BREAKDOWN:
------------------------------
-Commercial Application Fee: ₦45,000
-Business Verification & Credit Check: ₦25,000
-CAC Registration Verification: ₦15,000
-FIRS Tax Clearance Verification: ₦10,000
-Document Processing Fee: ₦5,000
-----------------------------------
-TOTAL PAID: ₦100,000
-
-COMMERCIAL ESCROW DETAILS:
---------------------------
-Escrow Status: Funds Secured in Commercial Escrow
-Business Verification Period: 5 Business Days
-Refund Policy: 100% refund if not approved
-
+PAYMENT DETAILS:
+----------------
+Total Amount: ₦${(currentApplication.propertyPrice || 0).toLocaleString()}
 Payment Method: ${document.getElementById('paymentMethod').textContent}
+Payment Status: Completed
+Application Status: Under Business Verification
 
-This receipt serves as proof of payment for your commercial property application.
-All funds are held in commercial escrow pending completion of business verification.
+Thank you for choosing DomiHive Commercial Services!
+Your business verification is now in progress.
 
 DomiHive Commercial Services
 www.domihive.com/commercial
@@ -734,12 +663,17 @@ www.domihive.com/commercial
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-    }, 2000);
+    }, 1500);
 }
 
 function closeSuccessModal() {
     const successModal = document.getElementById('successModal');
     successModal.classList.remove('active');
+    
+    // Redirect to notification page after closing modal
+    setTimeout(() => {
+        redirectToNotification();
+    }, 500);
 }
 
 function redirectToDocuments() {
@@ -750,7 +684,7 @@ function redirectToDocuments() {
         window.spa.navigateToSection('application-document-commercial');
     } else {
         // Fallback to direct navigation
-        window.location.href = '/application-document-commercial.html';
+        window.location.href = '/Pages/application-document-commercial.html';
     }
 }
 
@@ -762,20 +696,15 @@ function redirectToApplication() {
         window.spa.navigateToSection('application-process-commercial');
     } else {
         // Fallback to direct navigation
-        window.location.href = '/application-process-commercial.html';
+        window.location.href = '/Pages/application-process-commercial.html';
     }
 }
 
-function redirectToDashboard() {
-    console.log('🏢 Redirecting to commercial dashboard...');
+function redirectToNotification() {
+    console.log('📱 Redirecting to notification page...');
     
-    // Use SPA navigation if available
-    if (window.spa && typeof window.spa.navigateToSection === 'function') {
-        window.spa.navigateToSection('commercial-dashboard');
-    } else {
-        // Fallback to direct navigation
-        window.location.href = '/commercial-dashboard.html';
-    }
+    // Redirect to notification page
+    window.location.href = '/Pages/notification.html';
 }
 
 function showNotification(message, type = 'success') {

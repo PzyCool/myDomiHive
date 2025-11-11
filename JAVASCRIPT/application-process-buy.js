@@ -25,9 +25,6 @@ function initializePurchaseApplicationProcess() {
     // Prefill user information
     prefillUserData();
     
-    // Initialize financing section
-    initializeFinancingSection();
-    
     console.log('✅ Purchase application process initialized');
 }
 
@@ -45,7 +42,8 @@ function loadUserData() {
                 id: 'user_' + Date.now(),
                 fullName: 'John Doe',
                 email: 'john.doe@example.com',
-                phone: '+2348012345678',
+                phone: '8012345678',
+                countryCode: '+234',
                 userType: 'buyer'
             };
             console.log('⚠️ Using demo user data');
@@ -140,6 +138,12 @@ function prefillUserData() {
     // Prefill user information
     document.getElementById('prefilledFullName').textContent = currentUser.fullName || 'Not provided';
     document.getElementById('prefilledEmail').textContent = currentUser.email || 'Not provided';
+    
+    // Prefill phone with country code
+    const userCountryCode = document.getElementById('userCountryCode');
+    if (currentUser.countryCode) {
+        userCountryCode.value = currentUser.countryCode;
+    }
     document.getElementById('prefilledPhone').textContent = currentUser.phone || 'Not provided';
     
     // Prefill additional user data if available
@@ -156,18 +160,6 @@ function prefillUserData() {
     }
 }
 
-function initializeFinancingSection() {
-    // Initially hide financing details
-    const financingDetails = document.getElementById('financingDetails');
-    financingDetails.style.display = 'none';
-    
-    // Set financing fields as not required initially
-    const financingFields = financingDetails.querySelectorAll('input, select');
-    financingFields.forEach(field => {
-        field.required = false;
-    });
-}
-
 function initializeEventListeners() {
     // Form submission
     document.getElementById('purchaseApplicationForm').addEventListener('submit', handleFormSubmission);
@@ -176,11 +168,6 @@ function initializeEventListeners() {
     document.getElementById('backToPrevious').addEventListener('click', goBackToProperty);
     document.getElementById('backToPreviousBtn').addEventListener('click', goBackToProperty);
     
-    // Financing method selection
-    document.querySelectorAll('input[name="financingMethod"]').forEach(radio => {
-        radio.addEventListener('change', handleFinancingMethodChange);
-    });
-    
     // Real-time validation
     const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
     requiredFields.forEach(field => {
@@ -188,67 +175,11 @@ function initializeEventListeners() {
         field.addEventListener('input', clearFieldError);
     });
     
-    // Date of birth validation (must be at least 21 years old for purchase)
+    // Date of birth validation (optional, but if provided must be at least 21 years old for purchase)
     document.getElementById('dateOfBirth').addEventListener('change', validateDateOfBirth);
-    
-    // Currency input formatting
-    document.getElementById('downPayment').addEventListener('input', formatCurrencyInput);
-    document.getElementById('loanAmount').addEventListener('input', formatCurrencyInput);
     
     // ID number validation
     document.getElementById('idNumber').addEventListener('blur', validateIdNumber);
-}
-
-// Financing Logic Functions
-function handleFinancingMethodChange(event) {
-    const method = event.target.value;
-    const financingDetails = document.getElementById('financingDetails');
-    
-    console.log('💳 Financing method selected:', method);
-    
-    if (method === 'cash') {
-        financingDetails.style.display = 'none';
-        financingDetails.classList.remove('show');
-        
-        // Clear and make fields not required
-        const financingFields = financingDetails.querySelectorAll('input, select');
-        financingFields.forEach(field => {
-            field.required = false;
-            field.value = '';
-            clearFieldError({ target: field });
-        });
-    } else {
-        financingDetails.style.display = 'block';
-        financingDetails.classList.add('show');
-        
-        // Make relevant fields required based on method
-        const financingFields = financingDetails.querySelectorAll('input, select');
-        financingFields.forEach(field => {
-            field.required = true;
-        });
-        
-        // Specific field requirements based on method
-        if (method === 'mortgage') {
-            document.getElementById('loanAmount').required = true;
-            document.getElementById('preApproved').required = true;
-        } else if (method === 'installment') {
-            document.getElementById('downPayment').required = true;
-        }
-    }
-    
-    // Re-validate form
-    validateForm();
-}
-
-function formatCurrencyInput(event) {
-    let input = event.target.value.replace(/[^\d]/g, '');
-    
-    if (input) {
-        const number = parseInt(input);
-        event.target.value = '₦' + number.toLocaleString();
-    } else {
-        event.target.value = '';
-    }
 }
 
 // Form Validation and Submission
@@ -277,7 +208,7 @@ function validateForm() {
         }
     });
     
-    // Validate date of birth (must be at least 21 years old for purchase)
+    // Validate date of birth (optional, but if provided must be at least 21 years old for purchase)
     const dateOfBirth = document.getElementById('dateOfBirth').value;
     if (dateOfBirth && !isValidPurchaseAge(dateOfBirth)) {
         showFieldError(document.getElementById('dateOfBirth'), 'You must be at least 21 years old to purchase property');
@@ -289,32 +220,6 @@ function validateForm() {
     if (idNumber && !isValidIdNumber(idNumber)) {
         showFieldError(document.getElementById('idNumber'), 'Please enter a valid ID number');
         isValid = false;
-    }
-    
-    // Validate financing details if applicable
-    const financingMethod = document.querySelector('input[name="financingMethod"]:checked');
-    if (financingMethod && financingMethod.value !== 'cash') {
-        const financingFields = document.querySelectorAll('#financingDetails [required]');
-        financingFields.forEach(field => {
-            if (!field.value.trim()) {
-                showFieldError(field, 'This field is required');
-                isValid = false;
-            }
-        });
-        
-        // Validate currency amounts
-        const downPayment = document.getElementById('downPayment').value;
-        const loanAmount = document.getElementById('loanAmount').value;
-        
-        if (downPayment && !isValidCurrency(downPayment)) {
-            showFieldError(document.getElementById('downPayment'), 'Please enter a valid amount');
-            isValid = false;
-        }
-        
-        if (loanAmount && !isValidCurrency(loanAmount)) {
-            showFieldError(document.getElementById('loanAmount'), 'Please enter a valid amount');
-            isValid = false;
-        }
     }
     
     // Validate terms agreement
@@ -354,14 +259,6 @@ function validateField(event) {
         case 'idNumber':
             if (field.value && !isValidIdNumber(field.value)) {
                 showFieldError(field, 'Please enter a valid ID number');
-            } else {
-                clearFieldError(field);
-            }
-            break;
-        case 'downPayment':
-        case 'loanAmount':
-            if (field.value && !isValidCurrency(field.value)) {
-                showFieldError(field, 'Please enter a valid amount');
             } else {
                 clearFieldError(field);
             }
@@ -407,11 +304,6 @@ function isValidIdNumber(idNumber) {
     return idRegex.test(idNumber.trim());
 }
 
-function isValidCurrency(amount) {
-    const currencyRegex = /^₦?[0-9,]+$/;
-    return currencyRegex.test(amount.trim());
-}
-
 function showFieldError(field, message) {
     field.style.borderColor = '#e53e3e';
     
@@ -446,9 +338,6 @@ function clearValidationErrors() {
 }
 
 function collectFormData() {
-    const financingMethod = document.querySelector('input[name="financingMethod"]:checked');
-    const propertyUsage = document.querySelector('input[name="propertyUsage"]:checked');
-    
     const applicationData = {
         // Application metadata
         applicationId: 'BUY-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase(),
@@ -469,43 +358,23 @@ function collectFormData() {
             fullName: currentUser.fullName,
             email: currentUser.email,
             phone: currentUser.phone,
-            dateOfBirth: document.getElementById('dateOfBirth').value,
+            countryCode: document.getElementById('userCountryCode').value,
+            dateOfBirth: document.getElementById('dateOfBirth').value || null, // Optional
             nationality: document.getElementById('nationality').value,
-            maritalStatus: document.getElementById('maritalStatus').value,
             idType: document.getElementById('idType').value,
             idNumber: document.getElementById('idNumber').value,
             occupation: document.getElementById('occupation').value
         },
         
-        // Purchase Intent & Financing
-        purchaseInfo: {
-            financingMethod: financingMethod ? financingMethod.value : null,
-            downPayment: document.getElementById('downPayment').value ? 
-                        parseInt(document.getElementById('downPayment').value.replace(/[^\d]/g, '')) : null,
-            loanAmount: document.getElementById('loanAmount').value ? 
-                       parseInt(document.getElementById('loanAmount').value.replace(/[^\d]/g, '')) : null,
-            preApproved: document.getElementById('preApproved').value,
-            purchaseTimeline: document.getElementById('purchaseTimeline').value
-        },
-        
-        // Financial Capacity
-        financialInfo: {
-            annualIncome: document.getElementById('annualIncome').value,
-            netWorth: document.getElementById('netWorth').value,
-            sourceOfFunds: document.getElementById('sourceOfFunds').value,
-            employmentStatus: document.getElementById('employmentStatus').value,
-            currentProperties: document.getElementById('currentProperties').value
-        },
-        
         // Property Usage
         usageInfo: {
-            propertyUsage: propertyUsage ? propertyUsage.value : null,
+            propertyUsage: document.getElementById('propertyUsage').value,
             occupancyTimeline: document.getElementById('occupancyTimeline').value
         },
         
         // Legal Information
         legalInfo: {
-            legalRepresentative: document.getElementById('legalRepresentative').value,
+            legalRepresentative: document.getElementById('legalRepresentative').value || null, // Optional
             additionalNotes: document.getElementById('additionalNotes').value,
             termsAgreed: document.getElementById('agreeTerms').checked
         }
@@ -560,7 +429,8 @@ function updateUserProfile(applicationData) {
         ...currentUser,
         dateOfBirth: applicationData.personalInfo.dateOfBirth,
         occupation: applicationData.personalInfo.occupation,
-        nationality: applicationData.personalInfo.nationality
+        nationality: applicationData.personalInfo.nationality,
+        countryCode: applicationData.personalInfo.countryCode
     };
     
     localStorage.setItem('domihive_current_user', JSON.stringify(updatedUser));
@@ -667,8 +537,5 @@ if (!document.querySelector('#notification-styles')) {
     `;
     document.head.appendChild(style);
 }
-
-// Make functions available globally for HTML onclick
-window.handleFinancingMethodChange = handleFinancingMethodChange;
 
 console.log('🎉 Property Purchase Application JavaScript Loaded Successfully!');

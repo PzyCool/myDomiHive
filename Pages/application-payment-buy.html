@@ -77,36 +77,16 @@
                     <div class="payment-breakdown-card">
                         <h3>Payment Breakdown</h3>
                         <div class="breakdown-details">
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Purchase Application Fee</span>
-                                <span class="breakdown-amount" id="applicationFee">₦75,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Comprehensive Background Check</span>
-                                <span class="breakdown-amount" id="backgroundCheckFee">₦25,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Legal Document Review</span>
-                                <span class="breakdown-amount" id="legalReviewFee">₦35,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">FIRS Verification</span>
-                                <span class="breakdown-amount" id="firsFee">₦15,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Processing Fee</span>
-                                <span class="breakdown-amount" id="processingFee">₦10,000</span>
-                            </div>
                             <div class="breakdown-item total">
                                 <span class="breakdown-label">Total Amount</span>
-                                <span class="breakdown-amount" id="totalAmount">₦160,000</span>
+                                <span class="breakdown-amount" id="totalAmount">₦0</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Legal Escrow Explanation -->
+            <!-- Legal Review Explanation -->
             <section class="escrow-section">
                 <div class="escrow-card">
                     <div class="escrow-header">
@@ -114,8 +94,8 @@
                             <i class="fas fa-balance-scale"></i>
                         </div>
                         <div class="escrow-content">
-                            <h2>Legal Escrow & Purchase Protection</h2>
-                            <p>Your payment is protected by DomiHive's legal escrow system with comprehensive purchase safeguards</p>
+                            <h2>Legal Review Process</h2>
+                            <p>Your application goes through comprehensive legal review and verification</p>
                         </div>
                     </div>
                     
@@ -123,36 +103,22 @@
                         <div class="process-step">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <h4>Legal Escrow Holding</h4>
-                                <p>Your funds are held in a secure legal escrow account managed by DomiHive</p>
+                                <h4>Comprehensive Legal Review</h4>
+                                <p>We conduct thorough document verification and legal compliance checks</p>
                             </div>
                         </div>
                         <div class="process-step">
                             <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Comprehensive Legal Review</h4>
-                                <p>We conduct thorough document verification and legal compliance checks (5-7 days)</p>
-                            </div>
-                        </div>
-                        <div class="process-step">
-                            <div class="step-number">3</div>
                             <div class="step-content">
                                 <h4>Property Title Verification</h4>
                                 <p>Verification of property ownership and title documents with relevant authorities</p>
                             </div>
                         </div>
                         <div class="process-step">
-                            <div class="step-number">4</div>
+                            <div class="step-number">3</div>
                             <div class="step-content">
-                                <h4>Purchase Approval & Fund Release</h4>
-                                <p>If approved, you proceed to purchase agreement and fund transfer</p>
-                            </div>
-                        </div>
-                        <div class="process-step">
-                            <div class="step-number">5</div>
-                            <div class="step-content">
-                                <h4>Full Refund if Not Approved</h4>
-                                <p>If your application is not approved, you receive a 100% refund within 7 days</p>
+                                <h4>Purchase Approval</h4>
+                                <p>Final approval and completion of purchase process</p>
                             </div>
                         </div>
                     </div>
@@ -167,7 +133,7 @@
 
                     <form id="purchasePaymentForm" class="payment-form">
                         <input type="hidden" id="applicationData" name="applicationData">
-                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="160000">
+                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="0">
 
                         <!-- Payment Method Selection -->
                         <div class="payment-methods">
@@ -194,21 +160,6 @@
                                     <div class="method-info">
                                         <h4>Bank Transfer</h4>
                                         <p>Transfer directly from your bank</p>
-                                    </div>
-                                    <div class="method-check">
-                                        <div class="check-circle"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method-card" data-method="flutterwave">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <i class="fas fa-mobile-alt"></i>
-                                    </div>
-                                    <div class="method-info">
-                                        <h4>Flutterwave</h4>
-                                        <p>Pay with mobile money or card</p>
                                     </div>
                                     <div class="method-check">
                                         <div class="check-circle"></div>
@@ -269,7 +220,7 @@
                                 <div class="bank-instructions">
                                     <div class="instruction-item">
                                         <strong>Bank Name:</strong>
-                                        <span>DomiHive Legal Trust Bank</span>
+                                        <span>DomiHive Trust Bank</span>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Account Number:</strong>
@@ -280,7 +231,7 @@
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Account Name:</strong>
-                                        <span>DomiHive Legal Escrow Services</span>
+                                        <span>DomiHive Property Services</span>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Reference:</strong>
@@ -291,7 +242,7 @@
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Amount:</strong>
-                                        <span id="bankAmount">₦160,000</span>
+                                        <span id="bankAmount">₦0</span>
                                     </div>
                                 </div>
                                 <div class="upload-receipt">
@@ -330,21 +281,9 @@
                         <div class="form-section">
                             <div class="terms-agreement">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" id="agreeLegalEscrow" name="agreeLegalEscrow" required>
-                                    <span class="checkmark"></span>
-                                    I understand and agree to the <a href="#" class="terms-link">Legal Escrow Terms</a> and DomiHive's purchase protection policy
-                                </label>
-                                
-                                <label class="checkbox-label">
                                     <input type="checkbox" id="agreeLegalReview" name="agreeLegalReview" required>
                                     <span class="checkmark"></span>
                                     I consent to comprehensive legal review, document verification, and property title checks as part of the purchase process
-                                </label>
-                                
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
-                                    <span class="checkmark"></span>
-                                    I understand that my payment will be fully refunded if my application is not approved within 7 business days
                                 </label>
 
                                 <label class="checkbox-label">
@@ -381,13 +320,6 @@
                 <div class="security-grid">
                     <div class="security-feature">
                         <div class="feature-icon">
-                            <i class="fas fa-balance-scale"></i>
-                        </div>
-                        <h4>Legal Escrow Protection</h4>
-                        <p>Funds held in secure legal escrow account</p>
-                    </div>
-                    <div class="security-feature">
-                        <div class="feature-icon">
                             <i class="fas fa-file-contract"></i>
                         </div>
                         <h4>Title Verification</h4>
@@ -402,10 +334,10 @@
                     </div>
                     <div class="security-feature">
                         <div class="feature-icon">
-                            <i class="fas fa-sync-alt"></i>
+                            <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h4>7-Day Refund Guarantee</h4>
-                        <p>Full refund if application not approved</p>
+                        <h4>Secure Process</h4>
+                        <p>Protected and verified purchase process</p>
                     </div>
                 </div>
             </section>
@@ -427,15 +359,7 @@
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
-                            <span>Securing funds in legal escrow</span>
-                        </div>
-                        <div class="processing-step">
-                            <i class="fas fa-check"></i>
                             <span>Initiating legal document review</span>
-                        </div>
-                        <div class="processing-step">
-                            <i class="fas fa-check"></i>
-                            <span>Starting property title verification</span>
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
@@ -462,7 +386,7 @@
             
             <div class="modal-body">
                 <div class="success-details">
-                    <p>Your payment has been processed successfully and legal review has been initiated. Your funds are secured in legal escrow.</p>
+                    <p>Your payment has been processed successfully and legal review has been initiated.</p>
                     <div class="payment-summary-modal">
                         <h4>Payment & Legal Details:</h4>
                         <div class="detail-item">
@@ -478,59 +402,43 @@
                             <span id="paymentMethod">-</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Escrow Status:</strong>
-                            <span class="status-badge pending">Funds in Legal Escrow</span>
-                        </div>
-                        <div class="detail-item">
                             <strong>Legal Review Status:</strong>
                             <span class="status-badge pending">Review in Progress</span>
                         </div>
                     </div>
                     
                     <div class="next-steps">
-                        <h4>Legal Review Process Timeline:</h4>
+                        <h4>What happens next:</h4>
                         <div class="timeline">
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Document Verification (Days 1-2)</h5>
-                                    <p>Comprehensive review of all submitted documents and identification</p>
+                                    <h5>Document Verification</h5>
+                                    <p>Review of all submitted documents and identification</p>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Property Title Check (Days 2-4)</h5>
-                                    <p>Verification of property ownership and title documents with land registry</p>
+                                    <h5>Property Title Check</h5>
+                                    <p>Verification of property ownership and title documents</p>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Legal Compliance Review (Days 4-6)</h5>
-                                    <p>Ensuring compliance with all Nigerian property laws and regulations</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h5>Final Approval (Day 7)</h5>
-                                    <p>Completion of legal review and purchase approval notification</p>
+                                    <h5>Final Approval</h5>
+                                    <p>Completion of legal review and purchase approval</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="refund-notice">
-                        <i class="fas fa-info-circle"></i>
-                        <p><strong>7-Day Refund Guarantee:</strong> If your purchase application is not approved within 7 business days, you will receive a 100% refund automatically. You will be notified at every stage of the legal review process.</p>
                     </div>
                 </div>
                 
                 <div class="modal-actions">
                     <button class="btn-secondary" id="downloadReceiptBtn">
                         <i class="fas fa-download"></i>
-                        Download Legal Receipt
+                        Download Receipt
                     </button>
                     <button class="btn-primary" id="goToDashboardBtn">
                         Go to Purchase Dashboard

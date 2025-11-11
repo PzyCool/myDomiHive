@@ -42,7 +42,8 @@ function loadUserData() {
                 id: 'user_' + Date.now(),
                 fullName: 'Jane Smith',
                 email: 'jane.smith@example.com',
-                phone: '+2348012345679',
+                phone: '8012345679',
+                countryCode: '+234',
                 userType: 'business'
             };
             console.log('⚠️ Using demo user data for commercial application');
@@ -137,6 +138,12 @@ function prefillUserData() {
     // Prefill user information for contact person
     document.getElementById('prefilledFullName').textContent = currentUser.fullName || 'Not provided';
     document.getElementById('prefilledEmail').textContent = currentUser.email || 'Not provided';
+    
+    // Prefill phone with country code
+    const userCountryCode = document.getElementById('userCountryCode');
+    if (currentUser.countryCode) {
+        userCountryCode.value = currentUser.countryCode;
+    }
     document.getElementById('prefilledPhone').textContent = currentUser.phone || 'Not provided';
     
     // Prefill business data if available in user profile
@@ -163,15 +170,6 @@ function initializeEventListeners() {
         field.addEventListener('blur', validateField);
         field.addEventListener('input', clearFieldError);
     });
-    
-    // Account number validation
-    document.getElementById('accountNumber').addEventListener('blur', validateAccountNumber);
-    
-    // Business registration number validation
-    document.getElementById('businessRegistration').addEventListener('blur', validateBusinessRegistration);
-    
-    // TIN validation
-    document.getElementById('taxIdentification').addEventListener('blur', validateTaxIdentification);
 }
 
 // Form Validation and Submission
@@ -199,27 +197,6 @@ function validateForm() {
             isValid = false;
         }
     });
-    
-    // Validate business registration number
-    const businessReg = document.getElementById('businessRegistration').value;
-    if (businessReg && !isValidBusinessRegistration(businessReg)) {
-        showFieldError(document.getElementById('businessRegistration'), 'Please enter a valid business registration number');
-        isValid = false;
-    }
-    
-    // Validate account number (must be 10 digits)
-    const accountNumber = document.getElementById('accountNumber').value;
-    if (accountNumber && !isValidAccountNumber(accountNumber)) {
-        showFieldError(document.getElementById('accountNumber'), 'Please enter a valid 10-digit account number');
-        isValid = false;
-    }
-    
-    // Validate TIN number
-    const tinNumber = document.getElementById('taxIdentification').value;
-    if (tinNumber && !isValidTaxIdentification(tinNumber)) {
-        showFieldError(document.getElementById('taxIdentification'), 'Please enter a valid Tax Identification Number');
-        isValid = false;
-    }
     
     // Validate terms agreements
     const requiredCheckboxes = [
@@ -253,77 +230,7 @@ function validateField(event) {
         return;
     }
     
-    // Specific validations for commercial fields
-    switch (field.id) {
-        case 'businessRegistration':
-            if (field.value && !isValidBusinessRegistration(field.value)) {
-                showFieldError(field, 'Please enter a valid business registration number');
-            } else {
-                clearFieldError(field);
-            }
-            break;
-        case 'accountNumber':
-            if (field.value && !isValidAccountNumber(field.value)) {
-                showFieldError(field, 'Please enter a valid 10-digit account number');
-            } else {
-                clearFieldError(field);
-            }
-            break;
-        case 'taxIdentification':
-            if (field.value && !isValidTaxIdentification(field.value)) {
-                showFieldError(field, 'Please enter a valid Tax Identification Number');
-            } else {
-                clearFieldError(field);
-            }
-            break;
-        default:
-            clearFieldError(field);
-    }
-}
-
-function validateBusinessRegistration(event) {
-    const field = event.target;
-    if (field.value && !isValidBusinessRegistration(field.value)) {
-        showFieldError(field, 'Please enter a valid business registration number');
-    } else {
-        clearFieldError(field);
-    }
-}
-
-function validateAccountNumber(event) {
-    const field = event.target;
-    if (field.value && !isValidAccountNumber(field.value)) {
-        showFieldError(field, 'Please enter a valid 10-digit account number');
-    } else {
-        clearFieldError(field);
-    }
-}
-
-function validateTaxIdentification(event) {
-    const field = event.target;
-    if (field.value && !isValidTaxIdentification(field.value)) {
-        showFieldError(field, 'Please enter a valid Tax Identification Number');
-    } else {
-        clearFieldError(field);
-    }
-}
-
-function isValidBusinessRegistration(regNumber) {
-    // Basic validation for business registration numbers (CAC/BN format)
-    const regRegex = /^[A-Z0-9]{6,12}$/i;
-    return regRegex.test(regNumber.trim());
-}
-
-function isValidAccountNumber(accountNumber) {
-    // Nigerian account numbers are typically 10 digits
-    const accountRegex = /^\d{10}$/;
-    return accountRegex.test(accountNumber.trim());
-}
-
-function isValidTaxIdentification(tin) {
-    // Basic TIN validation (Nigeria TIN format)
-    const tinRegex = /^\d{8,12}-\d{4}$/;
-    return tinRegex.test(tin.trim());
+    clearFieldError(field);
 }
 
 function showFieldError(field, message) {
@@ -360,8 +267,6 @@ function clearValidationErrors() {
 }
 
 function collectFormData() {
-    const spaceUsage = document.querySelector('input[name="spaceUsage"]:checked');
-    
     const applicationData = {
         // Application metadata
         applicationId: 'COM-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase(),
@@ -381,7 +286,6 @@ function collectFormData() {
         businessInfo: {
             businessName: document.getElementById('businessName').value,
             businessType: document.getElementById('businessType').value,
-            businessRegistration: document.getElementById('businessRegistration').value,
             businessIndustry: document.getElementById('businessIndustry').value,
             yearsInBusiness: document.getElementById('yearsInBusiness').value,
             numberOfEmployees: document.getElementById('numberOfEmployees').value,
@@ -393,32 +297,19 @@ function collectFormData() {
             fullName: currentUser.fullName,
             email: currentUser.email,
             phone: currentUser.phone,
+            countryCode: document.getElementById('userCountryCode').value,
             position: document.getElementById('contactPosition').value,
             authority: document.getElementById('contactAuthority').value
         },
         
         // Commercial Requirements
         commercialRequirements: {
-            spaceUsage: spaceUsage ? spaceUsage.value : null,
-            operatingHours: document.getElementById('operatingHours').value,
-            customerTraffic: document.getElementById('customerTraffic').value,
-            leaseTerm: document.getElementById('leaseTerm').value,
-            businessDescription: document.getElementById('businessDescription').value
+            spaceUsage: document.getElementById('spaceUsage').value,
+            leaseTerm: document.getElementById('leaseTerm').value
         },
         
-        // Financial Information
-        financialInfo: {
-            bankName: document.getElementById('bankName').value,
-            accountName: document.getElementById('accountName').value,
-            accountNumber: document.getElementById('accountNumber').value,
-            taxIdentification: document.getElementById('taxIdentification').value,
-            vatRegistered: document.getElementById('vatRegistered').value
-        },
-        
-        // References & Additional Information
+        // Additional Information
         additionalInfo: {
-            previousLandlord: document.getElementById('previousLandlord').value,
-            referenceContact: document.getElementById('referenceContact').value,
             additionalNotes: document.getElementById('additionalNotes').value,
             termsAgreed: document.getElementById('agreeCommercialTerms').checked,
             creditCheckAgreed: document.getElementById('agreeCreditCheck').checked
@@ -474,7 +365,8 @@ function updateUserProfile(applicationData) {
         ...currentUser,
         businessName: applicationData.businessInfo.businessName,
         contactPosition: applicationData.contactInfo.position,
-        businessType: applicationData.businessInfo.businessType
+        businessType: applicationData.businessInfo.businessType,
+        countryCode: applicationData.contactInfo.countryCode
     };
     
     localStorage.setItem('domihive_current_user', JSON.stringify(updatedUser));

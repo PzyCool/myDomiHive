@@ -68,18 +68,16 @@ function updateApplicationDisplay() {
     document.getElementById('applicantName').textContent = currentApplication.personalInfo.fullName;
     document.getElementById('applicationId').textContent = currentApplication.applicationId;
     document.getElementById('propertyTitle').textContent = currentApplication.propertyTitle;
-    document.getElementById('propertyPrice').textContent = `₦${currentApplication.propertyPrice.toLocaleString()}`;
+    
+    // Update property price
+    const totalAmount = currentApplication.propertyPrice || 0;
+    document.getElementById('propertyPrice').textContent = `₦${totalAmount.toLocaleString()}`;
+    document.getElementById('totalAmount').textContent = `₦${totalAmount.toLocaleString()}`;
     
     // Update financing method
     const financingElement = document.getElementById('financingMethod');
     if (financingElement) {
-        const financingMethod = currentApplication.purchaseInfo.financingMethod;
-        const methodMap = {
-            'cash': 'Cash Payment',
-            'mortgage': 'Mortgage Financing',
-            'installment': 'Installment Plan'
-        };
-        financingElement.textContent = methodMap[financingMethod] || 'Not specified';
+        financingElement.textContent = 'Property Purchase';
     }
     
     // Update context type
@@ -94,10 +92,17 @@ function updateApplicationDisplay() {
 }
 
 function updatePaymentDetails() {
-    // Update bank amount
-    document.getElementById('bankAmount').textContent = '₦160,000';
+    if (!currentApplication) return;
     
-    console.log('💰 Purchase payment details updated');
+    // Calculate total amount based on property price
+    const totalAmount = currentApplication.propertyPrice || 0;
+    const formattedAmount = `₦${totalAmount.toLocaleString()}`;
+    
+    // Update all amount displays
+    document.getElementById('bankAmount').textContent = formattedAmount;
+    document.getElementById('totalPaymentAmount').value = totalAmount;
+    
+    console.log('💰 Purchase payment details updated:', formattedAmount);
 }
 
 function initializeEventListeners() {
@@ -110,13 +115,11 @@ function initializeEventListeners() {
     
     // Modal buttons
     document.getElementById('closeModalBtn').addEventListener('click', closeSuccessModal);
-    document.getElementById('downloadReceiptBtn').addEventListener('click', downloadLegalReceipt);
-    document.getElementById('goToDashboardBtn').addEventListener('click', redirectToDashboard);
+    document.getElementById('downloadReceiptBtn').addEventListener('click', downloadReceipt);
+    document.getElementById('goToDashboardBtn').addEventListener('click', redirectToNotification);
     
     // Legal terms checkboxes validation
-    document.getElementById('agreeLegalEscrow').addEventListener('change', validateForm);
     document.getElementById('agreeLegalReview').addEventListener('change', validateForm);
-    document.getElementById('agreeRefundPolicy').addEventListener('change', validateForm);
     document.getElementById('agreePurchaseTerms').addEventListener('change', validateForm);
     document.getElementById('agreePrivacyPolicy').addEventListener('change', validateForm);
     
@@ -204,27 +207,6 @@ function formatCardNumber(event) {
     }
     
     event.target.value = formattedInput;
-    
-    // Validate card type
-    validateCardType(input);
-}
-
-function validateCardType(cardNumber) {
-    const cardIcons = document.querySelectorAll('.card-icons i');
-    cardIcons.forEach(icon => icon.style.opacity = '0.3');
-    
-    // Visa
-    if (/^4/.test(cardNumber)) {
-        document.querySelector('.fa-cc-visa').style.opacity = '1';
-    }
-    // Mastercard
-    else if (/^5[1-5]/.test(cardNumber)) {
-        document.querySelector('.fa-cc-mastercard').style.opacity = '1';
-    }
-    // Amex
-    else if (/^3[47]/.test(cardNumber)) {
-        document.querySelector('.fa-cc-amex').style.opacity = '1';
-    }
 }
 
 function formatExpiryDate(event) {
@@ -235,34 +217,6 @@ function formatExpiryDate(event) {
     }
     
     event.target.value = input;
-    
-    // Validate expiry date
-    if (input.length === 5) {
-        validateExpiryDate(input);
-    }
-}
-
-function validateExpiryDate(expiryDate) {
-    const [month, year] = expiryDate.split('/');
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear() % 100;
-    const currentMonth = currentDate.getMonth() + 1;
-    
-    const expMonth = parseInt(month);
-    const expYear = parseInt(year);
-    
-    if (expMonth < 1 || expMonth > 12) {
-        showFieldError(document.getElementById('expiryDate'), 'Invalid month');
-        return false;
-    }
-    
-    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-        showFieldError(document.getElementById('expiryDate'), 'Card has expired');
-        return false;
-    }
-    
-    clearFieldError(document.getElementById('expiryDate'));
-    return true;
 }
 
 function formatCVV(event) {
@@ -326,9 +280,7 @@ function validateForm() {
     
     // Validate legal terms agreements
     const requiredCheckboxes = [
-        'agreeLegalEscrow',
         'agreeLegalReview',
-        'agreeRefundPolicy',
         'agreePurchaseTerms',
         'agreePrivacyPolicy'
     ];
@@ -369,12 +321,9 @@ function validateCardPayment() {
     const expiryDate = document.getElementById('expiryDate').value;
     const cvv = document.getElementById('cvv').value;
     
-    // Validate card number (basic Luhn check)
+    // Validate card number
     if (!cardNumber || cardNumber.length < 16) {
-        showFieldError(document.getElementById('cardNumber'), 'Valid card number is required');
-        isValid = false;
-    } else if (!luhnCheck(cardNumber)) {
-        showFieldError(document.getElementById('cardNumber'), 'Invalid card number');
+        showFieldError(document.getElementById('cardNumber'), 'Valid card number is required (16 digits)');
         isValid = false;
     }
     
@@ -386,40 +335,17 @@ function validateCardPayment() {
     
     // Validate expiry date
     if (!expiryDate || expiryDate.length !== 5) {
-        showFieldError(document.getElementById('expiryDate'), 'Valid expiry date is required');
-        isValid = false;
-    } else if (!validateExpiryDate(expiryDate)) {
+        showFieldError(document.getElementById('expiryDate'), 'Valid expiry date is required (MM/YY)');
         isValid = false;
     }
     
     // Validate CVV
     if (!cvv || cvv.length < 3) {
-        showFieldError(document.getElementById('cvv'), 'Valid CVV is required');
+        showFieldError(document.getElementById('cvv'), 'Valid CVV is required (3-4 digits)');
         isValid = false;
     }
     
     return isValid;
-}
-
-function luhnCheck(cardNumber) {
-    let sum = 0;
-    let isEven = false;
-    
-    for (let i = cardNumber.length - 1; i >= 0; i--) {
-        let digit = parseInt(cardNumber[i]);
-        
-        if (isEven) {
-            digit *= 2;
-            if (digit > 9) {
-                digit -= 9;
-            }
-        }
-        
-        sum += digit;
-        isEven = !isEven;
-    }
-    
-    return sum % 10 === 0;
 }
 
 function validateBankTransfer() {
@@ -480,11 +406,9 @@ function processPayment() {
     // Simulate payment processing
     let progress = 0;
     const steps = [
-        { progress: 20, text: 'Processing payment transaction...', step: 0 },
-        { progress: 40, text: 'Securing funds in legal escrow...', step: 1 },
-        { progress: 60, text: 'Initiating legal document review...', step: 2 },
-        { progress: 80, text: 'Starting property title verification...', step: 3 },
-        { progress: 100, text: 'Finalizing application submission...', step: 4 }
+        { progress: 33, text: 'Processing payment transaction...', step: 0 },
+        { progress: 66, text: 'Initiating legal document review...', step: 1 },
+        { progress: 100, text: 'Finalizing application submission...', step: 2 }
     ];
     
     let currentStep = 0;
@@ -510,7 +434,7 @@ function processPayment() {
             clearInterval(processInterval);
             completePayment();
         }
-    }, 1000);
+    }, 800);
 }
 
 function completePayment() {
@@ -518,7 +442,8 @@ function completePayment() {
     
     // Generate transaction details
     const transactionId = 'TXN-BUY-' + Date.now() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-    const paidAmount = '₦160,000';
+    const totalAmount = currentApplication.propertyPrice || 0;
+    const paidAmount = `₦${totalAmount.toLocaleString()}`;
     
     // Save payment data
     savePaymentData(transactionId);
@@ -539,12 +464,10 @@ function savePaymentData(transactionId) {
         applicationId: currentApplication.applicationId,
         transactionId: transactionId,
         paymentMethod: selectedPaymentMethod,
-        amount: 160000,
+        amount: currentApplication.propertyPrice || 0,
         paymentDate: new Date().toISOString(),
         status: 'completed',
-        escrowStatus: 'legal_escrow_held',
-        legalReviewStatus: 'in_progress',
-        reviewTimeline: '7_business_days'
+        applicationStatus: 'under_legal_review'
     };
     
     // Update application data with payment info
@@ -552,11 +475,6 @@ function savePaymentData(transactionId) {
     currentApplication.currentStep = 'payment_completed';
     currentApplication.status = 'under_legal_review';
     currentApplication.legalReviewStartDate = new Date().toISOString();
-    
-    // Calculate expected completion date (7 business days from now)
-    const completionDate = new Date();
-    completionDate.setDate(completionDate.getDate() + 7);
-    currentApplication.expectedCompletionDate = completionDate.toISOString();
     
     // Save to sessionStorage
     sessionStorage.setItem('current_purchase_application', JSON.stringify(currentApplication));
@@ -596,7 +514,6 @@ function formatPaymentMethod(method) {
     const methodNames = {
         'card': 'Credit/Debit Card',
         'bank': 'Bank Transfer',
-        'flutterwave': 'Flutterwave',
         'paystack': 'Paystack'
     };
     
@@ -609,16 +526,16 @@ function createPurchasePaymentNotification(transactionId) {
     const notification = {
         id: 'notif_buy_' + Date.now(),
         type: 'purchase_payment_completed',
-        title: 'Purchase Payment & Legal Review Initiated',
-        message: `Your payment of ₦160,000 for ${currentApplication.propertyTitle} has been processed. Legal review is now in progress. Transaction ID: ${transactionId}`,
+        title: 'Purchase Payment Successful',
+        message: `Your payment of ₦${(currentApplication.propertyPrice || 0).toLocaleString()} for ${currentApplication.propertyTitle} has been processed. Legal review is now in progress.`,
         timestamp: new Date().toISOString(),
         read: false,
         applicationId: currentApplication.applicationId,
         transactionId: transactionId,
         actions: [
             {
-                text: 'View Legal Review Status',
-                action: 'view_legal_review',
+                text: 'View Application Status',
+                action: 'view_application_status',
                 applicationId: currentApplication.applicationId
             },
             {
@@ -649,77 +566,69 @@ function copyToClipboard(elementId) {
     });
 }
 
-function downloadLegalReceipt() {
-    // In a real app, this would generate and download a PDF legal receipt
-    showNotification('Generating legal receipt...', 'success');
-    console.log('📄 Legal receipt download triggered');
+function downloadReceipt() {
+    showNotification('Generating receipt...', 'success');
+    console.log('📄 Receipt download triggered');
     
-    // Simulate receipt generation with legal details
+    // Simulate receipt generation
     setTimeout(() => {
-        showNotification('Legal receipt downloaded successfully!', 'success');
+        showNotification('Receipt downloaded successfully!', 'success');
         
-        // Create a simple receipt file (in real app, this would be a PDF)
+        // Create receipt content
         const receiptContent = `
 DOMIHIVE PROPERTY PURCHASE RECEIPT
 ===================================
 
 Transaction ID: ${document.getElementById('transactionId').textContent}
 Application ID: ${currentApplication.applicationId}
-Date: ${new Date().toLocaleDateString()}
-Time: ${new Date().toLocaleTimeString()}
+Payment Date: ${new Date().toLocaleDateString()}
+Payment Time: ${new Date().toLocaleTimeString()}
 
 APPLICANT DETAILS:
 ------------------
 Name: ${currentApplication.personalInfo.fullName}
 Email: ${currentApplication.personalInfo.email}
-Phone: ${currentApplication.personalInfo.phone}
 
 PROPERTY DETAILS:
 -----------------
-Address: ${currentApplication.propertyTitle}
+Property: ${currentApplication.propertyTitle}
 Location: ${currentApplication.propertyLocation}
-Purchase Price: ${currentApplication.propertyPrice.toLocaleString()}
+Purchase Price: ₦${(currentApplication.propertyPrice || 0).toLocaleString()}
 
-PAYMENT BREAKDOWN:
-------------------
-Purchase Application Fee: ₦75,000
-Comprehensive Background Check: ₦25,000
-Legal Document Review: ₦35,000
-FIRS Verification: ₦15,000
-Processing Fee: ₦10,000
-----------------------------------
-TOTAL PAID: ₦160,000
-
-LEGAL ESCROW DETAILS:
----------------------
-Escrow Status: Funds Secured in Legal Escrow
-Legal Review Period: 7 Business Days
-Refund Policy: 100% refund if not approved
-
+PAYMENT DETAILS:
+----------------
+Total Amount: ₦${(currentApplication.propertyPrice || 0).toLocaleString()}
 Payment Method: ${document.getElementById('paymentMethod').textContent}
+Payment Status: Completed
+Application Status: Under Legal Review
 
-This receipt serves as proof of payment for your property purchase application.
-All funds are held in legal escrow pending completion of legal review.
+Thank you for choosing DomiHive Property Services!
+Your legal review is now in progress.
 
-DomiHive Legal Services
-www.domihive.com/legal
+DomiHive Property Services
+www.domihive.com
         `;
         
         const blob = new Blob([receiptContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `legal-receipt-${currentApplication.applicationId}.txt`;
+        a.download = `purchase-receipt-${currentApplication.applicationId}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-    }, 2000);
+    }, 1500);
 }
 
 function closeSuccessModal() {
     const successModal = document.getElementById('successModal');
     successModal.classList.remove('active');
+    
+    // Redirect to notification page after closing modal
+    setTimeout(() => {
+        redirectToNotification();
+    }, 500);
 }
 
 function redirectToDocuments() {
@@ -730,7 +639,7 @@ function redirectToDocuments() {
         window.spa.navigateToSection('application-document-buy');
     } else {
         // Fallback to direct navigation
-        window.location.href = '/application-document-buy.html';
+        window.location.href = '/Pages/application-document-buy.html';
     }
 }
 
@@ -742,20 +651,15 @@ function redirectToApplication() {
         window.spa.navigateToSection('application-process-buy');
     } else {
         // Fallback to direct navigation
-        window.location.href = '/application-process-buy.html';
+        window.location.href = '/Pages/application-process-buy.html';
     }
 }
 
-function redirectToDashboard() {
-    console.log('🏠 Redirecting to purchase dashboard...');
+function redirectToNotification() {
+    console.log('📱 Redirecting to notification page...');
     
-    // Use SPA navigation if available
-    if (window.spa && typeof window.spa.navigateToSection === 'function') {
-        window.spa.navigateToSection('purchase-dashboard');
-    } else {
-        // Fallback to direct navigation
-        window.location.href = '/purchase-dashboard.html';
-    }
+    // Redirect to notification page
+    window.location.href = '/Pages/notification.html';
 }
 
 function showNotification(message, type = 'success') {

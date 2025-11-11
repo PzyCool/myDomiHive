@@ -12,11 +12,7 @@ let uploadedFiles = {
     governmentId: null,
     passportPhoto: null,
     proofOfFunds: [],
-    taxClearance: null,
-    proofOfIncome: null,
-    utilityBill: null,
-    referenceLetters: [],
-    additionalLegalDocs: []
+    utilityBill: null
 };
 
 function initializePurchaseDocumentUpload() {
@@ -84,13 +80,7 @@ function updateApplicationDisplay() {
     // Update purchase type
     const purchaseTypeElement = document.getElementById('purchaseType');
     if (purchaseTypeElement) {
-        const financingMethod = currentApplication.purchaseInfo.financingMethod;
-        const typeMap = {
-            'cash': 'Cash Purchase',
-            'mortgage': 'Mortgage Purchase',
-            'installment': 'Installment Plan'
-        };
-        purchaseTypeElement.textContent = typeMap[financingMethod] || 'Property Purchase';
+        purchaseTypeElement.textContent = 'Property Purchase';
     }
     
     // Update context type
@@ -139,35 +129,11 @@ function initializeFileUploads() {
     proofOfFundsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'proofOfFunds'));
     setupDragAndDrop(proofOfFundsArea, proofOfFundsInput, 'proofOfFundsMultiple');
     
-    // Tax Clearance upload
-    const taxClearanceInput = document.getElementById('taxClearance');
-    const taxClearanceArea = document.getElementById('taxClearanceArea');
-    taxClearanceInput.addEventListener('change', (e) => handleFileUpload(e, 'taxClearance'));
-    setupDragAndDrop(taxClearanceArea, taxClearanceInput, 'taxClearance');
-    
-    // Proof of Income upload
-    const proofOfIncomeInput = document.getElementById('proofOfIncome');
-    const proofOfIncomeArea = document.getElementById('proofOfIncomeArea');
-    proofOfIncomeInput.addEventListener('change', (e) => handleFileUpload(e, 'proofOfIncome'));
-    setupDragAndDrop(proofOfIncomeArea, proofOfIncomeInput, 'proofOfIncome');
-    
     // Utility Bill upload
     const utilityBillInput = document.getElementById('utilityBill');
     const utilityBillArea = document.getElementById('utilityBillArea');
     utilityBillInput.addEventListener('change', (e) => handleFileUpload(e, 'utilityBill'));
     setupDragAndDrop(utilityBillArea, utilityBillInput, 'utilityBill');
-    
-    // Reference Letters upload (multiple, optional)
-    const referenceLettersInput = document.getElementById('referenceLetters');
-    const referenceLettersArea = document.getElementById('referenceLettersArea');
-    referenceLettersInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'referenceLetters'));
-    setupDragAndDrop(referenceLettersArea, referenceLettersInput, 'referenceLettersMultiple');
-    
-    // Additional Legal Documents upload (multiple, optional)
-    const additionalLegalDocsInput = document.getElementById('additionalLegalDocs');
-    const additionalLegalDocsArea = document.getElementById('additionalLegalDocsArea');
-    additionalLegalDocsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'additionalLegalDocs'));
-    setupDragAndDrop(additionalLegalDocsArea, additionalLegalDocsInput, 'additionalLegalDocsMultiple');
 }
 
 function setupDragAndDrop(uploadArea, fileInput, fileType) {
@@ -203,12 +169,6 @@ function setupDragAndDrop(uploadArea, fileInput, fileType) {
                         break;
                     case 'passportPhoto':
                         handleFileUpload(event, 'passportPhoto');
-                        break;
-                    case 'taxClearance':
-                        handleFileUpload(event, 'taxClearance');
-                        break;
-                    case 'proofOfIncome':
-                        handleFileUpload(event, 'proofOfIncome');
                         break;
                     case 'utilityBill':
                         handleFileUpload(event, 'utilityBill');
@@ -308,22 +268,14 @@ function validatePurchaseFile(file, fileType) {
         governmentId: 5 * 1024 * 1024,
         passportPhoto: 2 * 1024 * 1024,
         proofOfFunds: 10 * 1024 * 1024,
-        taxClearance: 5 * 1024 * 1024,
-        proofOfIncome: 5 * 1024 * 1024,
-        utilityBill: 5 * 1024 * 1024,
-        referenceLetters: 5 * 1024 * 1024,
-        additionalLegalDocs: 5 * 1024 * 1024
+        utilityBill: 5 * 1024 * 1024
     };
     
     const allowedTypes = {
         governmentId: ['.pdf', '.jpg', '.jpeg', '.png'],
         passportPhoto: ['.jpg', '.jpeg', '.png'],
         proofOfFunds: ['.pdf', '.jpg', '.jpeg', '.png'],
-        taxClearance: ['.pdf', '.jpg', '.jpeg', '.png'],
-        proofOfIncome: ['.pdf', '.jpg', '.jpeg', '.png'],
-        utilityBill: ['.pdf', '.jpg', '.jpeg', '.png'],
-        referenceLetters: ['.pdf', '.doc', '.docx'],
-        additionalLegalDocs: ['.pdf', '.jpg', '.jpeg', '.png', '.doc', '.docx']
+        utilityBill: ['.pdf', '.jpg', '.jpeg', '.png']
     };
     
     // Check file size
@@ -358,11 +310,7 @@ function formatFileTypeName(fileType) {
         governmentId: 'Government ID',
         passportPhoto: 'Passport Photo',
         proofOfFunds: 'Proof of Funds',
-        taxClearance: 'Tax Clearance',
-        proofOfIncome: 'Proof of Income',
-        utilityBill: 'Utility Bill',
-        referenceLetters: 'Reference Letter',
-        additionalLegalDocs: 'Legal Document'
+        utilityBill: 'Utility Bill'
     };
     
     return nameMap[fileType] || fileType;
@@ -399,9 +347,6 @@ function getFileIcon(filename) {
         case 'jpeg':
         case 'png':
             return 'fa-file-image';
-        case 'doc':
-        case 'docx':
-            return 'fa-file-word';
         default:
             return 'fa-file';
     }
@@ -481,8 +426,6 @@ function validateForm() {
         'governmentId',
         'passportPhoto',
         'proofOfFunds',
-        'taxClearance',
-        'proofOfIncome',
         'utilityBill'
     ];
     
@@ -567,49 +510,35 @@ function processDocumentUpload() {
     // Simulate upload process
     let progress = 0;
     const uploadInterval = setInterval(() => {
-        progress += 8;
+        progress += 25;
         progressFill.style.width = progress + '%';
         
-        if (progress <= 16) {
+        if (progress <= 25) {
             progressText.textContent = 'Validating identification documents...';
             updateUploadItem('governmentId', 'processing');
             updateUploadItem('passportPhoto', 'processing');
         } 
-        else if (progress <= 32) {
+        else if (progress <= 50) {
             progressText.textContent = 'Processing financial documents...';
             updateUploadItem('governmentId', 'completed');
             updateUploadItem('passportPhoto', 'completed');
             updateUploadItem('proofOfFunds', 'processing');
-            updateUploadItem('proofOfIncome', 'processing');
         } 
-        else if (progress <= 48) {
-            progressText.textContent = 'Verifying tax clearance...';
-            updateUploadItem('proofOfFunds', 'completed');
-            updateUploadItem('proofOfIncome', 'completed');
-            updateUploadItem('taxClearance', 'processing');
-        }
-        else if (progress <= 64) {
+        else if (progress <= 75) {
             progressText.textContent = 'Checking utility bill...';
-            updateUploadItem('taxClearance', 'completed');
+            updateUploadItem('proofOfFunds', 'completed');
             updateUploadItem('utilityBill', 'processing');
-        }
-        else if (progress <= 80) {
-            progressText.textContent = 'Processing additional documents...';
-            updateUploadItem('utilityBill', 'completed');
-            updateUploadItem('referenceLetters', 'processing');
-            updateUploadItem('additionalLegalDocs', 'processing');
         }
         else {
             progressText.textContent = 'Finalizing document verification...';
-            updateUploadItem('referenceLetters', 'completed');
-            updateUploadItem('additionalLegalDocs', 'completed');
+            updateUploadItem('utilityBill', 'completed');
         }
         
         if (progress >= 100) {
             clearInterval(uploadInterval);
             completeDocumentUpload();
         }
-    }, 300);
+    }, 400);
 }
 
 function updateUploadItem(itemId, status) {
@@ -679,31 +608,11 @@ function saveDocumentData() {
                 size: file.size,
                 type: file.type
             })),
-            taxClearance: uploadedFiles.taxClearance ? {
-                name: uploadedFiles.taxClearance.name,
-                size: uploadedFiles.taxClearance.size,
-                type: uploadedFiles.taxClearance.type
-            } : null,
-            proofOfIncome: uploadedFiles.proofOfIncome ? {
-                name: uploadedFiles.proofOfIncome.name,
-                size: uploadedFiles.proofOfIncome.size,
-                type: uploadedFiles.proofOfIncome.type
-            } : null,
             utilityBill: uploadedFiles.utilityBill ? {
                 name: uploadedFiles.utilityBill.name,
                 size: uploadedFiles.utilityBill.size,
                 type: uploadedFiles.utilityBill.type
             } : null,
-            referenceLetters: uploadedFiles.referenceLetters.map(file => ({
-                name: file.name,
-                size: file.size,
-                type: file.type
-            })),
-            additionalLegalDocs: uploadedFiles.additionalLegalDocs.map(file => ({
-                name: file.name,
-                size: file.size,
-                type: file.type
-            })),
             uploadDate: new Date().toISOString()
         },
         termsAgreed: {

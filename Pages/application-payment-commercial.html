@@ -75,38 +75,18 @@
 
                     <!-- Payment Breakdown -->
                     <div class="payment-breakdown-card">
-                        <h3>Commercial Payment Breakdown</h3>
+                        <h3>Payment Breakdown</h3>
                         <div class="breakdown-details">
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Commercial Application Fee</span>
-                                <span class="breakdown-amount" id="applicationFee">₦45,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Business Verification & Credit Check</span>
-                                <span class="breakdown-amount" id="businessVerificationFee">₦25,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">CAC Registration Verification</span>
-                                <span class="breakdown-amount" id="cacVerificationFee">₦15,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">FIRS Tax Clearance Verification</span>
-                                <span class="breakdown-amount" id="firsVerificationFee">₦10,000</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Document Processing Fee</span>
-                                <span class="breakdown-amount" id="processingFee">₦5,000</span>
-                            </div>
                             <div class="breakdown-item total">
                                 <span class="breakdown-label">Total Amount</span>
-                                <span class="breakdown-amount" id="totalAmount">₦100,000</span>
+                                <span class="breakdown-amount" id="totalAmount">₦0</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Commercial Escrow Explanation -->
+            <!-- Payment Protection Explanation -->
             <section class="escrow-section">
                 <div class="escrow-card">
                     <div class="escrow-header">
@@ -114,8 +94,8 @@
                             <i class="fas fa-building"></i>
                         </div>
                         <div class="escrow-content">
-                            <h2>Commercial Escrow Payment Protection</h2>
-                            <p>Your payment is protected by DomiHive's commercial escrow system with business verification safeguards</p>
+                            <h2>Payment Protection</h2>
+                            <p>Your payment is protected while we process your commercial application</p>
                         </div>
                     </div>
                     
@@ -123,36 +103,22 @@
                         <div class="process-step">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <h4>Payment Held Securely</h4>
-                                <p>Your funds are held securely in escrow by DomiHive, not released immediately</p>
+                                <h4>Business Verification Process</h4>
+                                <p>We conduct comprehensive business verification including CAC, FIRS, and credit checks</p>
                             </div>
                         </div>
                         <div class="process-step">
                             <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Business Verification Process</h4>
-                                <p>We conduct comprehensive business verification including CAC, FIRS, and credit checks (3-5 days)</p>
-                            </div>
-                        </div>
-                        <div class="process-step">
-                            <div class="step-number">3</div>
                             <div class="step-content">
                                 <h4>Document Validation</h4>
                                 <p>Verification of all business documents and financial statements</p>
                             </div>
                         </div>
                         <div class="process-step">
-                            <div class="step-number">4</div>
+                            <div class="step-number">3</div>
                             <div class="step-content">
-                                <h4>Approval & Fund Release</h4>
-                                <p>If approved, you get access to your commercial tenant dashboard</p>
-                            </div>
-                        </div>
-                        <div class="process-step">
-                            <div class="step-number">5</div>
-                            <div class="step-content">
-                                <h4>Full Refund if Not Approved</h4>
-                                <p>If your commercial application is not approved, you receive a 100% refund within 5 days</p>
+                                <h4>Approval & Access</h4>
+                                <p>If approved, you get access to your commercial property dashboard</p>
                             </div>
                         </div>
                     </div>
@@ -167,7 +133,7 @@
 
                     <form id="commercialPaymentForm" class="payment-form">
                         <input type="hidden" id="applicationData" name="applicationData">
-                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="100000">
+                        <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="0">
 
                         <!-- Payment Method Selection -->
                         <div class="payment-methods">
@@ -194,21 +160,6 @@
                                     <div class="method-info">
                                         <h4>Bank Transfer</h4>
                                         <p>Transfer directly from your business account</p>
-                                    </div>
-                                    <div class="method-check">
-                                        <div class="check-circle"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method-card" data-method="flutterwave">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <i class="fas fa-mobile-alt"></i>
-                                    </div>
-                                    <div class="method-info">
-                                        <h4>Flutterwave</h4>
-                                        <p>Pay with mobile money or card</p>
                                     </div>
                                     <div class="method-check">
                                         <div class="check-circle"></div>
@@ -280,7 +231,7 @@
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Account Name:</strong>
-                                        <span>DomiHive Commercial Escrow Services</span>
+                                        <span>DomiHive Commercial Services</span>
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Reference:</strong>
@@ -291,7 +242,7 @@
                                     </div>
                                     <div class="instruction-item">
                                         <strong>Amount:</strong>
-                                        <span id="bankAmount">₦100,000</span>
+                                        <span id="bankAmount">₦0</span>
                                     </div>
                                 </div>
                                 <div class="upload-receipt">
@@ -332,19 +283,13 @@
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="agreeCommercialEscrow" name="agreeCommercialEscrow" required>
                                     <span class="checkmark"></span>
-                                    I understand and agree to the <a href="#" class="terms-link">Commercial Escrow Terms</a> and DomiHive's business payment protection policy
+                                    I understand and agree to the <a href="#" class="terms-link">Commercial Terms</a> and DomiHive's business payment protection policy
                                 </label>
                                 
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="agreeBusinessVerification" name="agreeBusinessVerification" required>
                                     <span class="checkmark"></span>
                                     I consent to comprehensive business verification including CAC registration checks, FIRS tax clearance verification, and business credit checks
-                                </label>
-                                
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
-                                    <span class="checkmark"></span>
-                                    I understand that my payment will be fully refunded if my commercial application is not approved within 5 business days
                                 </label>
 
                                 <label class="checkbox-label">
@@ -383,8 +328,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-building"></i>
                         </div>
-                        <h4>Commercial Escrow</h4>
-                        <p>Funds held in secure commercial escrow</p>
+                        <h4>Secure Payment</h4>
+                        <p>Your payment is protected and secure</p>
                     </div>
                     <div class="security-feature">
                         <div class="feature-icon">
@@ -402,10 +347,10 @@
                     </div>
                     <div class="security-feature">
                         <div class="feature-icon">
-                            <i class="fas fa-sync-alt"></i>
+                            <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h4>5-Day Refund Guarantee</h4>
-                        <p>Full refund if application not approved</p>
+                        <h4>Business Protection</h4>
+                        <p>Comprehensive business verification</p>
                     </div>
                 </div>
             </section>
@@ -427,15 +372,7 @@
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
-                            <span>Securing funds in commercial escrow</span>
-                        </div>
-                        <div class="processing-step">
-                            <i class="fas fa-check"></i>
-                            <span>Initiating CAC registration verification</span>
-                        </div>
-                        <div class="processing-step">
-                            <i class="fas fa-check"></i>
-                            <span>Starting FIRS tax clearance check</span>
+                            <span>Confirming payment details</span>
                         </div>
                         <div class="processing-step">
                             <i class="fas fa-check"></i>
@@ -462,7 +399,7 @@
             
             <div class="modal-body">
                 <div class="success-details">
-                    <p>Your commercial payment has been processed successfully and business verification has been initiated. Your funds are secured in commercial escrow.</p>
+                    <p>Your commercial payment has been processed successfully and business verification has been initiated.</p>
                     <div class="payment-summary-modal">
                         <h4>Commercial Payment Details:</h4>
                         <div class="detail-item">
@@ -478,59 +415,36 @@
                             <span id="paymentMethod">-</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Escrow Status:</strong>
-                            <span class="status-badge pending">Funds in Commercial Escrow</span>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Business Verification Status:</strong>
+                            <strong>Application Status:</strong>
                             <span class="status-badge pending">Verification in Progress</span>
                         </div>
                     </div>
                     
                     <div class="next-steps">
-                        <h4>Business Verification Process Timeline:</h4>
+                        <h4>What happens next:</h4>
                         <div class="timeline">
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>CAC Registration Check (Day 1)</h5>
-                                    <p>Verification of business registration with Corporate Affairs Commission</p>
+                                    <h5>Business Verification</h5>
+                                    <p>Comprehensive verification of your business documents and registration</p>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>FIRS Tax Clearance (Day 2)</h5>
-                                    <p>Validation of tax clearance certificate with Federal Inland Revenue Service</p>
+                                    <h5>Approval Notification</h5>
+                                    <p>You will receive notification once your application is approved</p>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <h5>Business Credit Check (Day 3)</h5>
-                                    <p>Comprehensive business credit and financial verification</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h5>Document Review (Day 4)</h5>
-                                    <p>Final review of all business documents and financial statements</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h5>Approval Notification (Day 5)</h5>
-                                    <p>Completion of business verification and commercial approval notification</p>
+                                    <h5>Access Your Dashboard</h5>
+                                    <p>Access your commercial property dashboard for management</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="refund-notice">
-                        <i class="fas fa-info-circle"></i>
-                        <p><strong>5-Day Refund Guarantee:</strong> If your commercial application is not approved within 5 business days, you will receive a 100% refund automatically. You will receive email updates at each stage of the business verification process.</p>
                     </div>
                 </div>
                 

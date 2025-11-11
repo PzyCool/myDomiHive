@@ -91,51 +91,102 @@ function updateApplicationDisplay() {
 }
 
 function updatePaymentDetails() {
-    // Update bank amount
-    document.getElementById('bankAmount').textContent = '₦47,500';
+    if (!currentApplication) return;
     
-    console.log('💰 Shortlet payment details updated');
+    // Calculate total amount based on nights and nightly rate
+    const totalAmount = currentApplication.financialInfo.estimatedTotal;
+    const formattedAmount = `₦${totalAmount.toLocaleString()}`;
+    
+    // Update all amount displays
+    document.getElementById('totalAmount').textContent = formattedAmount;
+    document.getElementById('bankAmount').textContent = formattedAmount;
+    document.getElementById('totalPaymentAmount').value = totalAmount;
+    
+    console.log('💰 Shortlet payment details updated:', formattedAmount);
 }
 
 function initializeEventListeners() {
+    console.log('🔗 Setting up event listeners...');
+    
     // Form submission
-    document.getElementById('shortletPaymentForm').addEventListener('submit', handlePaymentSubmission);
+    const paymentForm = document.getElementById('shortletPaymentForm');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', function(event) {
+            console.log('📝 Form submission triggered');
+            event.preventDefault();
+            handlePaymentSubmission(event);
+        });
+    } else {
+        console.error('❌ Payment form not found');
+    }
     
     // Back buttons
-    document.getElementById('backToDocuments').addEventListener('click', redirectToDocuments);
-    document.getElementById('backToDocumentsBtn').addEventListener('click', redirectToDocuments);
+    const backToDocuments = document.getElementById('backToDocuments');
+    const backToDocumentsBtn = document.getElementById('backToDocumentsBtn');
+    
+    if (backToDocuments) {
+        backToDocuments.addEventListener('click', redirectToDocuments);
+    }
+    if (backToDocumentsBtn) {
+        backToDocumentsBtn.addEventListener('click', redirectToDocuments);
+    }
     
     // Modal buttons
-    document.getElementById('closeModalBtn').addEventListener('click', closeSuccessModal);
-    document.getElementById('downloadReceiptBtn').addEventListener('click', downloadShortletReceipt);
-    document.getElementById('goToDashboardBtn').addEventListener('click', redirectToDashboard);
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+    const goToDashboardBtn = document.getElementById('goToDashboardBtn');
+    
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeSuccessModal);
+    if (downloadReceiptBtn) downloadReceiptBtn.addEventListener('click', downloadShortletReceipt);
+    if (goToDashboardBtn) goToDashboardBtn.addEventListener('click', redirectToNotification);
     
     // Shortlet terms checkboxes validation
-    document.getElementById('agreeShortletEscrow').addEventListener('change', validateForm);
-    document.getElementById('agreeGuestVerification').addEventListener('change', validateForm);
-    document.getElementById('agreeSecurityDeposit').addEventListener('change', validateForm);
-    document.getElementById('agreeCancellationPolicy').addEventListener('change', validateForm);
-    document.getElementById('agreeHouseRules').addEventListener('change', validateForm);
-    document.getElementById('agreePrivacyPolicy').addEventListener('change', validateForm);
+    const checkboxes = [
+        'agreeShortletEscrow',
+        'agreeGuestVerification',
+        'agreeCancellationPolicy',
+        'agreeHouseRules',
+        'agreePrivacyPolicy'
+    ];
     
-    // Card input formatting
-    document.getElementById('cardNumber').addEventListener('input', formatCardNumber);
-    document.getElementById('expiryDate').addEventListener('input', formatExpiryDate);
-    document.getElementById('cvv').addEventListener('input', formatCVV);
-    
-    // Bank receipt upload
-    document.getElementById('bankReceipt').addEventListener('change', handleReceiptUpload);
-    
-    // Close modal on background click
-    document.getElementById('successModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeSuccessModal();
+    checkboxes.forEach(checkboxId => {
+        const checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.addEventListener('change', validateForm);
         }
     });
+    
+    // Card input formatting
+    const cardNumber = document.getElementById('cardNumber');
+    const expiryDate = document.getElementById('expiryDate');
+    const cvv = document.getElementById('cvv');
+    
+    if (cardNumber) cardNumber.addEventListener('input', formatCardNumber);
+    if (expiryDate) expiryDate.addEventListener('input', formatExpiryDate);
+    if (cvv) cvv.addEventListener('input', formatCVV);
+    
+    // Bank receipt upload
+    const bankReceipt = document.getElementById('bankReceipt');
+    if (bankReceipt) {
+        bankReceipt.addEventListener('change', handleReceiptUpload);
+    }
+    
+    // Close modal on background click
+    const successModal = document.getElementById('successModal');
+    if (successModal) {
+        successModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSuccessModal();
+            }
+        });
+    }
+    
+    console.log('✅ Event listeners initialized');
 }
 
 function initializePaymentMethods() {
     const paymentMethodCards = document.querySelectorAll('.payment-method-card');
+    console.log(`🔍 Found ${paymentMethodCards.length} payment method cards`);
     
     paymentMethodCards.forEach(card => {
         card.addEventListener('click', function() {
@@ -147,6 +198,8 @@ function initializePaymentMethods() {
     const defaultMethod = document.querySelector('.payment-method-card[data-method="card"]');
     if (defaultMethod) {
         selectPaymentMethod(defaultMethod);
+    } else {
+        console.error('❌ Default payment method card not found');
     }
 }
 
@@ -173,6 +226,8 @@ function selectPaymentMethod(card) {
 }
 
 function showPaymentDetails(method) {
+    console.log('📋 Showing payment details for:', method);
+    
     // Hide all payment details
     document.querySelectorAll('.payment-details').forEach(detail => {
         detail.style.display = 'none';
@@ -184,9 +239,10 @@ function showPaymentDetails(method) {
     if (detailsElement) {
         detailsElement.style.display = 'block';
         detailsElement.classList.add('active');
+        console.log('✅ Payment details shown for:', method);
+    } else {
+        console.error('❌ Payment details element not found for:', method);
     }
-    
-    console.log('📋 Showing payment details for:', method);
 }
 
 // Card Input Formatting Functions
@@ -233,34 +289,6 @@ function formatExpiryDate(event) {
     }
     
     event.target.value = input;
-    
-    // Validate expiry date
-    if (input.length === 5) {
-        validateExpiryDate(input);
-    }
-}
-
-function validateExpiryDate(expiryDate) {
-    const [month, year] = expiryDate.split('/');
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear() % 100;
-    const currentMonth = currentDate.getMonth() + 1;
-    
-    const expMonth = parseInt(month);
-    const expYear = parseInt(year);
-    
-    if (expMonth < 1 || expMonth > 12) {
-        showFieldError(document.getElementById('expiryDate'), 'Invalid month');
-        return false;
-    }
-    
-    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-        showFieldError(document.getElementById('expiryDate'), 'Card has expired');
-        return false;
-    }
-    
-    clearFieldError(document.getElementById('expiryDate'));
-    return true;
 }
 
 function formatCVV(event) {
@@ -271,7 +299,12 @@ function formatCVV(event) {
 function handleReceiptUpload(event) {
     const file = event.target.files[0];
     
-    if (!file) return;
+    if (!file) {
+        console.log('❌ No file selected for receipt upload');
+        return;
+    }
+    
+    console.log('📄 File selected for receipt upload:', file.name);
     
     // Validate file
     const validation = validateReceiptFile(file);
@@ -282,7 +315,7 @@ function handleReceiptUpload(event) {
     }
     
     uploadedReceipt = file;
-    console.log('📄 Receipt uploaded:', file.name);
+    console.log('✅ Receipt uploaded successfully:', file.name);
     showNotification('Receipt uploaded successfully', 'success');
     
     validateForm();
@@ -311,6 +344,7 @@ function validateReceiptFile(file) {
 
 // Form Validation and Submission
 function validateForm() {
+    console.log('🔍 Validating form...');
     let isValid = true;
     
     // Clear previous errors
@@ -318,43 +352,60 @@ function validateForm() {
     
     // Validate payment method selection
     if (!selectedPaymentMethod) {
+        console.log('❌ No payment method selected');
         showNotification('Please select a payment method', 'error');
         isValid = false;
+    } else {
+        console.log('✅ Payment method selected:', selectedPaymentMethod);
     }
     
     // Validate shortlet terms agreements
     const requiredCheckboxes = [
         'agreeShortletEscrow',
         'agreeGuestVerification',
-        'agreeSecurityDeposit',
         'agreeCancellationPolicy',
         'agreeHouseRules',
         'agreePrivacyPolicy'
     ];
     
+    let uncheckedCheckboxes = [];
     requiredCheckboxes.forEach(checkboxId => {
         const checkbox = document.getElementById(checkboxId);
-        if (!checkbox.checked) {
+        if (checkbox && !checkbox.checked) {
+            uncheckedCheckboxes.push(checkboxId);
             showFieldError(checkbox, 'This shortlet agreement is required');
             isValid = false;
         }
     });
     
+    if (uncheckedCheckboxes.length > 0) {
+        console.log('❌ Unchecked checkboxes:', uncheckedCheckboxes);
+    }
+    
     // Validate payment method specific fields
     if (selectedPaymentMethod === 'card') {
+        console.log('🔍 Validating card payment...');
         isValid = validateCardPayment() && isValid;
     } else if (selectedPaymentMethod === 'bank') {
+        console.log('🔍 Validating bank transfer...');
         isValid = validateBankTransfer() && isValid;
+    } else if (selectedPaymentMethod === 'paystack') {
+        console.log('✅ Paystack method selected - no additional validation needed');
+        // Paystack doesn't need additional validation as it redirects to gateway
     }
     
     // Update submit button state
     const submitBtn = document.getElementById('submitPaymentBtn');
-    if (isValid) {
-        submitBtn.disabled = false;
-        console.log('✅ Shortlet payment form validation passed');
+    if (submitBtn) {
+        if (isValid) {
+            submitBtn.disabled = false;
+            console.log('✅ Shortlet payment form validation passed');
+        } else {
+            submitBtn.disabled = true;
+            console.log('❌ Shortlet payment form validation failed');
+        }
     } else {
-        submitBtn.disabled = true;
-        console.log('❌ Shortlet payment form validation failed');
+        console.error('❌ Submit button not found');
     }
     
     return isValid;
@@ -368,57 +419,38 @@ function validateCardPayment() {
     const expiryDate = document.getElementById('expiryDate').value;
     const cvv = document.getElementById('cvv').value;
     
-    // Validate card number (basic Luhn check)
+    console.log('🔍 Card validation:', { cardNumber: cardNumber?.length, cardHolder: !!cardHolder, expiryDate, cvv: cvv?.length });
+    
+    // Validate card number (basic validation - accept any 16-digit number)
     if (!cardNumber || cardNumber.length < 16) {
-        showFieldError(document.getElementById('cardNumber'), 'Valid card number is required');
+        showFieldError(document.getElementById('cardNumber'), 'Valid card number is required (16 digits)');
         isValid = false;
-    } else if (!luhnCheck(cardNumber)) {
-        showFieldError(document.getElementById('cardNumber'), 'Invalid card number');
-        isValid = false;
+        console.log('❌ Card number validation failed');
     }
     
     // Validate card holder
     if (!cardHolder) {
         showFieldError(document.getElementById('cardHolder'), 'Card holder name is required');
         isValid = false;
+        console.log('❌ Card holder validation failed');
     }
     
     // Validate expiry date
     if (!expiryDate || expiryDate.length !== 5) {
-        showFieldError(document.getElementById('expiryDate'), 'Valid expiry date is required');
+        showFieldError(document.getElementById('expiryDate'), 'Valid expiry date is required (MM/YY)');
         isValid = false;
-    } else if (!validateExpiryDate(expiryDate)) {
-        isValid = false;
+        console.log('❌ Expiry date validation failed');
     }
     
     // Validate CVV
     if (!cvv || cvv.length < 3) {
-        showFieldError(document.getElementById('cvv'), 'Valid CVV is required');
+        showFieldError(document.getElementById('cvv'), 'Valid CVV is required (3-4 digits)');
         isValid = false;
+        console.log('❌ CVV validation failed');
     }
     
+    console.log('✅ Card payment validation:', isValid ? 'PASSED' : 'FAILED');
     return isValid;
-}
-
-function luhnCheck(cardNumber) {
-    let sum = 0;
-    let isEven = false;
-    
-    for (let i = cardNumber.length - 1; i >= 0; i--) {
-        let digit = parseInt(cardNumber[i]);
-        
-        if (isEven) {
-            digit *= 2;
-            if (digit > 9) {
-                digit -= 9;
-            }
-        }
-        
-        sum += digit;
-        isEven = !isEven;
-    }
-    
-    return sum % 10 === 0;
 }
 
 function validateBankTransfer() {
@@ -428,6 +460,9 @@ function validateBankTransfer() {
     if (!uploadedReceipt) {
         showFieldError(document.getElementById('bankReceipt'), 'Receipt upload is required for bank transfer');
         isValid = false;
+        console.log('❌ Bank transfer validation failed - no receipt');
+    } else {
+        console.log('✅ Bank transfer validation passed - receipt uploaded');
     }
     
     return isValid;
@@ -442,6 +477,7 @@ function showFieldError(field, message) {
     }
     
     errorElement.textContent = message;
+    console.log('❌ Field error:', message);
 }
 
 function clearFieldError(field) {
@@ -457,33 +493,44 @@ function clearValidationErrors() {
 }
 
 function handlePaymentSubmission(event) {
-    event.preventDefault();
     console.log('💳 Shortlet payment form submission started...');
+    console.log('📊 Form data:', {
+        selectedPaymentMethod,
+        hasApplication: !!currentApplication,
+        totalAmount: currentApplication?.financialInfo?.estimatedTotal
+    });
     
     if (validateForm()) {
+        console.log('✅ Form validation passed, processing payment...');
         processPayment();
+    } else {
+        console.log('❌ Form validation failed, stopping submission');
+        showNotification('Please fix the errors in the form before submitting', 'error');
     }
 }
 
 function processPayment() {
-    console.log('🔄 Processing shortlet payment...');
+    console.log('🔄 Processing shortlet payment for method:', selectedPaymentMethod);
     
     // Show processing modal
     const processingModal = document.getElementById('processingModal');
+    if (processingModal) {
+        processingModal.classList.add('active');
+        console.log('✅ Processing modal shown');
+    } else {
+        console.error('❌ Processing modal not found');
+    }
+    
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
     const processingSteps = document.querySelectorAll('.processing-step');
     
-    processingModal.classList.add('active');
-    
     // Simulate payment processing
     let progress = 0;
     const steps = [
-        { progress: 20, text: 'Processing payment transaction...', step: 0 },
-        { progress: 40, text: 'Securing funds in shortlet escrow...', step: 1 },
-        { progress: 60, text: 'Initiating guest verification...', step: 2 },
-        { progress: 80, text: 'Starting ID verification process...', step: 3 },
-        { progress: 100, text: 'Finalizing booking confirmation...', step: 4 }
+        { progress: 33, text: 'Processing payment transaction...', step: 0 },
+        { progress: 66, text: 'Confirming payment details...', step: 1 },
+        { progress: 100, text: 'Finalizing booking confirmation...', step: 2 }
     ];
     
     let currentStep = 0;
@@ -492,8 +539,9 @@ function processPayment() {
         if (currentStep < steps.length) {
             const step = steps[currentStep];
             progress = step.progress;
-            progressFill.style.width = progress + '%';
-            progressText.textContent = step.text;
+            
+            if (progressFill) progressFill.style.width = progress + '%';
+            if (progressText) progressText.textContent = step.text;
             
             // Update step status
             processingSteps.forEach((stepElement, index) => {
@@ -507,9 +555,10 @@ function processPayment() {
             currentStep++;
         } else {
             clearInterval(processInterval);
+            console.log('✅ Payment processing simulation completed');
             completePayment();
         }
-    }, 1000);
+    }, 800);
 }
 
 function completePayment() {
@@ -517,7 +566,10 @@ function completePayment() {
     
     // Generate transaction details
     const transactionId = 'TXN-SHORT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-    const paidAmount = '₦47,500';
+    const totalAmount = currentApplication.financialInfo.estimatedTotal;
+    const paidAmount = `₦${totalAmount.toLocaleString()}`;
+    
+    console.log('💰 Payment completed:', { transactionId, paidAmount, method: selectedPaymentMethod });
     
     // Save payment data
     savePaymentData(transactionId);
@@ -525,11 +577,13 @@ function completePayment() {
     // Show success modal after delay
     setTimeout(() => {
         const processingModal = document.getElementById('processingModal');
-        processingModal.classList.remove('active');
+        if (processingModal) {
+            processingModal.classList.remove('active');
+        }
         
         showSuccessModal(transactionId, paidAmount);
         
-        console.log('🎉 Shortlet payment process completed');
+        console.log('🎉 Shortlet payment process completed successfully');
     }, 1000);
 }
 
@@ -538,29 +592,17 @@ function savePaymentData(transactionId) {
         applicationId: currentApplication.applicationId,
         transactionId: transactionId,
         paymentMethod: selectedPaymentMethod,
-        amount: 47500,
+        amount: currentApplication.financialInfo.estimatedTotal,
         paymentDate: new Date().toISOString(),
         status: 'completed',
-        escrowStatus: 'shortlet_escrow_held',
-        guestVerificationStatus: 'in_progress',
-        securityDeposit: {
-            amount: 25000,
-            status: 'held',
-            refundable: true
-        },
-        verificationTimeline: '24_48_hours'
+        bookingStatus: 'confirmed'
     };
     
     // Update application data with payment info
     currentApplication.payment = paymentData;
     currentApplication.currentStep = 'payment_completed';
-    currentApplication.status = 'under_guest_verification';
-    currentApplication.verificationStartDate = new Date().toISOString();
-    
-    // Calculate expected completion date (48 hours from now)
-    const completionDate = new Date();
-    completionDate.setHours(completionDate.getHours() + 48);
-    currentApplication.expectedCompletionDate = completionDate.toISOString();
+    currentApplication.status = 'confirmed';
+    currentApplication.confirmationDate = new Date().toISOString();
     
     // Save to sessionStorage
     sessionStorage.setItem('current_shortlet_application', JSON.stringify(currentApplication));
@@ -584,23 +626,33 @@ function savePaymentData(transactionId) {
 }
 
 function showSuccessModal(transactionId, paidAmount) {
+    console.log('📱 Showing success modal...');
+    
     // Update modal content
-    document.getElementById('transactionId').textContent = transactionId;
-    document.getElementById('paidAmount').textContent = paidAmount;
-    document.getElementById('paymentMethod').textContent = formatPaymentMethod(selectedPaymentMethod);
+    const transactionIdElement = document.getElementById('transactionId');
+    const paidAmountElement = document.getElementById('paidAmount');
+    const paymentMethodElement = document.getElementById('paymentMethod');
+    
+    if (transactionIdElement) transactionIdElement.textContent = transactionId;
+    if (paidAmountElement) paidAmountElement.textContent = paidAmount;
+    if (paymentMethodElement) paymentMethodElement.textContent = formatPaymentMethod(selectedPaymentMethod);
     
     // Show modal
     const successModal = document.getElementById('successModal');
-    successModal.classList.add('active');
+    if (successModal) {
+        successModal.classList.add('active');
+        console.log('✅ Success modal shown');
+    } else {
+        console.error('❌ Success modal not found');
+    }
     
-    showNotification('Shortlet payment completed successfully! Guest verification has been initiated.', 'success');
+    showNotification('Shortlet payment completed successfully! Your booking is now confirmed.', 'success');
 }
 
 function formatPaymentMethod(method) {
     const methodNames = {
         'card': 'Credit/Debit Card',
         'bank': 'Bank Transfer',
-        'flutterwave': 'Flutterwave',
         'paystack': 'Paystack'
     };
     
@@ -613,21 +665,21 @@ function createShortletPaymentNotification(transactionId) {
     const notification = {
         id: 'notif_short_' + Date.now(),
         type: 'shortlet_payment_completed',
-        title: 'Shortlet Payment & Guest Verification Initiated',
-        message: `Your shortlet payment of ₦47,500 for ${currentApplication.propertyTitle} has been processed. Guest verification is now in progress. Transaction ID: ${transactionId}`,
+        title: 'Shortlet Payment Successful',
+        message: `Your shortlet payment of ₦${currentApplication.financialInfo.estimatedTotal.toLocaleString()} for ${currentApplication.propertyTitle} has been processed successfully. Your booking is now confirmed.`,
         timestamp: new Date().toISOString(),
         read: false,
         applicationId: currentApplication.applicationId,
         transactionId: transactionId,
         actions: [
             {
-                text: 'View Verification Status',
-                action: 'view_verification_status',
+                text: 'View Booking Details',
+                action: 'view_booking_details',
                 applicationId: currentApplication.applicationId
             },
             {
-                text: 'Download Booking Receipt',
-                action: 'download_booking_receipt',
+                text: 'Download Receipt',
+                action: 'download_receipt',
                 transactionId: transactionId
             }
         ]
@@ -642,6 +694,11 @@ function createShortletPaymentNotification(transactionId) {
 // Utility Functions
 function copyToClipboard(elementId) {
     const element = document.getElementById(elementId);
+    if (!element) {
+        console.error('❌ Element not found for copy:', elementId);
+        return;
+    }
+    
     const text = element.textContent;
     
     navigator.clipboard.writeText(text).then(() => {
@@ -654,20 +711,19 @@ function copyToClipboard(elementId) {
 }
 
 function downloadShortletReceipt() {
-    // In a real app, this would generate and download a PDF shortlet receipt
+    console.log('📄 Downloading shortlet receipt...');
     showNotification('Generating shortlet booking receipt...', 'success');
-    console.log('📄 Shortlet receipt download triggered');
     
-    // Simulate receipt generation with shortlet details
+    // Simulate receipt generation
     setTimeout(() => {
         showNotification('Shortlet booking receipt downloaded successfully!', 'success');
         
-        // Create a simple receipt file (in real app, this would be a PDF)
+        // Create receipt content
         const receiptContent = `
 DOMIHIVE SHORTLET BOOKING RECEIPT
 ==================================
 
-Transaction ID: ${document.getElementById('transactionId').textContent}
+Transaction ID: ${document.getElementById('transactionId')?.textContent || 'N/A'}
 Application ID: ${currentApplication.applicationId}
 Booking Date: ${new Date().toLocaleDateString()}
 Booking Time: ${new Date().toLocaleTimeString()}
@@ -681,37 +737,21 @@ Total Guests: ${currentApplication.guestInfo.totalGuests}
 
 PROPERTY DETAILS:
 -----------------
-Address: ${currentApplication.propertyTitle}
+Property: ${currentApplication.propertyTitle}
 Location: ${currentApplication.propertyLocation}
 Check-in: ${new Date(currentApplication.bookingInfo.checkInDate).toLocaleDateString()}
 Check-out: ${new Date(currentApplication.bookingInfo.checkOutDate).toLocaleDateString()}
 Nights: ${currentApplication.bookingInfo.nights}
 
-SHORTLET PAYMENT BREAKDOWN:
----------------------------
-Shortlet Application Fee: ₦15,000
-Guest Verification Fee: ₦5,000
-Security Deposit: ₦25,000 (Refundable)
-Service Fee: ₦2,500
-----------------------------------
-TOTAL PAID: ₦47,500
+PAYMENT DETAILS:
+----------------
+Total Amount: ₦${currentApplication.financialInfo.estimatedTotal.toLocaleString()}
+Payment Method: ${document.getElementById('paymentMethod')?.textContent || 'N/A'}
+Payment Status: Completed
+Booking Status: Confirmed
 
-SECURITY DEPOSIT INFORMATION:
------------------------------
-Amount: ₦25,000
-Status: Held in Escrow
-Refundable: Yes
-Refund Timeline: 24 hours after check-out
-Conditions: No damages, house rules followed
-
-GUEST VERIFICATION DETAILS:
----------------------------
-Verification Status: In Progress
-Expected Completion: 24-48 hours
-Payment Method: ${document.getElementById('paymentMethod').textContent}
-
-This receipt serves as proof of payment for your shortlet booking.
-Your security deposit will be refunded after successful property inspection.
+Thank you for choosing DomiHive Shortlet Services!
+Your booking is confirmed and secured.
 
 DomiHive Shortlet Services
 www.domihive.com/shortlet
@@ -726,12 +766,22 @@ www.domihive.com/shortlet
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-    }, 2000);
+        
+        console.log('✅ Receipt downloaded successfully');
+    }, 1500);
 }
 
 function closeSuccessModal() {
+    console.log('❌ Closing success modal...');
     const successModal = document.getElementById('successModal');
-    successModal.classList.remove('active');
+    if (successModal) {
+        successModal.classList.remove('active');
+    }
+    
+    // Redirect to notification page after closing modal
+    setTimeout(() => {
+        redirectToNotification();
+    }, 500);
 }
 
 function redirectToDocuments() {
@@ -742,7 +792,7 @@ function redirectToDocuments() {
         window.spa.navigateToSection('application-document-shortlet');
     } else {
         // Fallback to direct navigation
-        window.location.href = '/application-document-shortlet.html';
+        window.location.href = '/Pages/application-document-shortlet.html';
     }
 }
 
@@ -754,23 +804,20 @@ function redirectToApplication() {
         window.spa.navigateToSection('application-process-shortlet');
     } else {
         // Fallback to direct navigation
-        window.location.href = '/application-process-shortlet.html';
+        window.location.href = '/Pages/application-process-shortlet.html';
     }
 }
 
-function redirectToDashboard() {
-    console.log('🏠 Redirecting to shortlet dashboard...');
+function redirectToNotification() {
+    console.log('📱 Redirecting to notification page...');
     
-    // Use SPA navigation if available
-    if (window.spa && typeof window.spa.navigateToSection === 'function') {
-        window.spa.navigateToSection('shortlet-dashboard');
-    } else {
-        // Fallback to direct navigation
-        window.location.href = '/shortlet-dashboard.html';
-    }
+    // Redirect to notification page
+    window.location.href = '/Pages/notification.html';
 }
 
 function showNotification(message, type = 'success') {
+    console.log(`📢 Notification [${type}]:`, message);
+    
     // Remove existing notifications
     const existingNotification = document.querySelector('.global-notification');
     if (existingNotification) {

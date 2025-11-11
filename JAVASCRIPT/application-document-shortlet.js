@@ -10,12 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let currentApplication = null;
 let uploadedFiles = {
     primaryGuestId: null,
-    additionalGuestsIds: [],
-    selfieWithId: null,
-    proofOfTravel: null,
-    businessDocuments: null,
-    stayReferences: null,
-    specialRequirementsDocs: null
+    additionalGuestsIds: {} // Object to store additional guest IDs by guest number
 };
 
 function initializeShortletDocumentUpload() {
@@ -30,7 +25,7 @@ function initializeShortletDocumentUpload() {
     // Initialize file upload handlers
     initializeFileUploads();
     
-    // Update shortlet-specific UI
+    // Update shortlet-specific UI based on guest count
     updateShortletUI();
     
     console.log('✅ Shortlet document upload initialized');
@@ -98,25 +93,66 @@ function updateApplicationDisplay() {
 }
 
 function updateShortletUI() {
-    // Show/hide sections based on booking purpose
-    const purposeOfStay = currentApplication.bookingInfo.purposeOfStay;
-    const businessSection = document.getElementById('businessDocumentsSection');
+    if (!currentApplication) return;
     
-    if (purposeOfStay === 'business') {
-        businessSection.style.display = 'block';
-    } else {
-        businessSection.style.display = 'none';
-    }
-    
-    // Show additional guest IDs section if there are additional guests
+    const hasAdditionalGuests = currentApplication.guestInfo.hasAdditionalGuests;
     const additionalGuestsSection = document.getElementById('additionalGuestsIdsSection');
-    if (currentApplication.guestInfo.totalGuests > 1) {
+    const additionalGuestsUploads = document.getElementById('additionalGuestsUploads');
+    
+    // Show/hide additional guest IDs section based on guest count
+    if (hasAdditionalGuests && currentApplication.guestInfo.additionalGuests.length > 0) {
+        additionalGuestsSection.style.display = 'block';
         additionalGuestsSection.classList.remove('optional');
         additionalGuestsSection.classList.add('required');
-        document.getElementById('additionalGuestsIds').required = true;
+        
+        // Create individual upload areas for each additional guest
+        createAdditionalGuestUploads();
+        
+        console.log(`👥 Created ${currentApplication.guestInfo.additionalGuests.length} additional guest upload areas`);
+    } else {
+        additionalGuestsSection.style.display = 'none';
+        console.log('👤 No additional guests - hiding additional guest IDs section');
     }
+}
+
+function createAdditionalGuestUploads() {
+    const additionalGuestsUploads = document.getElementById('additionalGuestsUploads');
+    additionalGuestsUploads.innerHTML = '';
     
-    console.log('🏨 Shortlet-specific UI updated');
+    currentApplication.guestInfo.additionalGuests.forEach((guest, index) => {
+        const guestNumber = index + 2; // Start from guest 2
+        const guestUploadId = `additionalGuest${guestNumber}Id`;
+        
+        const guestUploadHTML = `
+            <div class="guest-upload-group" id="${guestUploadId}Group">
+                <div class="guest-upload-header">
+                    <label for="${guestUploadId}" class="required">${guest.name} - ID Document *</label>
+                    <span class="upload-status" id="${guestUploadId}Status">Not uploaded</span>
+                </div>
+                <p class="upload-description">Relationship: ${guest.relationship}</p>
+                <div class="upload-area" id="${guestUploadId}Area">
+                    <div class="upload-placeholder">
+                        <i class="fas fa-id-card"></i>
+                        <p>Click to upload ID for ${guest.name}</p>
+                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
+                    </div>
+                    <input type="file" id="${guestUploadId}" name="${guestUploadId}" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+                <div class="file-preview" id="${guestUploadId}Preview"></div>
+            </div>
+        `;
+        
+        additionalGuestsUploads.innerHTML += guestUploadHTML;
+        
+        // Initialize file upload for this guest
+        const fileInput = document.getElementById(guestUploadId);
+        const uploadArea = document.getElementById(guestUploadId + 'Area');
+        
+        if (fileInput && uploadArea) {
+            fileInput.addEventListener('change', (e) => handleAdditionalGuestFileUpload(e, guestUploadId, guestNumber));
+            setupDragAndDrop(uploadArea, fileInput, guestUploadId);
+        }
+    });
 }
 
 function initializeEventListeners() {
@@ -141,42 +177,6 @@ function initializeFileUploads() {
     const primaryGuestIdArea = document.getElementById('primaryGuestIdArea');
     primaryGuestIdInput.addEventListener('change', (e) => handleFileUpload(e, 'primaryGuestId'));
     setupDragAndDrop(primaryGuestIdArea, primaryGuestIdInput, 'primaryGuestId');
-    
-    // Additional Guest IDs upload (multiple files)
-    const additionalGuestsIdsInput = document.getElementById('additionalGuestsIds');
-    const additionalGuestsIdsArea = document.getElementById('additionalGuestsIdsArea');
-    additionalGuestsIdsInput.addEventListener('change', (e) => handleMultipleFileUpload(e, 'additionalGuestsIds'));
-    setupDragAndDrop(additionalGuestsIdsArea, additionalGuestsIdsInput, 'additionalGuestsIdsMultiple');
-    
-    // Selfie with ID upload
-    const selfieWithIdInput = document.getElementById('selfieWithId');
-    const selfieWithIdArea = document.getElementById('selfieWithIdArea');
-    selfieWithIdInput.addEventListener('change', (e) => handleFileUpload(e, 'selfieWithId'));
-    setupDragAndDrop(selfieWithIdArea, selfieWithIdInput, 'selfieWithId');
-    
-    // Proof of Travel upload (optional)
-    const proofOfTravelInput = document.getElementById('proofOfTravel');
-    const proofOfTravelArea = document.getElementById('proofOfTravelArea');
-    proofOfTravelInput.addEventListener('change', (e) => handleFileUpload(e, 'proofOfTravel'));
-    setupDragAndDrop(proofOfTravelArea, proofOfTravelInput, 'proofOfTravel');
-    
-    // Business Documents upload (optional)
-    const businessDocumentsInput = document.getElementById('businessDocuments');
-    const businessDocumentsArea = document.getElementById('businessDocumentsArea');
-    businessDocumentsInput.addEventListener('change', (e) => handleFileUpload(e, 'businessDocuments'));
-    setupDragAndDrop(businessDocumentsArea, businessDocumentsInput, 'businessDocuments');
-    
-    // Stay References upload (optional)
-    const stayReferencesInput = document.getElementById('stayReferences');
-    const stayReferencesArea = document.getElementById('stayReferencesArea');
-    stayReferencesInput.addEventListener('change', (e) => handleFileUpload(e, 'stayReferences'));
-    setupDragAndDrop(stayReferencesArea, stayReferencesInput, 'stayReferences');
-    
-    // Special Requirements Docs upload (optional)
-    const specialRequirementsDocsInput = document.getElementById('specialRequirementsDocs');
-    const specialRequirementsDocsArea = document.getElementById('specialRequirementsDocsArea');
-    specialRequirementsDocsInput.addEventListener('change', (e) => handleFileUpload(e, 'specialRequirementsDocs'));
-    setupDragAndDrop(specialRequirementsDocsArea, specialRequirementsDocsInput, 'specialRequirementsDocs');
 }
 
 function setupDragAndDrop(uploadArea, fileInput, fileType) {
@@ -199,33 +199,14 @@ function setupDragAndDrop(uploadArea, fileInput, fileType) {
         
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            if (fileType.includes('Multiple')) {
-                const baseType = fileType.replace('Multiple', '');
-                handleMultipleFileUpload({ target: { files: files } }, baseType);
+            const event = new Event('change');
+            Object.defineProperty(event, 'target', { value: { files: [files[0]] } });
+            
+            if (fileType.startsWith('additionalGuest')) {
+                const guestNumber = fileType.replace('additionalGuest', '').replace('Id', '');
+                handleAdditionalGuestFileUpload(event, fileType, parseInt(guestNumber));
             } else {
-                const event = new Event('change');
-                Object.defineProperty(event, 'target', { value: { files: [files[0]] } });
-                
-                switch (fileType) {
-                    case 'primaryGuestId':
-                        handleFileUpload(event, 'primaryGuestId');
-                        break;
-                    case 'selfieWithId':
-                        handleFileUpload(event, 'selfieWithId');
-                        break;
-                    case 'proofOfTravel':
-                        handleFileUpload(event, 'proofOfTravel');
-                        break;
-                    case 'businessDocuments':
-                        handleFileUpload(event, 'businessDocuments');
-                        break;
-                    case 'stayReferences':
-                        handleFileUpload(event, 'stayReferences');
-                        break;
-                    case 'specialRequirementsDocs':
-                        handleFileUpload(event, 'specialRequirementsDocs');
-                        break;
-                }
+                handleFileUpload(event, fileType);
             }
         }
     });
@@ -264,76 +245,52 @@ function handleFileUpload(event, fileType) {
     showNotification(`${formatShortletFileTypeName(fileType)} uploaded successfully`, 'success');
 }
 
-function handleMultipleFileUpload(event, fileType) {
-    const files = Array.from(event.target.files);
+function handleAdditionalGuestFileUpload(event, fileType, guestNumber) {
+    const file = event.target.files[0];
     const statusElement = document.getElementById(fileType + 'Status');
     const previewContainer = document.getElementById(fileType + 'Preview');
     
-    console.log('📁 Multiple files selected for', fileType, ':', files.length);
+    if (!file) return;
     
-    // Clear existing files for this type
-    uploadedFiles[fileType] = [];
-    previewContainer.innerHTML = '';
+    console.log('📄 File selected for', fileType, 'guest', guestNumber, ':', file.name);
     
-    let validFilesCount = 0;
-    let totalSize = 0;
+    // Validate file
+    const validation = validateShortletFile(file, 'additionalGuestsIds');
+    if (!validation.isValid) {
+        showNotification(validation.message, 'error');
+        event.target.value = '';
+        updateUploadStatus(statusElement, 'error', validation.message);
+        return;
+    }
     
-    files.forEach(file => {
-        // Validate file
-        const validation = validateShortletFile(file, fileType);
-        if (!validation.isValid) {
-            showNotification(`Skipped invalid file: ${file.name} - ${validation.message}`, 'error');
-            return;
-        }
-        
-        // Check total size for multiple files
-        totalSize += file.size;
-        const maxTotalSize = 10 * 1024 * 1024; // 10MB for multiple guest IDs
-        
-        if (totalSize > maxTotalSize) {
-            showNotification(`Total file size exceeds ${maxTotalSize / (1024 * 1024)}MB limit for ${formatShortletFileTypeName(fileType)}`, 'error');
-            return;
-        }
-        
-        // Store file reference
-        uploadedFiles[fileType].push(file);
-        validFilesCount++;
-        
-        // Create preview
-        createFilePreview(file, previewContainer, fileType);
-    });
+    // Store file reference by guest number
+    uploadedFiles.additionalGuestsIds[guestNumber] = file;
+    
+    // Create preview
+    createFilePreview(file, previewContainer, fileType);
     
     // Update status
-    if (validFilesCount > 0) {
-        updateUploadStatus(statusElement, 'uploaded', `${validFilesCount} file(s) uploaded`);
-        showNotification(`${validFilesCount} ${formatShortletFileTypeName(fileType)} file(s) uploaded`, 'success');
-    } else {
-        updateUploadStatus(statusElement, 'none', 'No files');
-    }
+    updateUploadStatus(statusElement, 'uploaded', 'Uploaded');
     
     // Validate form
     validateForm();
+    
+    // Find guest name for notification
+    const guest = currentApplication.guestInfo.additionalGuests.find(g => g.guestNumber === guestNumber);
+    const guestName = guest ? guest.name : `Guest ${guestNumber}`;
+    
+    showNotification(`ID document for ${guestName} uploaded successfully`, 'success');
 }
 
 function validateShortletFile(file, fileType) {
     const maxSizes = {
         primaryGuestId: 5 * 1024 * 1024,
-        additionalGuestsIds: 5 * 1024 * 1024,
-        selfieWithId: 3 * 1024 * 1024,
-        proofOfTravel: 5 * 1024 * 1024,
-        businessDocuments: 5 * 1024 * 1024,
-        stayReferences: 5 * 1024 * 1024,
-        specialRequirementsDocs: 5 * 1024 * 1024
+        additionalGuestsIds: 5 * 1024 * 1024
     };
     
     const allowedTypes = {
         primaryGuestId: ['.pdf', '.jpg', '.jpeg', '.png'],
-        additionalGuestsIds: ['.pdf', '.jpg', '.jpeg', '.png'],
-        selfieWithId: ['.jpg', '.jpeg', '.png'],
-        proofOfTravel: ['.pdf', '.jpg', '.jpeg', '.png'],
-        businessDocuments: ['.pdf', '.jpg', '.jpeg', '.png'],
-        stayReferences: ['.pdf', '.jpg', '.jpeg', '.png'],
-        specialRequirementsDocs: ['.pdf', '.jpg', '.jpeg', '.png']
+        additionalGuestsIds: ['.pdf', '.jpg', '.jpeg', '.png']
     };
     
     // Check file size
@@ -353,23 +310,13 @@ function validateShortletFile(file, fileType) {
         };
     }
     
-    // Special validation for selfie (must be image)
-    if (fileType === 'selfieWithId' && !file.type.startsWith('image/')) {
-        return { isValid: false, message: 'Selfie must be an image file (JPG, PNG)' };
-    }
-    
     return { isValid: true, message: 'File is valid' };
 }
 
 function formatShortletFileTypeName(fileType) {
     const nameMap = {
         primaryGuestId: 'Primary Guest ID',
-        additionalGuestsIds: 'Additional Guest ID',
-        selfieWithId: 'Selfie with ID',
-        proofOfTravel: 'Proof of Travel',
-        businessDocuments: 'Business Document',
-        stayReferences: 'Stay Reference',
-        specialRequirementsDocs: 'Special Requirements Document'
+        additionalGuestsIds: 'Additional Guest ID'
     };
     
     return nameMap[fileType] || fileType;
@@ -388,7 +335,7 @@ function createFilePreview(file, container, fileType) {
             <div class="file-name">${file.name}</div>
             <div class="file-size">${fileSize}</div>
         </div>
-        <button type="button" class="remove-file" onclick="removeFile('${fileType}', '${file.name}')">
+        <button type="button" class="remove-file" onclick="removeFile('${fileType}', '${file.name}', ${fileType.includes('additionalGuest') ? fileType.replace('additionalGuest', '').replace('Id', '') : 'null'})">
             <i class="fas fa-times"></i>
         </button>
     `;
@@ -441,29 +388,19 @@ function updateUploadStatus(statusElement, status, text) {
     }
 }
 
-function removeFile(fileType, filename) {
-    console.log('🗑️ Removing file:', fileType, filename);
+function removeFile(fileType, filename, guestNumber = null) {
+    console.log('🗑️ Removing file:', fileType, filename, 'guest:', guestNumber);
     
-    if (Array.isArray(uploadedFiles[fileType])) {
-        // Multiple files array
-        uploadedFiles[fileType] = uploadedFiles[fileType].filter(file => file.name !== filename);
-        
-        // Re-render preview
+    if (fileType.startsWith('additionalGuest') && guestNumber) {
+        // Additional guest file
+        delete uploadedFiles.additionalGuestsIds[guestNumber];
+        const fileInput = document.getElementById(fileType);
+        if (fileInput) fileInput.value = '';
         const previewContainer = document.getElementById(fileType + 'Preview');
-        previewContainer.innerHTML = '';
-        uploadedFiles[fileType].forEach(file => {
-            createFilePreview(file, previewContainer, fileType);
-        });
-        
-        // Update status
-        const statusText = uploadedFiles[fileType].length > 0 
-            ? `${uploadedFiles[fileType].length} file(s) uploaded` 
-            : 'No files';
-        updateUploadStatus(document.getElementById(fileType + 'Status'), 
-                         uploadedFiles[fileType].length > 0 ? 'uploaded' : 'none', 
-                         statusText);
+        if (previewContainer) previewContainer.innerHTML = '';
+        updateUploadStatus(document.getElementById(fileType + 'Status'), 'none', 'Not uploaded');
     } else {
-        // Single file
+        // Primary guest file
         uploadedFiles[fileType] = null;
         document.getElementById(fileType).value = '';
         document.getElementById(fileType + 'Preview').innerHTML = '';
@@ -483,28 +420,26 @@ function validateForm() {
     // Clear previous errors
     clearValidationErrors();
     
-    // Validate required files
-    const requiredFiles = [
-        'primaryGuestId',
-        'selfieWithId'
-    ];
-    
-    requiredFiles.forEach(fileType => {
-        if (!uploadedFiles[fileType]) {
-            showFieldError(document.getElementById(fileType + 'Area'), `${formatShortletFileTypeName(fileType)} is required`);
-            isValid = false;
-        }
-    });
+    // Validate primary guest ID
+    if (!uploadedFiles.primaryGuestId) {
+        showFieldError(document.getElementById('primaryGuestIdArea'), 'Primary Guest ID is required');
+        isValid = false;
+    }
     
     // Validate additional guest IDs if there are additional guests
-    if (currentApplication.guestInfo.totalGuests > 1) {
-        if (uploadedFiles.additionalGuestsIds.length === 0) {
-            showFieldError(document.getElementById('additionalGuestsIdsArea'), 'Additional guest IDs are required');
-            isValid = false;
-        } else if (uploadedFiles.additionalGuestsIds.length < currentApplication.guestInfo.totalGuests - 1) {
-            showFieldError(document.getElementById('additionalGuestsIdsArea'), `Please upload IDs for all ${currentApplication.guestInfo.totalGuests - 1} additional guests`);
-            isValid = false;
-        }
+    const hasAdditionalGuests = currentApplication.guestInfo.hasAdditionalGuests;
+    if (hasAdditionalGuests && currentApplication.guestInfo.additionalGuests.length > 0) {
+        const additionalGuests = currentApplication.guestInfo.additionalGuests;
+        
+        additionalGuests.forEach(guest => {
+            const guestUploadId = `additionalGuest${guest.guestNumber}Id`;
+            const guestFile = uploadedFiles.additionalGuestsIds[guest.guestNumber];
+            
+            if (!guestFile) {
+                showFieldError(document.getElementById(guestUploadId + 'Area'), `ID document for ${guest.name} is required`);
+                isValid = false;
+            }
+        });
     }
     
     // Validate terms agreements
@@ -578,30 +513,18 @@ function processDocumentUpload() {
         progress += 10;
         progressFill.style.width = progress + '%';
         
-        if (progress <= 20) {
+        if (progress <= 30) {
             progressText.textContent = 'Validating primary guest identification...';
             updateUploadItem('primaryGuestId', 'processing');
         } 
-        else if (progress <= 40) {
+        else if (progress <= 70) {
             progressText.textContent = 'Processing additional guest IDs...';
             updateUploadItem('primaryGuestId', 'completed');
             updateUploadItem('additionalGuestsIds', 'processing');
-        } 
-        else if (progress <= 60) {
-            progressText.textContent = 'Verifying selfie with ID...';
-            updateUploadItem('additionalGuestsIds', 'completed');
-            updateUploadItem('selfieWithId', 'processing');
-        }
-        else if (progress <= 80) {
-            progressText.textContent = 'Checking supporting documents...';
-            updateUploadItem('selfieWithId', 'completed');
-            updateUploadItem('proofOfTravel', 'processing');
-            updateUploadItem('businessDocuments', 'processing');
         }
         else {
             progressText.textContent = 'Finalizing guest verification...';
-            updateUploadItem('proofOfTravel', 'completed');
-            updateUploadItem('businessDocuments', 'completed');
+            updateUploadItem('additionalGuestsIds', 'completed');
         }
         
         if (progress >= 100) {
@@ -668,36 +591,7 @@ function saveDocumentData() {
                 size: uploadedFiles.primaryGuestId.size,
                 type: uploadedFiles.primaryGuestId.type
             } : null,
-            additionalGuestsIds: uploadedFiles.additionalGuestsIds.map(file => ({
-                name: file.name,
-                size: file.size,
-                type: file.type
-            })),
-            selfieWithId: uploadedFiles.selfieWithId ? {
-                name: uploadedFiles.selfieWithId.name,
-                size: uploadedFiles.selfieWithId.size,
-                type: uploadedFiles.selfieWithId.type
-            } : null,
-            proofOfTravel: uploadedFiles.proofOfTravel ? {
-                name: uploadedFiles.proofOfTravel.name,
-                size: uploadedFiles.proofOfTravel.size,
-                type: uploadedFiles.proofOfTravel.type
-            } : null,
-            businessDocuments: uploadedFiles.businessDocuments ? {
-                name: uploadedFiles.businessDocuments.name,
-                size: uploadedFiles.businessDocuments.size,
-                type: uploadedFiles.businessDocuments.type
-            } : null,
-            stayReferences: uploadedFiles.stayReferences ? {
-                name: uploadedFiles.stayReferences.name,
-                size: uploadedFiles.stayReferences.size,
-                type: uploadedFiles.stayReferences.type
-            } : null,
-            specialRequirementsDocs: uploadedFiles.specialRequirementsDocs ? {
-                name: uploadedFiles.specialRequirementsDocs.name,
-                size: uploadedFiles.specialRequirementsDocs.size,
-                type: uploadedFiles.specialRequirementsDocs.type
-            } : null,
+            additionalGuestsIds: {},
             uploadDate: new Date().toISOString()
         },
         termsAgreed: {
@@ -708,6 +602,16 @@ function saveDocumentData() {
             ageVerification: document.getElementById('agreeAgeVerification').checked
         }
     };
+    
+    // Add additional guest IDs
+    Object.keys(uploadedFiles.additionalGuestsIds).forEach(guestNumber => {
+        const file = uploadedFiles.additionalGuestsIds[guestNumber];
+        documentData.documents.additionalGuestsIds[guestNumber] = {
+            name: file.name,
+            size: file.size,
+            type: file.type
+        };
+    });
     
     // Update application data in sessionStorage
     currentApplication.step2 = documentData;

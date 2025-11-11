@@ -83,7 +83,6 @@
                         <!-- Section 1: Business Registration Documents -->
                         <div class="form-section">
                             <h3>Business Registration Documents</h3>
-                            <p class="section-description">Upload your business registration and incorporation documents</p>
                             
                             <!-- Certificate of Incorporation -->
                             <div class="upload-group required">
@@ -111,45 +110,26 @@
                                     </ul>
                                 </div>
                             </div>
-
-                            <!-- Articles of Association -->
-                            <div class="upload-group required">
-                                <div class="upload-header">
-                                    <label for="articlesOfAssociation" class="required">Articles of Association *</label>
-                                    <span class="upload-status" id="articlesOfAssociationStatus">Not uploaded</span>
-                                </div>
-                                <p class="upload-description">Upload your company's Articles of Association or Constitution</p>
-                                <div class="upload-area" id="articlesOfAssociationArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-gavel"></i>
-                                        <p>Click to upload Articles of Association</p>
-                                        <span class="file-types">Accepted: PDF (Max: 5MB)</span>
-                                    </div>
-                                    <input type="file" id="articlesOfAssociation" name="articlesOfAssociation" accept=".pdf" required>
-                                </div>
-                                <div class="file-preview" id="articlesOfAssociationPreview"></div>
-                            </div>
                         </div>
 
                         <!-- Section 2: Financial Documents -->
                         <div class="form-section">
                             <h3>Financial Documents</h3>
-                            <p class="section-description">Upload financial statements and tax documents</p>
                             
-                            <!-- Bank Statements -->
-                            <div class="upload-group required">
+                            <!-- Bank Statements - NOW OPTIONAL -->
+                            <div class="upload-group optional">
                                 <div class="upload-header">
-                                    <label for="bankStatements" class="required">Business Bank Statements *</label>
-                                    <span class="upload-status" id="bankStatementsStatus">Not uploaded</span>
+                                    <label for="bankStatements">Business Bank Statements (Optional)</label>
+                                    <span class="upload-status" id="bankStatementsStatus">No files</span>
                                 </div>
-                                <p class="upload-description">Last 6 months of business bank statements</p>
+                                <p class="upload-description">Last 6 months of business bank statements (Optional but recommended)</p>
                                 <div class="upload-area" id="bankStatementsArea">
                                     <div class="upload-placeholder">
                                         <i class="fas fa-file-invoice-dollar"></i>
                                         <p>Click to upload Bank Statements</p>
                                         <span class="file-types">Accepted: PDF, JPG, PNG (Max: 10MB total)</span>
                                     </div>
-                                    <input type="file" id="bankStatements" name="bankStatements" accept=".pdf,.jpg,.jpeg,.png" required multiple>
+                                    <input type="file" id="bankStatements" name="bankStatements" accept=".pdf,.jpg,.jpeg,.png" multiple>
                                 </div>
                                 <div class="file-preview" id="bankStatementsPreview"></div>
                                 <div class="upload-requirements">
@@ -161,42 +141,6 @@
                                         <li>Multiple files accepted (up to 10MB total)</li>
                                     </ul>
                                 </div>
-                            </div>
-
-                            <!-- Tax Clearance Certificate -->
-                            <div class="upload-group required">
-                                <div class="upload-header">
-                                    <label for="taxClearance" class="required">Tax Clearance Certificate *</label>
-                                    <span class="upload-status" id="taxClearanceStatus">Not uploaded</span>
-                                </div>
-                                <p class="upload-description">Current year tax clearance certificate from FIRS</p>
-                                <div class="upload-area" id="taxClearanceArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-receipt"></i>
-                                        <p>Click to upload Tax Clearance</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
-                                    </div>
-                                    <input type="file" id="taxClearance" name="taxClearance" accept=".pdf,.jpg,.jpeg,.png" required>
-                                </div>
-                                <div class="file-preview" id="taxClearancePreview"></div>
-                            </div>
-
-                            <!-- Audited Financial Statements -->
-                            <div class="upload-group required">
-                                <div class="upload-header">
-                                    <label for="financialStatements" class="required">Audited Financial Statements *</label>
-                                    <span class="upload-status" id="financialStatementsStatus">Not uploaded</span>
-                                </div>
-                                <p class="upload-description">Last 2 years audited financial statements</p>
-                                <div class="upload-area" id="financialStatementsArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-chart-line"></i>
-                                        <p>Click to upload Financial Statements</p>
-                                        <span class="file-types">Accepted: PDF (Max: 5MB each)</span>
-                                    </div>
-                                    <input type="file" id="financialStatements" name="financialStatements" accept=".pdf" required multiple>
-                                </div>
-                                <div class="file-preview" id="financialStatementsPreview"></div>
                             </div>
                         </div>
 
@@ -231,87 +175,9 @@
                                     </ul>
                                 </div>
                             </div>
-
-                            <!-- Proof of Address -->
-                            <div class="upload-group required">
-                                <div class="upload-header">
-                                    <label for="proofOfAddress" class="required">Proof of Business Address *</label>
-                                    <span class="upload-status" id="proofOfAddressStatus">Not uploaded</span>
-                                </div>
-                                <p class="upload-description">Utility bill or business address verification document</p>
-                                <div class="upload-area" id="proofOfAddressArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <p>Click to upload Proof of Address</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB)</span>
-                                    </div>
-                                    <input type="file" id="proofOfAddress" name="proofOfAddress" accept=".pdf,.jpg,.jpeg,.png" required>
-                                </div>
-                                <div class="file-preview" id="proofOfAddressPreview"></div>
-                            </div>
                         </div>
 
-                        <!-- Section 4: Additional Business Documents -->
-                        <div class="form-section">
-                            <h3>Additional Business Documents (Optional)</h3>
-                            <p class="section-description">You may upload additional documents to support your application</p>
-                            
-                            <!-- Business Plan -->
-                            <div class="upload-group optional">
-                                <div class="upload-header">
-                                    <label for="businessPlan">Business Plan</label>
-                                    <span class="upload-status" id="businessPlanStatus">No files</span>
-                                </div>
-                                <p class="upload-description">Business plan or operational strategy document</p>
-                                <div class="upload-area" id="businessPlanArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-briefcase"></i>
-                                        <p>Click to upload Business Plan</p>
-                                        <span class="file-types">Accepted: PDF, DOC, DOCX (Max: 5MB)</span>
-                                    </div>
-                                    <input type="file" id="businessPlan" name="businessPlan" accept=".pdf,.doc,.docx">
-                                </div>
-                                <div class="file-preview" id="businessPlanPreview"></div>
-                            </div>
-
-                            <!-- Trade References -->
-                            <div class="upload-group optional">
-                                <div class="upload-header">
-                                    <label for="tradeReferences">Trade References</label>
-                                    <span class="upload-status" id="tradeReferencesStatus">No files</span>
-                                </div>
-                                <p class="upload-description">Reference letters from suppliers or business partners</p>
-                                <div class="upload-area" id="tradeReferencesArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-handshake"></i>
-                                        <p>Click to upload Trade References</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB each)</span>
-                                    </div>
-                                    <input type="file" id="tradeReferences" name="tradeReferences" accept=".pdf,.jpg,.jpeg,.png" multiple>
-                                </div>
-                                <div class="file-preview" id="tradeReferencesPreview"></div>
-                            </div>
-
-                            <!-- Licenses and Permits -->
-                            <div class="upload-group optional">
-                                <div class="upload-header">
-                                    <label for="licensesPermits">Business Licenses & Permits</label>
-                                    <span class="upload-status" id="licensesPermitsStatus">No files</span>
-                                </div>
-                                <p class="upload-description">Industry-specific licenses and permits</p>
-                                <div class="upload-area" id="licensesPermitsArea">
-                                    <div class="upload-placeholder">
-                                        <i class="fas fa-certificate"></i>
-                                        <p>Click to upload Licenses & Permits</p>
-                                        <span class="file-types">Accepted: PDF, JPG, PNG (Max: 5MB each)</span>
-                                    </div>
-                                    <input type="file" id="licensesPermits" name="licensesPermits" accept=".pdf,.jpg,.jpeg,.png" multiple>
-                                </div>
-                                <div class="file-preview" id="licensesPermitsPreview"></div>
-                            </div>
-                        </div>
-
-                        <!-- Section 5: Terms and Agreements -->
+                        <!-- Section 4: Terms and Agreements -->
                         <div class="form-section">
                             <h3>Commercial Terms and Agreements</h3>
                             
@@ -400,34 +266,14 @@
                         <span>Certificate of Incorporation</span>
                         <i class="fas fa-spinner fa-spin status-icon"></i>
                     </div>
-                    <div class="upload-item" id="uploadArticlesOfAssociation">
-                        <i class="fas fa-gavel"></i>
-                        <span>Articles of Association</span>
-                        <i class="fas fa-spinner fa-spin status-icon"></i>
-                    </div>
                     <div class="upload-item" id="uploadBankStatements">
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span>Bank Statements</span>
                         <i class="fas fa-spinner fa-spin status-icon"></i>
                     </div>
-                    <div class="upload-item" id="uploadTaxClearance">
-                        <i class="fas fa-receipt"></i>
-                        <span>Tax Clearance</span>
-                        <i class="fas fa-spinner fa-spin status-icon"></i>
-                    </div>
-                    <div class="upload-item" id="uploadFinancialStatements">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Financial Statements</span>
-                        <i class="fas fa-spinner fa-spin status-icon"></i>
-                    </div>
                     <div class="upload-item" id="uploadDirectorIds">
                         <i class="fas fa-id-card"></i>
                         <span>Director IDs</span>
-                        <i class="fas fa-spinner fa-spin status-icon"></i>
-                    </div>
-                    <div class="upload-item" id="uploadProofOfAddress">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Proof of Address</span>
                         <i class="fas fa-spinner fa-spin status-icon"></i>
                     </div>
                 </div>

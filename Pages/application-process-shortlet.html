@@ -105,7 +105,29 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="required">Phone Number</label>
-                                    <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                    <div class="phone-input-group">
+                                        <div class="country-code-select">
+                                            <select id="userCountryCode" class="country-code">
+                                                <option value="+234">NG +234</option>
+                                                <option value="+233">GH +233</option>
+                                                <option value="+254">KE +254</option>
+                                                <option value="+27">ZA +27</option>
+                                                <option value="+1">US +1</option>
+                                                <option value="+44">UK +44</option>
+                                                <option value="+33">FR +33</option>
+                                                <option value="+49">DE +49</option>
+                                                <option value="+39">IT +39</option>
+                                                <option value="+34">ES +34</option>
+                                                <option value="+91">IN +91</option>
+                                                <option value="+86">CN +86</option>
+                                                <option value="+81">JP +81</option>
+                                                <option value="+82">KR +82</option>
+                                                <option value="+61">AU +61</option>
+                                                <option value="+55">BR +55</option>
+                                            </select>
+                                        </div>
+                                        <div class="prefilled-data" id="prefilledPhone">Loading...</div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -145,67 +167,81 @@
                         </div>
 
                         <!-- Section 2: Booking Details -->
-                        <div class="form-section">
-                            <h3>Booking Details</h3>
-                            <p class="section-description">Select your preferred dates and number of guests</p>
-                            
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="checkInDate" class="required">Check-in Date</label>
-                                    <input type="date" id="checkInDate" name="checkInDate" required min="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="checkOutDate" class="required">Check-out Date</label>
-                                    <input type="date" id="checkOutDate" name="checkOutDate" required min="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="numberOfGuests" class="required">Number of Guests</label>
-                                    <select id="numberOfGuests" name="numberOfGuests" required>
-                                        <option value="">Select guests</option>
-                                        <option value="1">1 Guest</option>
-                                        <option value="2">2 Guests</option>
-                                        <option value="3">3 Guests</option>
-                                        <option value="4">4 Guests</option>
-                                        <option value="5">5 Guests</option>
-                                        <option value="6">6+ Guests</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="purposeOfStay" class="required">Purpose of Stay</label>
-                                    <select id="purposeOfStay" name="purposeOfStay" required>
-                                        <option value="">Select purpose</option>
-                                        <option value="vacation">Vacation/Holiday</option>
-                                        <option value="business">Business Trip</option>
-                                        <option value="relocation">Temporary Relocation</option>
-                                        <option value="event">Special Event</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
+<div class="form-section">
+    <h3>Booking Details</h3>
+    <p class="section-description">Select your preferred dates and number of guests</p>
+    
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="checkInDate" class="required">Check-in Date</label>
+            <input type="date" id="checkInDate" name="checkInDate" required min="">
+        </div>
+        <div class="form-group">
+            <label for="checkOutDate" class="required">Check-out Date</label>
+            <input type="date" id="checkOutDate" name="checkOutDate" required min="">
+        </div>
+        <div class="form-group">
+            <label for="numberOfGuests" class="required">Number of Guests</label>
+            <select id="numberOfGuests" name="numberOfGuests" required>
+                <option value="">Select guests</option>
+                <option value="1">1 Guest (Just me)</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5">5 Guests</option>
+                <option value="6">6+ Guests</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="purposeOfStay" class="required">Purpose of Stay</label>
+            <select id="purposeOfStay" name="purposeOfStay" required>
+                <option value="">Select purpose</option>
+                <option value="vacation">Vacation/Holiday</option>
+                <option value="business">Business Trip</option>
+                <option value="relocation">Temporary Relocation</option>
+                <option value="event">Special Event</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+    </div>
 
-                            <div class="booking-summary" id="bookingSummary" style="display: none;">
-                                <h4>Booking Summary</h4>
-                                <div class="summary-details">
-                                    <div class="summary-item">
-                                        <span>Duration:</span>
-                                        <span id="stayDuration">-</span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span>Total Nights:</span>
-                                        <span id="totalNights">-</span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span>Nightly Rate:</span>
-                                        <span id="nightlyRate">-</span>
-                                    </div>
-                                    <div class="summary-item total">
-                                        <span>Estimated Total:</span>
-                                        <span id="estimatedTotal">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="booking-summary" id="bookingSummary" style="display: none;">
+        <h4>Booking Summary</h4>
+        <div class="summary-details">
+            <div class="summary-item">
+                <span>Duration:</span>
+                <span id="stayDuration">-</span>
+            </div>
+            <div class="summary-item">
+                <span>Total Nights:</span>
+                <span id="totalNights">-</span>
+            </div>
+            <div class="summary-item">
+                <span>Nightly Rate:</span>
+                <span id="nightlyRate">-</span>
+            </div>
+            <div class="summary-item total">
+                <span>Estimated Total:</span>
+                <span id="estimatedTotal">-</span>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Section 3: Additional Guests -->
+<div class="form-section" id="additionalGuestsSection" style="display: none;">
+    <h3>Additional Guests</h3>
+    <p class="section-description">Provide details for other guests staying with you</p>
+    
+    <div id="additionalGuestsForms">
+        <!-- Guest forms will be dynamically added here -->
+    </div>
+
+    <button type="button" class="btn-secondary" id="addGuestBtn" style="margin-top: 1rem;">
+        <i class="fas fa-plus"></i>
+        Add Another Guest
+    </button>
+</div>
                         <!-- Section 3: Additional Guests -->
                         <div class="form-section">
                             <h3>Additional Guests</h3>
@@ -269,16 +305,6 @@
                                         <option value="20:00">8:00 PM</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="transportation" class="required">Need Airport Transfer?</label>
-                                    <select id="transportation" name="transportation" required>
-                                        <option value="">Select option</option>
-                                        <option value="no">No, I'll arrange my own</option>
-                                        <option value="yes-arrival">Yes, arrival only</option>
-                                        <option value="yes-departure">Yes, departure only</option>
-                                        <option value="yes-both">Yes, both arrival and departure</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
 
@@ -294,7 +320,29 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="emergencyContactPhone" class="required">Phone Number</label>
-                                    <input type="tel" id="emergencyContactPhone" name="emergencyContactPhone" required>
+                                    <div class="phone-input-group">
+                                        <div class="country-code-select">
+                                            <select id="emergencyCountryCode" class="country-code">
+                                                <option value="+234">NG +234</option>
+                                                <option value="+233">GH +233</option>
+                                                <option value="+254">KE +254</option>
+                                                <option value="+27">ZA +27</option>
+                                                <option value="+1">US +1</option>
+                                                <option value="+44">UK +44</option>
+                                                <option value="+33">FR +33</option>
+                                                <option value="+49">DE +49</option>
+                                                <option value="+39">IT +39</option>
+                                                <option value="+34">ES +34</option>
+                                                <option value="+91">IN +91</option>
+                                                <option value="+86">CN +86</option>
+                                                <option value="+81">JP +81</option>
+                                                <option value="+82">KR +82</option>
+                                                <option value="+61">AU +61</option>
+                                                <option value="+55">BR +55</option>
+                                            </select>
+                                        </div>
+                                        <input type="tel" id="emergencyContactPhone" name="emergencyContactPhone" placeholder="Phone number" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="emergencyContactRelationship" class="required">Relationship</label>

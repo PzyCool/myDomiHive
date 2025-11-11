@@ -11,6 +11,26 @@ let currentUser = null;
 let currentProperty = null;
 let currentBooking = null;
 
+// Country phone number validation patterns
+const countryPhonePatterns = {
+    '+234': /^[789][01]\d{8}$/, // Nigeria: 10 digits starting with 70, 80, 81, 90, 91
+    '+233': /^[2345]\d{8}$/, // Ghana: 9 digits starting with 2,3,4,5
+    '+254': /^[17]\d{8}$/, // Kenya: 9 digits starting with 1 or 7
+    '+27': /^[678]\d{8}$/, // South Africa: 9 digits starting with 6,7,8
+    '+1': /^[2-9]\d{9}$/, // USA/Canada: 10 digits, area code 2-9
+    '+44': /^[1-9]\d{9}$/, // UK: 10 digits
+    '+33': /^[1-9]\d{8}$/, // France: 9 digits
+    '+49': /^[1-9]\d{10}$/, // Germany: 11 digits
+    '+39': /^[3]\d{9}$/, // Italy: 10 digits starting with 3
+    '+34': /^[6789]\d{8}$/, // Spain: 9 digits starting with 6,7,8,9
+    '+91': /^[6789]\d{9}$/, // India: 10 digits starting with 6,7,8,9
+    '+86': /^[1][3-9]\d{9}$/, // China: 11 digits starting with 13-19
+    '+81': /^[789]\d{9}$/, // Japan: 10 digits starting with 7,8,9
+    '+82': /^[1]\d{9}$/, // South Korea: 10 digits starting with 1
+    '+61': /^[4]\d{8}$/, // Australia: 9 digits starting with 4
+    '+55': /^[1-9]\d{9}$/ // Brazil: 10 digits
+};
+
 function initializeApplicationProcess() {
     console.log('🏠 Initializing Application Process...');
     
@@ -45,7 +65,8 @@ function loadUserData() {
                 id: 'user_' + Date.now(),
                 fullName: 'John Doe',
                 email: 'john.doe@example.com',
-                phone: '+2348012345678',
+                phone: '8012345678',
+                countryCode: '+234',
                 userType: 'tenant'
             };
             console.log('⚠️ Using demo user data');
@@ -149,6 +170,12 @@ function prefillUserData() {
     // Prefill user information
     document.getElementById('prefilledFullName').textContent = currentUser.fullName || 'Not provided';
     document.getElementById('prefilledEmail').textContent = currentUser.email || 'Not provided';
+    
+    // Prefill phone with country code
+    const userCountryCode = document.getElementById('userCountryCode');
+    if (currentUser.countryCode) {
+        userCountryCode.value = currentUser.countryCode;
+    }
     document.getElementById('prefilledPhone').textContent = currentUser.phone || 'Not provided';
     
     // Prefill additional user data if available
@@ -181,18 +208,71 @@ function initializeEventListeners() {
     document.getElementById('backToPrevious').addEventListener('click', goBackToInspection);
     document.getElementById('backToPreviousBtn').addEventListener('click', goBackToInspection);
     
-    // Real-time validation
+    // Country code change listeners
+    document.getElementById('emergencyCountryCode').addEventListener('change', validateEmergencyPhoneNumber);
+    
+    // Phone number validation
+    document.getElementById('emergencyContactPhone').addEventListener('blur', validateEmergencyPhoneNumber);
+    document.getElementById('emergencyContactPhone').addEventListener('input', clearFieldError);
+    
+    // Real-time validation for other fields
     const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
     requiredFields.forEach(field => {
-        field.addEventListener('blur', validateField);
-        field.addEventListener('input', clearFieldError);
+        if (field.id !== 'emergencyContactPhone') {
+            field.addEventListener('blur', validateField);
+            field.addEventListener('input', clearFieldError);
+        }
     });
     
     // Date of birth validation (must be at least 18 years old)
     document.getElementById('dateOfBirth').addEventListener('change', validateDateOfBirth);
+}
+
+// Phone Number Validation with Country Code
+function validateEmergencyPhoneNumber(event) {
+    const phoneInput = document.getElementById('emergencyContactPhone');
+    const countryCodeSelect = document.getElementById('emergencyCountryCode');
+    const phoneNumber = phoneInput.value.trim();
+    const countryCode = countryCodeSelect.value;
     
-    // Phone number validation for emergency contact
-    document.getElementById('emergencyContactPhone').addEventListener('blur', validatePhoneNumber);
+    if (!phoneNumber) {
+        showFieldError(phoneInput, 'Phone number is required');
+        return false;
+    }
+    
+    // Get validation pattern for selected country
+    const pattern = countryPhonePatterns[countryCode];
+    if (pattern && !pattern.test(phoneNumber)) {
+        const countryName = getCountryName(countryCode);
+        showFieldError(phoneInput, `Please enter a valid ${countryName} phone number`);
+        return false;
+    }
+    
+    clearFieldError({ target: phoneInput });
+    return true;
+}
+
+function getCountryName(countryCode) {
+    const countryNames = {
+        '+234': 'Nigerian',
+        '+233': 'Ghanaian',
+        '+254': 'Kenyan',
+        '+27': 'South African',
+        '+1': 'US/Canadian',
+        '+44': 'UK',
+        '+33': 'French',
+        '+49': 'German',
+        '+39': 'Italian',
+        '+34': 'Spanish',
+        '+91': 'Indian',
+        '+86': 'Chinese',
+        '+81': 'Japanese',
+        '+82': 'South Korean',
+        '+61': 'Australian',
+        '+55': 'Brazilian'
+    };
+    
+    return countryNames[countryCode] || 'phone';
 }
 
 // Employment Logic Functions
@@ -268,10 +348,8 @@ function validateForm() {
         isValid = false;
     }
     
-    // Validate emergency contact phone
-    const emergencyPhone = document.getElementById('emergencyContactPhone').value;
-    if (emergencyPhone && !isValidPhone(emergencyPhone)) {
-        showFieldError(document.getElementById('emergencyContactPhone'), 'Please enter a valid phone number');
+    // Validate emergency contact phone with country code
+    if (!validateEmergencyPhoneNumber()) {
         isValid = false;
     }
     
@@ -307,13 +385,6 @@ function validateField(event) {
     
     // Specific validations
     switch (field.type) {
-        case 'tel':
-            if (field.value && !isValidPhone(field.value)) {
-                showFieldError(field, 'Please enter a valid phone number');
-            } else {
-                clearFieldError(field);
-            }
-            break;
         case 'date':
             if (field.id === 'dateOfBirth' && field.value && !isValidAge(field.value)) {
                 showFieldError(field, 'You must be at least 18 years old');
@@ -335,15 +406,6 @@ function validateDateOfBirth(event) {
     }
 }
 
-function validatePhoneNumber(event) {
-    const field = event.target;
-    if (field.value && !isValidPhone(field.value)) {
-        showFieldError(field, 'Please enter a valid phone number');
-    } else {
-        clearFieldError(field);
-    }
-}
-
 function isValidAge(dateString) {
     const birthDate = new Date(dateString);
     const today = new Date();
@@ -356,13 +418,13 @@ function isValidAge(dateString) {
     return age >= 18;
 }
 
-function isValidPhone(phone) {
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
-}
-
 function showFieldError(field, message) {
     field.style.borderColor = '#e53e3e';
+    
+    // For phone input group, add error class to parent
+    if (field.id === 'emergencyContactPhone') {
+        field.parentNode.classList.add('error');
+    }
     
     let errorElement = field.parentNode.querySelector('.field-error');
     if (!errorElement) {
@@ -378,6 +440,11 @@ function clearFieldError(event) {
     const field = event.target;
     field.style.borderColor = '';
     
+    // For phone input group, remove error class
+    if (field.id === 'emergencyContactPhone') {
+        field.parentNode.classList.remove('error');
+    }
+    
     const errorElement = field.parentNode.querySelector('.field-error');
     if (errorElement) {
         errorElement.remove();
@@ -388,6 +455,9 @@ function clearValidationErrors() {
     const fields = document.querySelectorAll('input, select, textarea');
     fields.forEach(field => {
         field.style.borderColor = '';
+        if (field.parentNode.classList.contains('phone-input-group')) {
+            field.parentNode.classList.remove('error');
+        }
     });
     
     const errorElements = document.querySelectorAll('.field-error');
@@ -415,6 +485,7 @@ function collectFormData() {
             fullName: currentUser.fullName,
             email: currentUser.email,
             phone: currentUser.phone,
+            countryCode: document.getElementById('userCountryCode').value,
             dateOfBirth: document.getElementById('dateOfBirth').value,
             sex: document.getElementById('sex').value,
             maritalStatus: document.getElementById('maritalStatus').value,
@@ -436,6 +507,7 @@ function collectFormData() {
         emergencyContact: {
             name: document.getElementById('emergencyContactName').value,
             phone: document.getElementById('emergencyContactPhone').value,
+            countryCode: document.getElementById('emergencyCountryCode').value,
             relationship: document.getElementById('emergencyContactRelationship').value,
             email: document.getElementById('emergencyContactEmail').value
         },
@@ -495,7 +567,7 @@ function updateUserProfile(applicationData) {
         ...currentUser,
         dateOfBirth: applicationData.personalInfo.dateOfBirth,
         occupation: applicationData.personalInfo.occupation,
-        // Add other fields as needed
+        countryCode: applicationData.personalInfo.countryCode
     };
     
     localStorage.setItem('domihive_current_user', JSON.stringify(updatedUser));
@@ -514,6 +586,17 @@ function redirectToDocumentUpload() {
     }
 }
 
+function goBackToInspection() {
+    console.log('↩️ Going back to inspection...');
+    
+    // Use SPA navigation if available
+    if (window.spa && typeof window.spa.navigateToSection === 'function') {
+        window.spa.navigateToSection('property-inspection');
+    } else {
+        // Fallback to going back in history
+        window.history.back();
+    }
+}
 
 // Utility Functions
 function showNotification(message, type = 'success') {
