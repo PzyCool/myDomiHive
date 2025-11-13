@@ -2215,7 +2215,6 @@ select:focus {
 .step-number {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--accent-color);
     margin-bottom: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
