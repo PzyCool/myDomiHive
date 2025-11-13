@@ -142,166 +142,228 @@
                     </div>
                 </div>
 
-                <!-- Collapsible Advanced Filters - KEEP ORIGINAL -->
-                <div class="advanced-filters-collapsible" id="advancedFilters" aria-hidden="true">
-                    <div class="advanced-filters-content">
-                        <div class="filters-grid">
-                            <!-- Bedrooms -->
-                            <div class="filter-group">
-                                <h4>Bedrooms</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bedrooms" value="1">
-                                        <span>1 Bedroom</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bedrooms" value="2">
-                                        <span>2 Bedrooms</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bedrooms" value="3">
-                                        <span>3 Bedrooms</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bedrooms" value="4">
-                                        <span>4+ Bedrooms</span>
-                                    </label>
-                                </div>
+                <div id="advancedFiltersModal" class="filters-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Advanced Filters</h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="filters-grid">
+                        <!-- Price Range -->
+                        <div class="filter-group">
+                            <h4>Price Range (₦/year)</h4>
+                            <div class="price-inputs">
+                                <input type="number" id="minPrice" placeholder="Min" class="price-input">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="Max" class="price-input">
                             </div>
-
-                            <!-- Bathrooms -->
-                            <div class="filter-group">
-                                <h4>Bathrooms</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bathrooms" value="1">
-                                        <span>1 Bathroom</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bathrooms" value="2">
-                                        <span>2 Bathrooms</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="bathrooms" value="3">
-                                        <span>3+ Bathrooms</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Amenities -->
-                            <div class="filter-group">
-                                <h4>Amenities</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="amenities" value="wifi">
-                                        <span>WiFi</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="amenities" value="parking">
-                                        <span>Parking</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="amenities" value="security">
-                                        <span>24/7 Security</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="amenities" value="pool">
-                                        <span>Swimming Pool</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="amenities" value="gym">
-                                        <span>Gym</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="amenities" value="generator">
-                                        <span>Generator</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Furnishing -->
-                            <div class="filter-group">
-                                <h4>Furnishing</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="furnishing" value="furnished">
-                                        <span>Furnished</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="furnishing" value="semi-furnished">
-                                        <span>Semi-Furnished</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="furnishing" value="unfurnished">
-                                        <span>Unfurnished</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Pet Policy -->
-                            <div class="filter-group">
-                                <h4>Pet Policy</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="pets" value="allowed">
-                                        <span>Pets Allowed</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="pets" value="not-allowed">
-                                        <span>No Pets</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Property Age -->
-                            <div class="filter-group">
-                                <h4>Property Age</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="age" value="new">
-                                        <span>New (0-2 years)</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="age" value="modern">
-                                        <span>Modern (3-10 years)</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="age" value="established">
-                                        <span>Established (10+ years)</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Location Areas -->
-                            <div class="filter-group">
-                                <h4>Location Areas</h4>
-                                <div class="filter-options">
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="area" value="mainland">
-                                        <span>Mainland Areas</span>
-                                    </label>
-                                    <label class="filter-option">
-                                        <input type="checkbox" name="area" value="island">
-                                        <span>Island Areas</span>
-                                    </label>
-                                </div>
+                            <div class="price-slider">
+                                <input type="range" id="priceRange" min="0" max="10000000" step="100000" class="range-slider">
                             </div>
                         </div>
 
-                        <!-- Filter Actions -->
-                        <div class="filter-actions">
-                            <button class="btn-clear-filters" id="clearAllFilters">
-                                <i class="fas fa-times"></i>
-                                Clear All Filters
-                            </button>
-                            <button class="btn-apply-filters" id="applyFilters">
-                                <i class="fas fa-check"></i>
-                                Apply Filters
-                            </button>
+                        <!-- Bedrooms & Bathrooms -->
+                        <div class="filter-group">
+                            <h4>Bedrooms</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="1">
+                                    <span>1 Bedroom</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="2">
+                                    <span>2 Bedrooms</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="3">
+                                    <span>3 Bedrooms</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bedrooms" value="4">
+                                    <span>4+ Bedrooms</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <h4>Bathrooms</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bathrooms" value="1">
+                                    <span>1 Bathroom</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bathrooms" value="2">
+                                    <span>2 Bathrooms</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="bathrooms" value="3">
+                                    <span>3+ Bathrooms</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Property Type -->
+                        <div class="filter-group">
+                            <h4>Property Type</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="apartment">
+                                    <span>Apartment</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="house">
+                                    <span>House</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="duplex">
+                                    <span>Duplex</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="studio">
+                                    <span>Studio</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="propertyType" value="shared">
+                                    <span>Shared</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Furnishing -->
+                        <div class="filter-group">
+                            <h4>Furnishing</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="furnishing" value="furnished">
+                                    <span>Furnished</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="furnishing" value="semi-furnished">
+                                    <span>Semi-Furnished</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="furnishing" value="unfurnished">
+                                    <span>Unfurnished</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Amenities -->
+                        <div class="filter-group">
+                            <h4>Amenities</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="wifi">
+                                    <span>WiFi</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="parking">
+                                    <span>Parking</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="security">
+                                    <span>24/7 Security</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="pool">
+                                    <span>Swimming Pool</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="gym">
+                                    <span>Gym</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="ac">
+                                    <span>Air Conditioning</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="generator">
+                                    <span>Generator</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="amenities" value="water">
+                                    <span>Constant Water</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Location Areas -->
+                        <div class="filter-group">
+                            <h4>Location Areas</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="area" value="mainland">
+                                    <span>Mainland Areas</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="area" value="island">
+                                    <span>Island Areas</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Pet Policy -->
+                        <div class="filter-group">
+                            <h4>Pet Policy</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="pets" value="allowed">
+                                    <span>Pets Allowed</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="pets" value="not-allowed">
+                                    <span>No Pets</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Property Age -->
+                        <div class="filter-group">
+                            <h4>Property Age</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="age" value="new">
+                                    <span>New (0-2 years)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="age" value="modern">
+                                    <span>Modern (3-10 years)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="age" value="established">
+                                    <span>Established (10+ years)</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Filter Actions -->
+                <div class="modal-footer">
+                    <button class="btn-clear-filters" id="clearFilters">
+                        <i class="fas fa-times"></i>
+                        Clear All Filters
+                    </button>
+                    <button class="btn-apply-filters" id="applyFilters">
+                        <i class="fas fa-check"></i>
+                        Apply Filters
+                    </button>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Applying Filters...</span>
+                </div>
+            </div>
+        </div>
+        
                 <!-- Properties Grid Container -->
                 <div class="properties-grid-container">
                     <!-- Properties Grid -->

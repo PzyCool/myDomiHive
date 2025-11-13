@@ -1,4 +1,4 @@
-// browse-content.js - COMPLETE REWRITE - All 4 Tabs Working + SPA Integration
+// browse-content.js - UPDATED WITH HOME.JS ADVANCED FILTERS
 // DomiHive Browse Properties - All Property Types Supported
 
 // ===== GLOBAL VARIABLES =====
@@ -7,7 +7,8 @@ let filteredProperties = [];
 let currentPage = 1;
 const propertiesPerPage = 12;
 let userFavorites = new Set();
-let currentActiveTab = 'rent'; // Track active tab: 'rent', 'shortlet', 'commercial', 'buy'
+let currentActiveTab = 'rent';
+let propertyStorage; // Added for consistency with home.js
 
 // ===== SPA INTEGRATION =====
 window.spaBrowseInit = function() {
@@ -19,7 +20,6 @@ window.spaBrowseInit = function() {
 if (window.location.pathname.includes('browse-content.html')) {
     document.addEventListener('DOMContentLoaded', initializeBrowseProperties);
 } else {
-    // SPA environment - check if we're on the page and initialize
     setTimeout(function() {
         if (document.querySelector('.browse-content')) {
             console.log('🔍 Detected SPA environment - auto-initializing browse');
@@ -28,15 +28,83 @@ if (window.location.pathname.includes('browse-content.html')) {
     }, 500);
 }
 
+// ===== PROPERTY STORAGE SYSTEM (FROM HOME.JS) =====
+class PropertyStorageSystem {
+    constructor() {
+        this.initializeStorage();
+    }
+
+    initializeStorage() {
+        if (!localStorage.getItem('domihive_property_interests')) {
+            const initialData = {
+                viewed_properties: [],
+                saved_properties: [],
+                recent_searches: []
+            };
+            localStorage.setItem('domihive_property_interests', JSON.stringify(initialData));
+        }
+    }
+
+    storePropertyForOverview(property, action = 'viewed') {
+        try {
+            const storage = this.getStorage();
+            const timestamp = new Date().toISOString();
+            
+            const propertyData = {
+                property: property,
+                action: action,
+                timestamp: timestamp,
+                stored_at: new Date().toLocaleString(),
+                ready_for_dashboard: true
+            };
+
+            storage.viewed_properties.unshift(propertyData);
+            
+            if (storage.viewed_properties.length > 10) {
+                storage.viewed_properties = storage.viewed_properties.slice(0, 10);
+            }
+
+            this.saveStorage(storage);
+            
+            console.log('💾 Property stored for overview:', property.id);
+            return true;
+            
+        } catch (error) {
+            console.error('❌ Error storing property:', error);
+            return false;
+        }
+    }
+
+    storeFavoriteProperty(property) {
+        return this.storePropertyForOverview(property, 'saved');
+    }
+
+    getStorage() {
+        return JSON.parse(localStorage.getItem('domihive_property_interests'));
+    }
+
+    saveStorage(data) {
+        localStorage.setItem('domihive_property_interests', JSON.stringify(data));
+    }
+
+    getRecentProperties(limit = 5) {
+        const storage = this.getStorage();
+        return storage.viewed_properties.slice(0, limit);
+    }
+}
+
 // ===== INITIALIZATION =====
 function initializeBrowseProperties() {
     console.log('🏠 Initializing Browse Properties');
     
+    // Initialize property storage system (from home.js)
+    propertyStorage = new PropertyStorageSystem();
+    
     loadUserFavorites();
     initializeHeroSearch();
-    initializeAdvancedFilters();
-    generateAllProperties(); // Generate properties for ALL categories
-    filterPropertiesByActiveTab(); // Show only active tab properties
+    initializeAdvancedFilters(); // This will now use home.js modal system
+    generateAllProperties();
+    filterPropertiesByActiveTab();
     displayProperties();
     initializeEventListeners();
     
@@ -157,7 +225,6 @@ function initializeHeroSearch() {
 
         if (!areaKey || !lagosAreas[areaKey]) return;
 
-        // Sort locations alphabetically
         const sortedLocations = lagosAreas[areaKey].sort();
         
         sortedLocations.forEach(loc => {
@@ -168,28 +235,23 @@ function initializeHeroSearch() {
         });
     }
 
-    // Tab click behavior - UPDATED TO FILTER PROPERTIES
+    // Tab click behavior
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove active class from all tabs
             tabs.forEach(t => {
                 t.classList.remove('active');
                 t.setAttribute('aria-selected', 'false');
             });
             
-            // Add active class to clicked tab
             tab.classList.add('active');
             tab.setAttribute('aria-selected', 'true');
 
-            // Update active tab and filter properties
             const selectedType = tab.getAttribute('data-type');
             console.log('🏠 Tab switched to:', selectedType);
             currentActiveTab = selectedType;
             
-            // Update property type options
             populateTypeOptions(selectedType);
             
-            // Update search placeholder based on tab
             const placeholders = {
                 rent: 'Search for rental properties — e.g. "Lekki 3 bedroom"',
                 shortlet: 'Search for shortlet properties — e.g. "VI luxury apartment"',
@@ -199,12 +261,10 @@ function initializeHeroSearch() {
             
             searchInput.placeholder = placeholders[selectedType] || 'Search properties...';
             
-            // ✅ FILTER PROPERTIES BY ACTIVE TAB
             filterPropertiesByActiveTab();
         });
     });
 
-    // Area selection behavior
     areaTypeSelect.addEventListener('change', () => {
         const area = areaTypeSelect.value;
         populateLocations(area);
@@ -214,7 +274,6 @@ function initializeHeroSearch() {
         }
     });
 
-    // Search handler
     doSearchBtn.addEventListener('click', (e) => {
         e.preventDefault();
         
@@ -227,7 +286,6 @@ function initializeHeroSearch() {
         const minPrice = document.getElementById('minPriceSelect').value;
         const maxPrice = document.getElementById('maxPriceSelect').value;
 
-        // Build search criteria
         const searchCriteria = {
             action: activeTab,
             query: query,
@@ -240,84 +298,105 @@ function initializeHeroSearch() {
             timestamp: new Date().toISOString()
         };
 
-        // Store search for property grid
         sessionStorage.setItem('domihive_search_criteria', JSON.stringify(searchCriteria));
         
         console.log('🔍 Search submitted:', searchCriteria);
         
-        // Apply search immediately to properties grid
         applyHeroSearch(searchCriteria);
         
-        // Scroll to properties section
         document.querySelector('.properties-section')?.scrollIntoView({ 
             behavior: 'smooth' 
         });
     });
 
-    // Keyboard accessibility - press Enter to search
     searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             doSearchBtn.click();
         }
     });
 
-    // Initialize
     function initHeroSearch() {
-        // Set default property types
         console.log('🎯 Initializing hero search');
         populateTypeOptions('rent');
         populateLocations('mainland');
         
-        // Clear any previous search
         searchInput.value = '';
         
         console.log('✅ Hero Search Initialized with 4 tabs');
     }
 
-    // Start initialization
     initHeroSearch();
 }
 
-// ===== ADVANCED FILTERS =====
+// ===== ADVANCED FILTERS - EXACT COPY FROM HOME.JS =====
 function initializeAdvancedFilters() {
     const filterToggle = document.getElementById('filterToggle');
-    const advancedFilters = document.getElementById('advancedFilters');
-    
-    if (filterToggle && advancedFilters) {
+    const modal = document.getElementById('advancedFiltersModal');
+    const modalClose = document.getElementById('modalClose');
+    const applyFiltersBtn = document.getElementById('applyFilters');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+
+    if (filterToggle && modal) {
         filterToggle.addEventListener('click', function() {
-            advancedFilters.classList.toggle('active');
-            filterToggle.classList.toggle('active');
-            
-            const isExpanded = advancedFilters.classList.contains('active');
-            filterToggle.setAttribute('aria-expanded', isExpanded);
-            
-            // Update toggle text
-            const toggleText = filterToggle.querySelector('.toggle-text');
-            if (toggleText) {
-                toggleText.textContent = isExpanded ? 'Hide Filters' : 'Advanced Filters';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal || e.target.classList.contains('modal-overlay')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
         });
     }
-    
-    // Clear filters button
-    const clearFiltersBtn = document.getElementById('clearAllFilters');
-    if (clearFiltersBtn) {
-        clearFiltersBtn.addEventListener('click', clearAllFilters);
-    }
-    
-    // Apply filters button
-    const applyFiltersBtn = document.getElementById('applyFilters');
+
     if (applyFiltersBtn) {
-        applyFiltersBtn.addEventListener('click', applyFilters);
+        applyFiltersBtn.addEventListener('click', function() {
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('active');
+            }
+            
+            setTimeout(() => {
+                applyFilters();
+                
+                if (loadingIndicator) {
+                    loadingIndicator.classList.remove('active');
+                }
+                
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                showSimpleNotification('Filters applied successfully!', 'success');
+            }, 1500);
+        });
     }
-    
-    // Real-time filtering for checkboxes
-    const filterInputs = document.querySelectorAll('#advancedFilters input[type="checkbox"]');
-    filterInputs.forEach(input => {
-        input.addEventListener('change', debounce(applyFilters, 300));
+
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+            clearAllFilters();
+            showSimpleNotification('All filters cleared!', 'success');
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     });
 }
 
+// ===== FILTER FUNCTIONS - EXACT COPY FROM HOME.JS =====
 function applyFilters() {
     console.log('🎯 Applying filters...');
     
@@ -326,7 +405,7 @@ function applyFilters() {
         return matchesAllFilters(property, filters);
     });
     
-    // ✅ APPLY ACTIVE TAB FILTER AFTER OTHER FILTERS
+    // Apply active tab filter after other filters
     filteredProperties = filteredProperties.filter(property => 
         property.category === currentActiveTab
     );
@@ -339,7 +418,14 @@ function applyFilters() {
 }
 
 function getCurrentFilters() {
+    const minPriceValue = parseInt(document.getElementById('minPrice').value) || 0;
+    const maxPriceValue = parseInt(document.getElementById('maxPrice').value) || 100000000;
+    
     const filters = {
+        priceRange: {
+            min: minPriceValue,
+            max: maxPriceValue
+        },
         bedrooms: getCheckedValues('bedrooms'),
         bathrooms: getCheckedValues('bathrooms'),
         propertyType: getCheckedValues('propertyType'),
@@ -354,11 +440,16 @@ function getCurrentFilters() {
 }
 
 function getCheckedValues(name) {
-    const checked = document.querySelectorAll(`#advancedFilters input[name="${name}"]:checked`);
+    const checked = document.querySelectorAll(`#advancedFiltersModal input[name="${name}"]:checked`);
     return Array.from(checked).map(input => input.value);
 }
 
 function matchesAllFilters(property, filters) {
+    // Price range
+    if (property.price < filters.priceRange.min || property.price > filters.priceRange.max) {
+        return false;
+    }
+    
     // Bedrooms
     if (filters.bedrooms.length > 0) {
         const bedroomValue = property.bedrooms >= 4 ? '4' : property.bedrooms.toString();
@@ -372,7 +463,7 @@ function matchesAllFilters(property, filters) {
     }
     
     // Property type
-    if (filters.propertyType.length > 0 && !filters.propertyType.includes(property.propertyType)) {
+    if (filters.propertyType.length > 0 && !filters.propertyType.includes(property.type)) {
         return false;
     }
     
@@ -381,7 +472,7 @@ function matchesAllFilters(property, filters) {
         return false;
     }
     
-    // Amenities (all selected amenities must be present)
+    // Amenities
     if (filters.amenities.length > 0) {
         const hasAllAmenities = filters.amenities.every(amenity => 
             property.amenities.includes(amenity)
@@ -409,10 +500,22 @@ function matchesAllFilters(property, filters) {
 }
 
 function clearAllFilters() {
-    // Uncheck all checkboxes in advanced filters
-    document.querySelectorAll('#advancedFilters input[type="checkbox"]').forEach(checkbox => {
+    document.querySelectorAll('#advancedFiltersModal input[type="checkbox"]').forEach(checkbox => {
         checkbox.checked = false;
     });
+    
+    const minPriceInput = document.getElementById('minPrice');
+    const maxPriceInput = document.getElementById('maxPrice');
+    if (minPriceInput) minPriceInput.value = '';
+    if (maxPriceInput) maxPriceInput.value = '';
+    
+    const priceRange = document.getElementById('priceRange');
+    if (priceRange) {
+        priceRange.value = 5000000;
+    }
+    
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) sortSelect.value = 'newest';
     
     applyFilters();
     console.log('🧹 All filters cleared');
@@ -422,15 +525,14 @@ function clearAllFilters() {
 function generateAllProperties() {
     allProperties = [];
     
-    // Generate properties for ALL categories
     for (let i = 1; i <= 60; i++) {
-        if (i <= 20) { // 20 rent properties
+        if (i <= 20) {
             generateRentProperty(i);
-        } else if (i <= 35) { // 15 shortlet properties
+        } else if (i <= 35) {
             generateShortletProperty(i - 20);
-        } else if (i <= 45) { // 10 commercial properties
+        } else if (i <= 45) {
             generateCommercialProperty(i - 35);
-        } else { // 15 buy properties
+        } else {
             generateBuyProperty(i - 45);
         }
     }
@@ -466,7 +568,7 @@ function generateRentProperty(id) {
         priceType: 'year',
         location: locations[Math.floor(Math.random() * locations.length)],
         area: area,
-        propertyType: ['apartment', 'self-contain', 'mini-flat', 'duplex'][Math.floor(Math.random() * 4)],
+        type: ['apartment', 'self-contain', 'mini-flat', 'duplex'][Math.floor(Math.random() * 4)], // Changed from propertyType to type
         bedrooms: Math.floor(Math.random() * 4) + 1,
         bathrooms: Math.floor(Math.random() * 3) + 1,
         size: `${Math.floor(Math.random() * 200) + 50} sqm`,
@@ -509,7 +611,7 @@ function generateShortletProperty(id) {
         priceType: 'night',
         location: locations[Math.floor(Math.random() * locations.length)],
         area: area,
-        propertyType: ['apartment', 'serviced-apartment', 'studio', 'executive-suite'][Math.floor(Math.random() * 4)],
+        type: ['apartment', 'serviced-apartment', 'studio', 'executive-suite'][Math.floor(Math.random() * 4)], // Changed from propertyType to type
         bedrooms: Math.floor(Math.random() * 3) + 1,
         bathrooms: Math.floor(Math.random() * 2) + 1,
         size: `${Math.floor(Math.random() * 150) + 30} sqm`,
@@ -564,7 +666,7 @@ function generateCommercialProperty(id) {
         priceType: 'year',
         location: locations[Math.floor(Math.random() * locations.length)],
         area: area,
-        propertyType: propertyType,
+        type: propertyType, // Changed from propertyType to type
         bedrooms: 0,
         bathrooms: Math.floor(Math.random() * 4) + 1,
         size: `${Math.floor(Math.random() * 500) + 100} sqm`,
@@ -609,7 +711,7 @@ function generateBuyProperty(id) {
         priceType: 'once',
         location: locations[Math.floor(Math.random() * locations.length)],
         area: area,
-        propertyType: ['apartment', 'duplex', 'detached-house', 'bungalow', 'semi-detached'][Math.floor(Math.random() * 5)],
+        type: ['apartment', 'duplex', 'detached-house', 'bungalow', 'semi-detached'][Math.floor(Math.random() * 5)], // Changed from propertyType to type
         bedrooms: Math.floor(Math.random() * 5) + 2,
         bathrooms: Math.floor(Math.random() * 4) + 2,
         size: `${Math.floor(Math.random() * 400) + 100} sqm`,
@@ -674,7 +776,6 @@ function displayProperties() {
         });
     }
     
-    // Update results count with tab-specific text
     if (resultsCount) {
         const tabNames = {
             rent: 'Rental Properties',
@@ -686,7 +787,6 @@ function displayProperties() {
         resultsCount.textContent = `${filteredProperties.length}+ ${tabNames[currentActiveTab] || 'Properties'}`;
     }
     
-    // Show/hide load more button
     const totalDisplayed = Math.min(endIndex, filteredProperties.length);
     const hasMoreProperties = totalDisplayed < filteredProperties.length;
     
@@ -706,7 +806,6 @@ function displayProperties() {
 function createPropertyCard(property) {
     const isFavorite = userFavorites.has(property.id);
     
-    // ✅ DYNAMIC BADGE BASED ON CATEGORY
     const categoryBadges = {
         rent: '<span class="property-badge" style="background: #0e1f42;">For Rent</span>',
         shortlet: '<span class="property-badge" style="background: #8b5cf6;">Shortlet</span>',
@@ -778,10 +877,11 @@ function handleViewDetailsClick(propertyId) {
     
     const property = allProperties.find(p => p.id === propertyId);
     if (property) {
-        // Store property data for the next page
+        // Use the property storage system from home.js
+        propertyStorage.storePropertyForOverview(property, 'viewed');
+        
         localStorage.setItem('current_property_view', JSON.stringify(property));
         
-        // ✅ UPDATED: ROUTE TO CORRECT PAGE BASED ON PROPERTY CATEGORY
         const pageRoutes = {
             rent: 'property-details-rent',
             shortlet: 'property-details-shortlet', 
@@ -795,7 +895,6 @@ function handleViewDetailsClick(propertyId) {
             console.log(`🚀 SPA Navigation to: ${targetPage}`);
             window.spa.navigateToSection(targetPage);
         } else {
-            // Fallback to direct navigation
             console.log(`🌐 Direct navigation to: ${targetPage}`);
             window.location.href = `/Pages/${targetPage}.html?id=${propertyId}`;
         }
@@ -805,14 +904,28 @@ function handleViewDetailsClick(propertyId) {
 function handleFavoriteClick(propertyId, buttonElement) {
     console.log(`💖 Favorite clicked for property ${propertyId}`);
     
+    const property = allProperties.find(p => p.id === propertyId);
+    if (!property) {
+        console.error('❌ Property not found:', propertyId);
+        return;
+    }
+
     if (userFavorites.has(propertyId)) {
         userFavorites.delete(propertyId);
         buttonElement.classList.remove('active');
-        showNotification('Property removed from favorites', 'success');
+        showSimpleNotification('Property removed from favorites');
     } else {
         userFavorites.add(propertyId);
         buttonElement.classList.add('active');
-        showNotification('Property added to favorites!', 'success');
+        
+        // Use the property storage system from home.js
+        const success = propertyStorage.storePropertyForOverview(property, 'saved');
+        
+        if (success) {
+            showSimpleNotification('Added to favorites! We\'ll save it for your dashboard.');
+        } else {
+            showSimpleNotification('Added to favorites!', 'success');
+        }
     }
     
     saveUserFavorites();
@@ -861,19 +974,16 @@ function sortProperties() {
 
 // ===== EVENT LISTENERS =====
 function initializeEventListeners() {
-    // Sort select
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
         sortSelect.addEventListener('change', sortProperties);
     }
     
-    // Load more button
     const loadMoreBtn = document.getElementById('loadMore');
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMoreProperties);
     }
     
-    // View options
     const viewBtns = document.querySelectorAll('.view-btn');
     viewBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -898,32 +1008,20 @@ function switchView(view) {
     displayProperties();
 }
 
-// ===== UTILITY FUNCTIONS =====
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-function showNotification(message, type = 'success') {
-    const existingNotification = document.querySelector('.global-notification');
+// ===== UTILITY FUNCTIONS FROM HOME.JS =====
+function showSimpleNotification(message, type = 'success') {
+    const existingNotification = document.querySelector('.simple-notification');
     if (existingNotification) {
         existingNotification.remove();
     }
-    
+
     const notification = document.createElement('div');
-    notification.className = `global-notification notification-${type}`;
+    notification.className = `simple-notification ${type}`;
     notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        background: ${type === 'success' ? '#10b981' : '#ef4444'};
+        background: ${type === 'success' ? '#10b981' : '#3b82f6'};
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 8px;
@@ -937,18 +1035,18 @@ function showNotification(message, type = 'success') {
     `;
     
     notification.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
         <span>${message}</span>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         if (notification.parentNode) {
             notification.style.animation = 'slideOutRight 0.3s ease';
             setTimeout(() => notification.remove(), 300);
         }
-    }, 4000);
+    }, 3000);
 }
 
 function showNoResultsMessage() {
@@ -976,32 +1074,38 @@ function showNoResultsMessage() {
 function applyHeroSearch(searchCriteria) {
     console.log('🎯 Applying hero search criteria:', searchCriteria);
     
-    // Clear existing filters first
     clearAllFilters();
     
-    // Filter by category first
     if (searchCriteria.action) {
         currentActiveTab = searchCriteria.action;
         filterPropertiesByActiveTab();
     }
     
-    // Apply hero search filters to advanced sidebar
     if (searchCriteria.areaType) {
-        const areaCheckbox = document.querySelector(`input[name="area"][value="${searchCriteria.areaType}"]`);
+        const areaCheckbox = document.querySelector(`#advancedFiltersModal input[name="area"][value="${searchCriteria.areaType}"]`);
         if (areaCheckbox) areaCheckbox.checked = true;
     }
     
     if (searchCriteria.propertyType) {
-        const typeCheckbox = document.querySelector(`input[name="propertyType"][value="${searchCriteria.propertyType}"]`);
+        const typeCheckbox = document.querySelector(`#advancedFiltersModal input[name="propertyType"][value="${searchCriteria.propertyType}"]`);
         if (typeCheckbox) typeCheckbox.checked = true;
     }
     
     if (searchCriteria.bedrooms) {
-        const bedroomCheckbox = document.querySelector(`input[name="bedrooms"][value="${searchCriteria.bedrooms}"]`);
+        const bedroomCheckbox = document.querySelector(`#advancedFiltersModal input[name="bedrooms"][value="${searchCriteria.bedrooms}"]`);
         if (bedroomCheckbox) bedroomCheckbox.checked = true;
     }
     
-    // Apply the filters
+    if (searchCriteria.minPrice) {
+        const minPriceInput = document.getElementById('minPrice');
+        if (minPriceInput) minPriceInput.value = searchCriteria.minPrice;
+    }
+    
+    if (searchCriteria.maxPrice) {
+        const maxPriceInput = document.getElementById('maxPrice');
+        if (maxPriceInput) maxPriceInput.value = searchCriteria.maxPrice;
+    }
+    
     setTimeout(() => {
         applyFilters();
         console.log('✅ Hero search filters applied successfully');
@@ -1058,4 +1162,4 @@ if (document.readyState === 'loading') {
 // Make initialization function globally available
 window.initializeBrowseProperties = initializeBrowseProperties;
 
-console.log('🎉 DomiHive Browse Properties Module Loaded - All 4 Tabs Active!');
+console.log('🎉 DomiHive Browse Properties Module Loaded - All 4 Tabs Active with Home.js Advanced Filters!');
