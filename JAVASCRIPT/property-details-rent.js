@@ -1,80 +1,22 @@
-// property-details-rent.js - UPDATED WITH LOGIN CHECK FOR BOOK INSPECTION
+// property-details-rent.js - UPDATED FOR SPA COMPATIBILITY
 
-// ===== CHECK IF USER IS COMING FROM HOMEPAGE =====
-function isComingFromHomepage() {
-    const referrer = document.referrer;
-    const fromHomepage = referrer.includes('index.html') || referrer.includes('/') && !referrer.includes('dashboard');
-    const fromDirectAccess = !referrer; // User typed URL directly
-    
-    console.log('Referrer:', referrer);
-    console.log('From homepage:', fromHomepage);
-    console.log('Direct access:', fromDirectAccess);
-    
-    return fromHomepage || fromDirectAccess;
-}
-
-// ===== REDIRECT TO SIGNUP IF COMING FROM HOMEPAGE =====
-function setupBookingButtonRedirect(buttonId) {
-    const button = document.getElementById(buttonId);
-    if (button && isComingFromHomepage()) {
-        console.log(`🔄 Setting up ${buttonId} to redirect to signup`);
-        
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log(`📅 ${buttonId} clicked - user not logged in, redirecting to signup`);
-            
-            // Store the current property for after signup
-            const currentProperty = localStorage.getItem('current_property_view');
-            if (currentProperty) {
-                sessionStorage.setItem('domihive_redirect_after_signup', window.location.pathname);
-                sessionStorage.setItem('domihive_booking_intent', 'true');
-            }
-            
-            window.location.href = '/Pages/signup.html';
-        });
-        
-        // Optional: Change button text to indicate signup required
-        button.innerHTML = button.innerHTML.replace('Book', 'Sign Up to Book');
-    }
-}
-
-// ===== INITIALIZE BASED ON USER SOURCE =====
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🏠 Checking user source...');
-    
-    // Setup booking button redirects if coming from homepage
-    const bookingButtons = {
-        'property-details-rent.html': 'bookInspectionBtn',
-        'property-details-shortlet.html': 'bookShortletBtn', 
-        'property-details-commercial.html': 'scheduleTourBtn',
-        'property-details-buy.html': 'bookViewingBtn'
-    };
-    
-    const currentPage = window.location.pathname.split('/').pop();
-    const buttonId = bookingButtons[currentPage];
-    
-    if (buttonId) {
-        setupBookingButtonRedirect(buttonId);
-    }
-    
-    // Update back button based on source
-    const backButton = document.getElementById('backToDashboard');
-    if (backButton && isComingFromHomepage()) {
-        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Home';
-        backButton.addEventListener('click', function() {
-            window.location.href = '/index.html';
-        });
-    }
-});
+// ===== GLOBAL INITIALIZATION FUNCTION =====
+window.initializePropertyDetails = function() {
+    console.log('🎯 SPA: Initializing Property Details Content');
+    initializePropertyDetailsPage();
+};
 
 // ===== MAIN INITIALIZATION FUNCTION =====
 function initializePropertyDetailsPage() {
     console.log('🏠 Initializing Property Details Page');
     
-    // 1. BACK TO DASHBOARD - UPDATED FOR SPA
+    // 1. BACK TO DASHBOARD - SPA COMPATIBLE
     const backButton = document.getElementById('backToDashboard');
     if (backButton) {
-        backButton.addEventListener('click', function() {
+        backButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🔙 Back button clicked');
+            
             if (window.spa && typeof window.spa.navigateToSection === 'function') {
                 window.spa.navigateToSection('browse');
             } else {
@@ -90,22 +32,16 @@ function initializePropertyDetailsPage() {
             const address = "24 Bourdillon Road, Ikoyi, Lagos";
             const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
             window.open(mapsUrl, '_blank');
+            console.log('🗺️ Opening directions to:', address);
         });
     }
 
-    // 3. LIKE CHECKBOX - SHOW BOOK INSPECTION BUTTON (FIXED)
+    // 3. LIKE CHECKBOX - SHOW BOOK INSPECTION BUTTON
     const likeCheckbox = document.getElementById('likeCheckbox');
     const proceedButtonContainer = document.getElementById('proceedButtonContainer');
     
     if (likeCheckbox && proceedButtonContainer) {
-        console.log('✅ Setting up checkbox functionality');
-        
-        // Remove any existing event listeners first
-        const newCheckbox = likeCheckbox.cloneNode(true);
-        likeCheckbox.parentNode.replaceChild(newCheckbox, likeCheckbox);
-        
-        // Add new event listener
-        newCheckbox.addEventListener('change', function() {
+        likeCheckbox.addEventListener('change', function() {
             console.log('🔘 Checkbox changed:', this.checked);
             if (this.checked) {
                 proceedButtonContainer.style.display = 'block';
@@ -121,10 +57,10 @@ function initializePropertyDetailsPage() {
         });
         
         // Set initial state
-        proceedButtonContainer.style.display = newCheckbox.checked ? 'block' : 'none';
+        proceedButtonContainer.style.display = 'none';
     }
 
-    // 4. BOOK INSPECTION BUTTON - UPDATED WITH LOGIN CHECK
+    // 4. BOOK INSPECTION BUTTON
     const bookInspectionBtn = document.getElementById('bookInspectionBtn');
     if (bookInspectionBtn) {
         bookInspectionBtn.addEventListener('click', handleBookInspection);
@@ -162,104 +98,62 @@ function initializePropertyDetailsPage() {
         propertyContext.textContent = 'Viewing from Rental Properties';
     }
 
-    // 8. IMAGE ERROR HANDLING
-    document.addEventListener('error', function(e) {
-        if (e.target.tagName === 'IMG') {
-            console.log('Image failed to load:', e.target.src);
-            e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop';
-            e.target.alt = 'Image not available';
-        }
-    }, true);
-
-    // 9. REVIEW SYSTEM
+    // 8. REVIEW SYSTEM
     initializeReviewSystem();
 
-    // 10. PROPERTY DATA
+    // 9. PROPERTY DATA
     initializePropertyData();
 
-    // 11. FLOATING CALL BUTTON
+    // 10. FLOATING CALL BUTTON
     initializeFloatingCallButton();
+
+    // 11. TAB FUNCTIONALITY - MOST IMPORTANT FOR SPA
+    initializeTabs();
 
     console.log('✅ All Property Details functionality initialized');
 }
 
-// ===== UPDATED BOOK INSPECTION FUNCTION =====
-function handleBookInspection() {
-    console.log('📅 Book Inspection clicked');
+// ===== TAB FUNCTIONALITY =====
+function initializeTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const tabsNav = document.getElementById('propertyTabsNav');
     
-    const propertyData = getCurrentProperty();
+    console.log('📑 Initializing tabs:', tabButtons.length, 'buttons found');
     
-    // Check if user is logged in
-    const isLoggedIn = checkUserLoggedIn();
-    
-    if (!isLoggedIn) {
-        // User is NOT logged in - Store intent and redirect to signup
-        console.log('👤 User not logged in - storing booking intent');
-        
-        localStorage.setItem('domihive_pending_booking', JSON.stringify({
-            property: propertyData,
-            intended_action: 'book_inspection',
-            redirect_to: 'book-inspection.html',
-            timestamp: new Date().toISOString(),
-            message: 'Continue to book inspection for this property'
-        }));
-        
-        // Also store the property for the dashboard
-        localStorage.setItem('domihive_selected_property', JSON.stringify(propertyData));
-        
-        showNotification('Please sign up to book an inspection', 'info');
-        
-        // Redirect to signup after short delay
-        setTimeout(() => {
-            if (window.spa && typeof window.spa.navigateToSection === 'function') {
-                window.spa.navigateToSection('signup');
-            } else {
-                window.location.href = '/Pages/signup.html';
+    // Tab switching functionality
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            console.log('🔄 Switching to tab:', tabId);
+            
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            this.classList.add('active');
+            const targetTab = document.getElementById(`${tabId}-tab`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+                console.log('✅ Tab switched successfully');
             }
-        }, 1500);
+        });
+    });
+    
+    // Sticky tab navigation
+    if (tabsNav) {
+        const observer = new IntersectionObserver(
+            ([e]) => {
+                const isSticky = e.intersectionRatio < 1;
+                e.target.classList.toggle('sticky', isSticky);
+            },
+            { threshold: [1] }
+        );
         
-    } else {
-        // User IS logged in - Proceed directly to booking
-        console.log('👤 User logged in - proceeding to booking');
-        
-        localStorage.setItem('domihive_selected_property', JSON.stringify(propertyData));
-        
-        showNotification('Redirecting to booking...', 'success');
-        
-        setTimeout(() => {
-            if (window.spa && typeof window.spa.navigateToSection === 'function') {
-                window.spa.navigateToSection('book-inspection');
-            } else {
-                window.location.href = '/Pages/book-inspection.html';
-            }
-        }, 1000);
+        observer.observe(tabsNav);
+        console.log('📌 Sticky tabs initialized');
     }
-}
-
-// ===== USER AUTHENTICATION CHECK =====
-function checkUserLoggedIn() {
-    // Check multiple possible authentication indicators
-    const userToken = localStorage.getItem('user_token');
-    const domiHiveUser = localStorage.getItem('domihive_user');
-    const authToken = localStorage.getItem('auth_token');
-    const isAuthenticated = localStorage.getItem('is_authenticated');
-    
-    // Return true if any authentication indicator exists
-    return !!(userToken || domiHiveUser || authToken || isAuthenticated === 'true');
-}
-
-// ===== GET CURRENT PROPERTY DATA =====
-function getCurrentProperty() {
-    return {
-        id: document.getElementById('propertyId')?.textContent || 'rent_123',
-        title: document.getElementById('propertyTitle')?.textContent || 'Luxury Property',
-        price: document.getElementById('propertyPrice')?.textContent || '₦4,500,000/year',
-        location: document.getElementById('propertyLocation')?.textContent || 'Ikoyi, Lagos',
-        bedrooms: document.getElementById('bedroomsCount')?.textContent || '3',
-        bathrooms: document.getElementById('bathroomsCount')?.textContent || '3',
-        size: document.getElementById('propertySize')?.textContent || '180 sqm',
-        type: document.getElementById('propertyType')?.textContent || 'Apartment'
-    };
 }
 
 // ===== CAROUSEL FUNCTIONS =====
@@ -335,13 +229,12 @@ function initializeCarousel() {
         nextBtn.addEventListener('click', nextSlide);
     }
 
+    // Auto-advance
     setInterval(nextSlide, 5000);
 }
 
 // ===== REVIEW SYSTEM FUNCTIONS =====
 function initializeReviewSystem() {
-    console.log('Initializing review system...');
-    
     const filterButtons = document.querySelectorAll('.filter-btn');
     const reviewCards = document.querySelectorAll('.review-card');
     const loadMoreBtn = document.getElementById('loadMoreReviews');
@@ -413,23 +306,10 @@ function filterReviews(filter) {
         if (shouldShow) {
             card.style.display = 'block';
             visibleCount++;
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
         } else {
             card.style.display = 'none';
         }
     });
-
-    const loadMoreBtn = document.getElementById('loadMoreReviews');
-    if (loadMoreBtn && visibleCount > 0) {
-        loadMoreBtn.style.display = 'block';
-    } else if (loadMoreBtn) {
-        loadMoreBtn.style.display = 'none';
-    }
-
-    console.log(`Filtered to ${visibleCount} reviews with filter: ${filter}`);
 }
 
 // ===== PROPERTY DATA FUNCTIONS =====
@@ -456,50 +336,42 @@ function initializePropertyData() {
 }
 
 function updatePropertyDetails(data) {
-    if (document.getElementById('propertyTitle')) {
-        document.getElementById('propertyTitle').textContent = data.title;
-    }
-    if (document.getElementById('propertyPrice')) {
-        document.getElementById('propertyPrice').textContent = data.price;
-    }
-    if (document.getElementById('propertyLocation')) {
-        document.getElementById('propertyLocation').textContent = data.location;
-    }
-    if (document.getElementById('propertyId')) {
-        document.getElementById('propertyId').textContent = data.id;
-    }
-    if (document.getElementById('bedroomsCount')) {
-        document.getElementById('bedroomsCount').textContent = data.bedrooms;
-    }
-    if (document.getElementById('bathroomsCount')) {
-        document.getElementById('bathroomsCount').textContent = data.bathrooms;
-    }
-    if (document.getElementById('propertySize')) {
-        document.getElementById('propertySize').textContent = data.size;
-    }
-    if (document.getElementById('propertyType')) {
-        document.getElementById('propertyType').textContent = data.type;
-    }
-    if (document.getElementById('propertyDescription')) {
-        document.getElementById('propertyDescription').textContent = data.description;
-    }
-    
-    if (document.getElementById('verifiedBadge')) {
-        document.getElementById('verifiedBadge').style.display = data.isVerified ? 'block' : 'none';
-    }
-    if (document.getElementById('featuredBadge')) {
-        document.getElementById('featuredBadge').style.display = data.isFeatured ? 'block' : 'none';
-    }
-    if (document.getElementById('newBadge')) {
-        document.getElementById('newBadge').style.display = data.isNew ? 'block' : 'none';
-    }
+    const elements = {
+        'propertyTitle': data.title,
+        'propertyPrice': data.price,
+        'propertyLocation': data.location,
+        'propertyId': data.id,
+        'bedroomsCount': data.bedrooms,
+        'bathroomsCount': data.bathrooms,
+        'propertySize': data.size,
+        'propertyType': data.type,
+        'propertyDescription': data.description
+    };
+
+    Object.keys(elements).forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = elements[id];
+    });
+
+    // Update badges
+    const badges = {
+        'verifiedBadge': data.isVerified,
+        'featuredBadge': data.isFeatured,
+        'newBadge': data.isNew
+    };
+
+    Object.keys(badges).forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.style.display = badges[id] ? 'block' : 'none';
+    });
 }
 
 // ===== FLOATING CALL BUTTON =====
 function initializeFloatingCallButton() {
     const floatingBtn = document.getElementById('floatingCallBtn');
+    if (!floatingBtn) return;
+
     let scrollTimer;
-    let isScrolling = false;
 
     function showButton() {
         floatingBtn.classList.add('visible');
@@ -509,28 +381,90 @@ function initializeFloatingCallButton() {
     function hideButton() {
         scrollTimer = setTimeout(() => {
             floatingBtn.classList.remove('visible');
-            isScrolling = false;
-        }, 30000);
+        }, 3000);
     }
-
-    window.addEventListener('scroll', function() {
-        if (!isScrolling) {
-            isScrolling = true;
-            showButton();
-        }
-        
-        clearTimeout(scrollTimer);
-        hideButton();
-    });
 
     floatingBtn.addEventListener('click', function() {
         window.open('tel:+2349010851071');
     });
 
-    console.log('📞 Floating call button initialized');
+    window.addEventListener('scroll', function() {
+        showButton();
+        clearTimeout(scrollTimer);
+        hideButton();
+    });
+
+    // Show initially
+    setTimeout(() => {
+        floatingBtn.classList.add('visible');
+    }, 1000);
 }
 
-// ===== NOTIFICATION SYSTEM =====
+// ===== BOOK INSPECTION FUNCTION =====
+function handleBookInspection() {
+    const propertyData = getCurrentProperty();
+    
+    // Check if user is logged in
+    const isLoggedIn = checkUserLoggedIn();
+    
+    if (!isLoggedIn) {
+        localStorage.setItem('domihive_pending_booking', JSON.stringify({
+            property: propertyData,
+            intended_action: 'book_inspection',
+            redirect_to: 'book-inspection.html',
+            timestamp: new Date().toISOString()
+        }));
+        
+        localStorage.setItem('domihive_selected_property', JSON.stringify(propertyData));
+        
+        showNotification('Please sign up to book an inspection', 'info');
+        
+        setTimeout(() => {
+            if (window.spa && typeof window.spa.navigateToSection === 'function') {
+                window.spa.navigateToSection('signup');
+            } else {
+                window.location.href = '/Pages/signup.html';
+            }
+        }, 1500);
+        
+    } else {
+        localStorage.setItem('domihive_selected_property', JSON.stringify(propertyData));
+        
+        showNotification('Redirecting to booking...', 'success');
+        
+        setTimeout(() => {
+            if (window.spa && typeof window.spa.navigateToSection === 'function') {
+                window.spa.navigateToSection('book-inspection');
+            } else {
+                window.location.href = '/Pages/book-inspection.html';
+            }
+        }, 1000);
+    }
+}
+
+// ===== HELPER FUNCTIONS =====
+function checkUserLoggedIn() {
+    const userToken = localStorage.getItem('user_token');
+    const domiHiveUser = localStorage.getItem('domihive_user');
+    const authToken = localStorage.getItem('auth_token');
+    const isAuthenticated = localStorage.getItem('is_authenticated');
+    
+    return !!(userToken || domiHiveUser || authToken || isAuthenticated === 'true');
+}
+
+function getCurrentProperty() {
+    return {
+        id: document.getElementById('propertyId')?.textContent || 'rent_123',
+        title: document.getElementById('propertyTitle')?.textContent || 'Luxury Property',
+        price: document.getElementById('propertyPrice')?.textContent || '₦4,500,000/year',
+        location: document.getElementById('propertyLocation')?.textContent || 'Ikoyi, Lagos',
+        bedrooms: document.getElementById('bedroomsCount')?.textContent || '3',
+        bathrooms: document.getElementById('bathroomsCount')?.textContent || '3',
+        size: document.getElementById('propertySize')?.textContent || '180 sqm',
+        type: document.getElementById('propertyType')?.textContent || 'Apartment'
+    };
+}
+
 function showNotification(message, type = 'success') {
     const existingNotification = document.querySelector('.global-notification');
     if (existingNotification) {
@@ -566,22 +500,6 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    if (!document.querySelector('#notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-            @keyframes slideInRight {
-                from { opacity: 0; transform: translateX(100%); }
-                to { opacity: 1; transform: translateX(0); }
-            }
-            @keyframes slideOutRight {
-                from { opacity: 1; transform: translateX(0); }
-                to { opacity: 0; transform: translateX(100%); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
     setTimeout(() => {
         if (notification.parentNode) {
             notification.style.animation = 'slideOutRight 0.3s ease';
@@ -590,16 +508,10 @@ function showNotification(message, type = 'success') {
     }, 4000);
 }
 
-// ===== SPA INTEGRATION =====
-window.spaPropertyDetailsInit = function() {
-    console.log('🎯 SPA: Initializing Property Details Content');
-    initializePropertyDetailsPage();
-};
-
-// ===== INITIALIZATION =====
+// ===== AUTO-INITIALIZE FOR DIRECT PAGE LOADS =====
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Property details page loaded via DOMContentLoaded');
+    console.log('📄 Page loaded directly - initializing property details');
     initializePropertyDetailsPage();
 });
 
-console.log('✅ Property Details JavaScript Module Loaded!');
+console.log('✅ Property Details JavaScript Loaded - SPA Ready');

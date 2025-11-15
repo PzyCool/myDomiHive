@@ -59,15 +59,7 @@
                     <span class="stat-label">Completed</span>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon urgent">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-number" id="propertyUrgentRequests">0</span>
-                    <span class="stat-label">Urgent</span>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Tab Navigation -->
@@ -231,6 +223,12 @@
                         </div>
                     </div>
 
+                    <div type="read" class="btn-primary">
+                        <i class="fas fa-book-open"></i>
+                         Please ensure to read the maintenance policies before submitting
+                    </div>
+
+
                     <div class="form-actions">
                         <button type="button" class="btn-secondary" onclick="clearForm()">
                             <i class="fas fa-times"></i>
@@ -255,20 +253,10 @@
                     <button class="filter-btn active" data-filter="all">All Requests</button>
                     <button class="filter-btn" data-filter="pending">Pending</button>
                     <button class="filter-btn" data-filter="progress">In Progress</button>
-                    <button class="filter-btn" data-filter="urgent">Urgent</button>
                 </div>
 
                 <div class="requests-list" id="activeRequestsList">
                     <!-- Active maintenance requests will be loaded here -->
-                    <div class="empty-requests">
-                        <i class="fas fa-tools"></i>
-                        <h4>No Active Requests</h4>
-                        <p>You don't have any active maintenance requests</p>
-                        <button class="btn-primary" onclick="switchToTab('new-request')">
-                            <i class="fas fa-plus"></i>
-                            Submit New Request
-                        </button>
-                    </div>
                 </div>
             </div>
 

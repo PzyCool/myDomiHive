@@ -299,7 +299,16 @@ async initializeSPAContent(sectionId) {
       await this.initializeOverviewContent();
       break;
     case 'property-details-rent':
-      this.initializePropertyDetailsCheckbox();
+      await this.initializePropertyDetailsContent();
+      break;
+    case 'property-details-shortlet':
+      await this.initializePropertyDetailsShortletContent();
+      break;
+    case 'property-details-commercial':
+      await this.initializePropertyDetailsCommercialContent();
+      break;
+    case 'property-details-buy':
+      await this.initializePropertyDetailsBuyContent();
       break;
     // Add other sections as needed
   }
@@ -326,6 +335,82 @@ async initializeOverviewContent() {
     if (typeof initializeOverview === 'function') {
       initializeOverview();
     }
+  }
+}
+
+// ✅ NEW: Initialize Property Details Content
+async initializePropertyDetailsContent() {
+  console.log('🎯 SPA: Initializing Property Details Content');
+  
+  // Wait for DOM to be ready
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  // Try multiple initialization methods
+  if (typeof window.initializePropertyDetails === 'function') {
+    console.log('🔄 Calling initializePropertyDetails');
+    window.initializePropertyDetails();
+  } else if (typeof initializePropertyDetailsPage === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsPage directly');
+    initializePropertyDetailsPage();
+  } else {
+    console.log('⚠️ No property details init function found');
+  }
+}
+
+// ✅ NEW: Initialize Property Details Shortlet Content
+async initializePropertyDetailsShortletContent() {
+  console.log('🎯 SPA: Initializing Property Details Shortlet Content');
+  
+  // Wait for DOM to be ready
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  // Try multiple initialization methods
+  if (typeof window.initializePropertyDetailsShortlet === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsShortlet');
+    window.initializePropertyDetailsShortlet();
+  } else if (typeof initializePropertyDetailsPage === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsPage directly');
+    initializePropertyDetailsPage();
+  } else {
+    console.log('⚠️ No shortlet property details init function found');
+  }
+}
+
+// ✅ NEW: Initialize Property Details Commercial Content
+async initializePropertyDetailsCommercialContent() {
+  console.log('🎯 SPA: Initializing Property Details Commercial Content');
+  
+  // Wait for DOM to be ready
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  // Try multiple initialization methods
+  if (typeof window.initializePropertyDetailsCommercial === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsCommercial');
+    window.initializePropertyDetailsCommercial();
+  } else if (typeof initializePropertyDetailsPage === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsPage directly');
+    initializePropertyDetailsPage();
+  } else {
+    console.log('⚠️ No commercial property details init function found');
+  }
+}
+
+// ✅ NEW: Initialize Property Details Buy Content
+async initializePropertyDetailsBuyContent() {
+  console.log('🎯 SPA: Initializing Property Details Buy Content');
+  
+  // Wait for DOM to be ready
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  // Try multiple initialization methods
+  if (typeof window.initializePropertyDetailsBuy === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsBuy');
+    window.initializePropertyDetailsBuy();
+  } else if (typeof initializePropertyDetailsPage === 'function') {
+    console.log('🔄 Calling initializePropertyDetailsPage directly');
+    initializePropertyDetailsPage();
+  } else {
+    console.log('⚠️ No buy property details init function found');
   }
 }
   // ✅ EXECUTE SCRIPTS IN LOADED CONTENT

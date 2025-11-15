@@ -153,6 +153,95 @@ body {
     font-weight: 600;
 }
 
+/* ===== TABBED INTERFACE STYLES ===== */
+.properties-tabs {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 0;
+    margin-bottom: 2rem;
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+}
+
+.tabs-container {
+    display: flex;
+    background: var(--light-gray);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem 2rem;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    position: relative;
+    min-height: 70px;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    background: var(--white);
+    color: var(--primary-color);
+    border-bottom-color: currentColor;
+}
+
+/* Property type specific tab colors */
+.tab-btn[data-tab="rent"].active {
+    color: var(--rent-color);
+    border-bottom-color: var(--rent-color);
+}
+
+.tab-btn[data-tab="shortlet"].active {
+    color: var(--shortlet-color);
+    border-bottom-color: var(--shortlet-color);
+}
+
+.tab-btn[data-tab="commercial"].active {
+    color: var(--commercial-color);
+    border-bottom-color: var(--commercial-color);
+}
+
+.tab-btn[data-tab="buy"].active {
+    color: var(--buy-color);
+    border-bottom-color: var(--buy-color);
+}
+
+.tab-btn i {
+    font-size: 1.1rem;
+}
+
+.tab-count {
+    background: var(--gray-light);
+    color: var(--dark-gray);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    min-width: 24px;
+    text-align: center;
+    transition: all var(--transition-normal);
+}
+
+.tab-btn.active .tab-count {
+    background: currentColor;
+    color: var(--white);
+}
+
 /* ===== PROPERTIES SECTIONS ===== */
 .properties-section {
     background: var(--white);
@@ -162,11 +251,19 @@ body {
     border: 2px solid var(--border-color);
     margin-bottom: 2rem;
     position: relative;
+    display: none; /* Hide all sections by default */
+    animation: fadeInUp 0.5s ease;
+}
+
+.properties-section.active {
+    display: block; /* Show only active section */
 }
 
 /* Section header with title and stats */
 .section-header {
     margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1.5rem;
 }
 
 .section-title {
@@ -1120,6 +1217,24 @@ body {
         width: fit-content;
     }
     
+    /* Tab responsive styles */
+    .tabs-container {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        padding: 1.25rem 1.5rem;
+        justify-content: flex-start;
+        min-height: 60px;
+        border-bottom: 1px solid var(--border-color);
+        border-right: 3px solid transparent;
+    }
+    
+    .tab-btn.active {
+        border-bottom-color: transparent;
+        border-right-color: currentColor;
+    }
+    
     .question-actions {
         flex-direction: column;
     }
@@ -1176,6 +1291,23 @@ body {
     .properties-section {
         padding: 1rem;
     }
+    
+    /* Mobile tab styles */
+    .tab-btn {
+        padding: 1rem 1.25rem;
+        font-size: 0.9rem;
+        gap: 0.5rem;
+    }
+    
+    .tab-btn i {
+        font-size: 1rem;
+    }
+    
+    .tab-count {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+        min-width: 20px;
+    }
 }
 
 /* Focus styles for accessibility */
@@ -1227,15 +1359,6 @@ textarea:focus {
     }
 }
 
-.properties-section {
-    animation: fadeInUp 0.5s ease;
-}
-
-.properties-section:nth-child(2) { animation-delay: 0.1s; }
-.properties-section:nth-child(3) { animation-delay: 0.2s; }
-.properties-section:nth-child(4) { animation-delay: 0.3s; }
-.properties-section:nth-child(5) { animation-delay: 0.4s; }
-
 /* SPA-specific styles for smooth transitions */
 .applications-content {
     opacity: 1;
@@ -1256,7 +1379,8 @@ textarea:focus {
     }
     
     .property-actions,
-    .modal-container {
+    .modal-container,
+    .properties-tabs {
         display: none;
     }
 }

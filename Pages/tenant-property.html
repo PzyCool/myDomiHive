@@ -32,10 +32,6 @@
 
         <!-- Tab Navigation - UPDATED WITH 4TH TAB -->
         <nav class="property-tabs">
-            <button class="tab-btn active" data-tab="timeline">
-                <i class="fas fa-road"></i>
-                <span class="tab-text">Property Journey</span>
-            </button>
             <button class="tab-btn" data-tab="updates">
                 <i class="fas fa-bullhorn"></i>
                 <span class="tab-text">Updates</span>
@@ -53,22 +49,6 @@
 
         <!-- Tab Content Container -->
         <div class="tab-content-container">
-            <!-- Timeline Tab (ORIGINAL) -->
-            <div class="tab-content active" id="timeline-content">
-                <div class="tab-header">
-                    <h2>Property Journey Timeline</h2>
-                    <p>Track your property journey from application to current tenancy</p>
-                </div>
-                <div class="timeline-wrapper">
-                    <div class="journey-timeline" id="journeyTimeline">
-                        <div class="empty-timeline">
-                            <i class="fas fa-road"></i>
-                            <h4>Loading Timeline...</h4>
-                            <p>Your property journey will appear here</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Updates Tab (ORIGINAL) -->
             <div class="tab-content" id="updates-content">
@@ -86,6 +66,10 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+
+            
 
             <!-- Lease & Documents Tab (ORIGINAL) -->
             <div class="tab-content" id="lease-content">
@@ -230,63 +214,7 @@
                             </div>
                         </div>
 
-                        <!-- Category Ratings -->
-                        <div class="category-ratings">
-                            <label class="rating-label">Category Ratings</label>
-                            <div class="category-grid">
-                                <div class="category-item">
-                                    <span class="category-name">Property Condition</span>
-                                    <div class="category-stars" data-category="propertyCondition">
-                                        <span class="star" data-rating="1">★</span>
-                                        <span class="star" data-rating="2">★</span>
-                                        <span class="star" data-rating="3">★</span>
-                                        <span class="star" data-rating="4">★</span>
-                                        <span class="star" data-rating="5">★</span>
-                                    </div>
-                                </div>
-                                <div class="category-item">
-                                    <span class="category-name">Landlord Responsiveness</span>
-                                    <div class="category-stars" data-category="landlordResponsiveness">
-                                        <span class="star" data-rating="1">★</span>
-                                        <span class="star" data-rating="2">★</span>
-                                        <span class="star" data-rating="3">★</span>
-                                        <span class="star" data-rating="4">★</span>
-                                        <span class="star" data-rating="5">★</span>
-                                    </div>
-                                </div>
-                                <div class="category-item">
-                                    <span class="category-name">Neighborhood</span>
-                                    <div class="category-stars" data-category="neighborhood">
-                                        <span class="star" data-rating="1">★</span>
-                                        <span class="star" data-rating="2">★</span>
-                                        <span class="star" data-rating="3">★</span>
-                                        <span class="star" data-rating="4">★</span>
-                                        <span class="star" data-rating="5">★</span>
-                                    </div>
-                                </div>
-                                <div class="category-item">
-                                    <span class="category-name">Value for Money</span>
-                                    <div class="category-stars" data-category="valueForMoney">
-                                        <span class="star" data-rating="1">★</span>
-                                        <span class="star" data-rating="2">★</span>
-                                        <span class="star" data-rating="3">★</span>
-                                        <span class="star" data-rating="4">★</span>
-                                        <span class="star" data-rating="5">★</span>
-                                    </div>
-                                </div>
-                                <div class="category-item">
-                                    <span class="category-name">Maintenance Quality</span>
-                                    <div class="category-stars" data-category="maintenanceQuality">
-                                        <span class="star" data-rating="1">★</span>
-                                        <span class="star" data-rating="2">★</span>
-                                        <span class="star" data-rating="3">★</span>
-                                        <span class="star" data-rating="4">★</span>
-                                        <span class="star" data-rating="5">★</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        
                         <!-- Review Details -->
                         <div class="review-details">
                             <div class="form-group">
@@ -299,7 +227,7 @@
                                 <textarea id="reviewText" class="form-textarea" placeholder="Share your detailed experience living in this property. What did you like? What could be improved?" rows="6"></textarea>
                             </div>
 
-                            <div class="pros-cons-grid">
+                            <!-- <div class="pros-cons-grid">
                                 <div class="form-group">
                                     <label for="pros">Pros</label>
                                     <textarea id="pros" class="form-textarea" placeholder="What did you love about this property?" rows="3"></textarea>
@@ -308,7 +236,7 @@
                                     <label for="cons">Cons</label>
                                     <textarea id="cons" class="form-textarea" placeholder="What could be improved?" rows="3"></textarea>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Recommendation -->
                             <div class="recommendation-section">
@@ -334,7 +262,7 @@
                                     <span class="checkbox-checkmark"></span>
                                     <span class="checkbox-text">Post anonymously (your name will not be shown)</span>
                                 </label>
-                                <p class="privacy-note">Your review will be submitted to DomiHive admin for approval before being published on the property details page.</p>
+                                <p class="privacy-note">To keep our platform safe, reviews are verified for authenticity only. We do not alter or filter genuine feedback.</p>
                             </div>
                         </div>
 
@@ -346,7 +274,7 @@
                             </button>
                             <button type="button" class="btn-primary" onclick="submitPropertyReview()">
                                 <i class="fas fa-paper-plane"></i>
-                                Submit Review for Approval
+                                Submit Review
                             </button>
                         </div>
                     </div>

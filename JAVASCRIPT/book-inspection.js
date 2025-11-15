@@ -535,7 +535,7 @@ function validateForm() {
         'inspectionDate',
         'inspectionTime', 
         'numberOfPeople',
-        'agreeTerms'
+        'agreeTerms',
     ];
     
     let isValid = true;
@@ -546,11 +546,13 @@ function validateForm() {
     // Check required fields
     requiredFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
-        if (!field.value.trim() && fieldId !== 'agreeTerms') {
+        if (!field) {
+            console.error('Field not found:', fieldId);
+            return;
+        }
+        
+        if (!field.value && !field.type === 'checkbox') {
             showFieldError(field, 'This field is required');
-            isValid = false;
-        } else if (fieldId === 'agreeTerms' && !field.checked) {
-            showFieldError(field, 'You must agree to the terms and conditions');
             isValid = false;
         }
     });
@@ -611,6 +613,7 @@ function getFormData() {
         numberOfPeople: numberOfPeople,
         attendeesText: peopleText,
         
+        
         // System Information
         agreeTerms: document.getElementById('agreeTerms').checked,
         bookingDate: new Date().toISOString(),
@@ -619,7 +622,6 @@ function getFormData() {
         source: 'inspection-booking'
     };
 }
-
 function submitInspectionBooking(formData) {
     console.log('📅 Submitting inspection booking:', formData);
     
@@ -734,6 +736,20 @@ function showSuccessModal(bookingData) {
     document.getElementById('summaryDateTime').textContent = formatDateTime(bookingData.inspectionDate, bookingData.inspectionTime);
     document.getElementById('summaryLocation').textContent = bookingData.propertyLocation;
     document.getElementById('summaryAttendees').textContent = bookingData.attendeesText;
+    
+    // Add document reminder to modal (you can add this to your modal HTML)
+    const existingReminder = document.querySelector('.document-reminder');
+    if (existingReminder) {
+        existingReminder.innerHTML = `
+            <div class="document-reminder-notice">
+                <i class="fas fa-file-alt"></i>
+                <div>
+                    <strong>Don't Forget Your Documents!</strong>
+                    <p>Remember to bring your Government ID and Proof of Income for verification during inspection.</p>
+                </div>
+            </div>
+        `;
+    }
     
     // Show modal
     const modal = document.getElementById('successModal');

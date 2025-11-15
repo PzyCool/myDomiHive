@@ -1,4 +1,4 @@
-// applications-content.js - Rewritten My Applications Logic
+// applications-content.js - Rewritten My Applications Logic with Tab Functionality
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📋 Initializing My Applications Page...');
     
@@ -17,16 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeApplicationsPage();
     }
 });
-
-
-
-
-
-
-
-
-
-
 
 // Global variables
 let allProperties = [];
@@ -134,6 +124,7 @@ function initializeApplicationsPage() {
     updateAllApplicationStats();
     renderAllPropertiesGrids();
     initializeEventListeners();
+    initializeTabs(); // Initialize tab functionality
     
     console.log('✅ My Applications page loaded successfully');
 }
@@ -335,6 +326,89 @@ function loadApplicationsData() {
     console.log('📄 Applications data loaded:', allApplications.length);
 }
 
+// ===== TAB FUNCTIONALITY =====
+function initializeTabs() {
+    console.log('🎯 Initializing tab functionality...');
+    
+    // Add click event listeners to tabs
+    document.querySelectorAll('.tab-btn').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+            switchTab(targetTab);
+        });
+    });
+    
+    // Update tab counts
+    updateTabCounts();
+    
+    // Set initial active tab from URL hash or default to 'rent'
+    const initialTab = window.location.hash.replace('#', '') || 'rent';
+    if (PROPERTY_TYPES[initialTab]) {
+        switchTab(initialTab);
+    } else {
+        switchTab('rent');
+    }
+    
+    console.log('✅ Tabs initialized successfully');
+}
+
+function switchTab(tabName) {
+    console.log('🔄 Switching to tab:', tabName);
+    
+    if (!PROPERTY_TYPES[tabName]) {
+        console.error('❌ Invalid tab name:', tabName);
+        return;
+    }
+    
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    const activeTab = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
+    
+    // Update sections
+    document.querySelectorAll('.properties-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    const activeSection = document.getElementById(`${tabName}Section`);
+    if (activeSection) {
+        activeSection.classList.add('active');
+    }
+    
+    // Update URL hash for deep linking
+    window.location.hash = tabName;
+    
+    // Trigger a slight delay to ensure DOM is updated before any potential scrolling
+    setTimeout(() => {
+        // Scroll to top of the section for better UX
+        activeSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+    
+    console.log(`✅ Switched to ${PROPERTY_TYPES[tabName].name} tab`);
+}
+
+function updateTabCounts() {
+    Object.keys(PROPERTY_TYPES).forEach(type => {
+        const typeProperties = allProperties.filter(prop => prop.propertyType === type);
+        const count = typeProperties.length;
+        const countElement = document.getElementById(`${type}TabCount`);
+        
+        if (countElement) {
+            countElement.textContent = count;
+            
+            // Add animation for count updates
+            countElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                countElement.style.transform = 'scale(1)';
+            }, 300);
+        }
+    });
+    console.log('📊 Tab counts updated');
+}
+
 // ===== STATISTICS MANAGEMENT =====
 function updateAllApplicationStats() {
     console.log('📊 Updating application statistics...');
@@ -360,6 +434,9 @@ function updateAllApplicationStats() {
     document.getElementById('totalPendingCount').textContent = totalPending;
     document.getElementById('totalActiveCount').textContent = totalActive;
     document.getElementById('totalApprovedCount').textContent = totalApproved;
+    
+    // Update tab counts as well
+    updateTabCounts();
     
     console.log('📈 Statistics updated successfully');
 }
@@ -792,13 +869,13 @@ function submitPropertyRejection() {
     
     // Update stats and UI
     updateAllApplicationStats();
+    renderPropertiesGridByType(currentPropertyType);
     
     console.log('❌ Property rejected:', application.id);
     
     // Close modal after delay and refresh
     setTimeout(() => {
         closeDecisionModal();
-        renderPropertiesGridByType(currentPropertyType);
     }, 2000);
 }
 
@@ -1044,6 +1121,14 @@ function initializeEventListeners() {
         }
     });
     
+    // Hash change for tab deep linking
+    window.addEventListener('hashchange', function() {
+        const tabName = window.location.hash.replace('#', '');
+        if (PROPERTY_TYPES[tabName]) {
+            switchTab(tabName);
+        }
+    });
+    
     console.log('🎯 Event listeners initialized');
 }
 
@@ -1064,6 +1149,10 @@ window.redirectToApplicationProcess = redirectToApplicationProcess;
 window.viewApprovedProperty = viewApprovedProperty;
 window.closeDecisionModalAndRefresh = closeDecisionModalAndRefresh;
 
+// Tab functionality exposed globally
+window.switchTab = switchTab;
+window.initializeTabs = initializeTabs;
+
 // Auto-initialize when included in SPA
 if (document.querySelector('.applications-content')) {
     setTimeout(initializeApplicationsPage, 100);
@@ -1071,15 +1160,16 @@ if (document.querySelector('.applications-content')) {
 
 console.log('🎉 My Applications JavaScript Loaded Successfully!');
 
-
-
+// Debug logging for containers
 console.log('Rent container:', document.getElementById('rentPropertiesGrid'));
 console.log('Shortlet container:', document.getElementById('shortletPropertiesGrid')); 
 console.log('Commercial container:', document.getElementById('commercialPropertiesGrid'));
 console.log('Buy container:', document.getElementById('buyPropertiesGrid'));
 
-
+// Debug logging for properties
 const props = JSON.parse(localStorage.getItem('domihive_my_applications_properties') || '[]');
 console.log('Total properties:', props.length);
 console.log('Rent properties:', props.filter(p => p.propertyType === 'rent').length);
 console.log('Shortlet properties:', props.filter(p => p.propertyType === 'shortlet').length);
+console.log('Commercial properties:', props.filter(p => p.propertyType === 'commercial').length);
+console.log('Buy properties:', props.filter(p => p.propertyType === 'buy').length);

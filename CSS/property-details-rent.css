@@ -1,4 +1,4 @@
-/* Property Details Page - Updated with Reviews & Rating System */
+/* Property Details Page - Updated with Tabs & Sticky Navigation */
 
 /* ===== CSS VARIABLES ===== */
 :root {
@@ -39,8 +39,8 @@
 }
 
 .container {
-    
-    
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 0 1.5rem;
 }
 
@@ -346,9 +346,199 @@
     text-align: center;
 }
 
+/* ===== QUICK FACTS SECTION - ADD TO property-details-rent.css ===== */
+.quick-facts {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--light-gray);
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.quick-facts h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-facts h3 i {
+    color: var(--accent-color);
+}
+
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.fact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    background: var(--white);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--gray-light);
+}
+
+.fact-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+}
+
+.fact-item i {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+.fact-item span {
+    font-weight: 500;
+    color: var(--dark-gray);
+    font-size: 0.95rem;
+}
+
+/* Responsive design for quick facts */
+@media (max-width: 768px) {
+    .facts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .fact-item {
+        padding: 0.7rem;
+    }
+    
+    .fact-item span {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .facts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-facts {
+        padding: 1rem;
+    }
+}
+
+/* ===== STICKY TAB NAVIGATION ===== */
+.property-tabs-nav {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(14, 31, 66, 0.05);
+    position: sticky;
+    top: 100px;
+    z-index: 9999; 
+    transition: all 0.3s ease;
+}
+
+
+
+.property-tabs-nav.sticky {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 0 0 16px 16px;
+}
+
+
+
+.tabs-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 0 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tabs-container::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1.2rem 1.5rem;
+    color: var(--gray);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    position: relative;
+    font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+    background: rgba(14, 31, 66, 0.03);
+}
+
+.tab-btn.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 3px 3px 0 0;
+}
+
+.tab-btn i {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* ===== TAB CONTENT WRAPPER ===== */
+.tab-content-wrapper {
+    position: relative;
+    top: 10px;
+    transition: opacity 0.2s linear, transform 0.2s linear;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-section {
+    margin-bottom: 2rem;
+}
+
+
+
 /* Property Description Section */
 .property-description-section {
-    margin-top: 2rem;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(14, 31, 66, 0.05);
 }
 
 .property-description-section h2 {
@@ -371,7 +561,7 @@
     font-size: 1.1rem;
 }
 
-/* ===== NEW: TENANT REVIEWS & RATING SECTION ===== */
+/* ===== TENANT REVIEWS & RATING SECTION ===== */
 .reviews-section {
     background: var(--white);
     border-radius: 16px;
@@ -1067,91 +1257,6 @@
     box-shadow: 0 4px 15px rgba(159, 117, 57, 0.3);
 }
 
-/* ===== QUICK FACTS SECTION - ADD TO property-details-rent.css ===== */
-.quick-facts {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: var(--light-gray);
-    border-radius: 12px;
-    border-left: 4px solid var(--accent-color);
-}
-
-.quick-facts h3 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.quick-facts h3 i {
-    color: var(--accent-color);
-}
-
-.facts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.fact-item {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.8rem;
-    background: var(--white);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    border: 1px solid var(--gray-light);
-}
-
-.fact-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent-color);
-}
-
-.fact-item i {
-    color: var(--accent-color);
-    font-size: 1.2rem;
-    width: 24px;
-    text-align: center;
-}
-
-.fact-item span {
-    font-weight: 500;
-    color: var(--dark-gray);
-    font-size: 0.95rem;
-}
-
-/* Responsive design for quick facts */
-@media (max-width: 768px) {
-    .facts-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.8rem;
-    }
-    
-    .fact-item {
-        padding: 0.7rem;
-    }
-    
-    .fact-item span {
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .facts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .quick-facts {
-        padding: 1rem;
-    }
-}
-
 /* Nearby Amenities */
 .nearby-amenities {
     margin-top: 2rem;
@@ -1269,80 +1374,6 @@
 .spec-value {
     color: var(--dark-gray);
     font-weight: 500;
-}
-
-/* Floating Call Button */
-.floating-call-btn {
-    position: fixed;
-    right: 30px; /* CHANGED from left: 30px */
-    bottom: 30px;
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
-    color: var(--white);
-    padding: 1rem 1.2rem;
-    border-radius: 50px;
-    box-shadow: 0 8px 30px rgba(159, 117, 57, 0.3);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    z-index: 9999;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    font-family: inherit;
-    font-weight: 600;
-    opacity: 0;
-    transform: translateX(20px); /* CHANGED from -20px to 20px */
-    visibility: hidden;
-}
-
-.floating-call-btn.visible {
-    opacity: 1;
-    transform: translateX(0);
-    visibility: visible;
-}
-
-/* Call Details Tooltip */
-.call-details {
-    position: absolute;
-    right: 100%; /* CHANGED from left: 100% */
-    top: 50%;
-    transform: translateY(-50%) translateX(-10px); /* CHANGED from 10px to -10px */
-    background: var(--white);
-    color: var(--primary-color);
-    padding: 1rem 1.2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--gray-light);
-    min-width: 200px;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    pointer-events: none;
-}
-
-.floating-call-btn:hover .call-details {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(-50%) translateX(-20px); /* CHANGED from 20px to -20px */
-}
-
-.call-details::before {
-    content: '';
-    position: absolute;
-    left: 100%; /* CHANGED from right: 100% */
-    top: 50%;
-    transform: translateY(-50%);
-    border: 8px solid transparent;
-    border-left-color: var(--white); /* CHANGED from border-right-color */
-}
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-    .floating-call-btn {
-        right: 20px; /* CHANGED from left: 20px */
-        bottom: 20px;
-        padding: 0.8rem 1rem;
-    }
 }
 
 /* Terms Section */
@@ -1522,6 +1553,71 @@
     box-shadow: 0 8px 25px rgba(159, 117, 57, 0.3);
 }
 
+/* Floating Call Button */
+.floating-call-btn {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+    color: var(--white);
+    padding: 1rem 1.2rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(159, 117, 57, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 9999;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    font-family: inherit;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateX(20px);
+    visibility: hidden;
+}
+
+.floating-call-btn.visible {
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+}
+
+/* Call Details Tooltip */
+.call-details {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    background: var(--white);
+    color: var(--primary-color);
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--gray-light);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.floating-call-btn:hover .call-details {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(-20px);
+}
+
+.call-details::before {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 8px solid transparent;
+    border-left-color: var(--white);
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
     .main-carousel {
@@ -1615,6 +1711,25 @@
     .review-filters {
         justify-content: center;
     }
+    
+    /* Tab Navigation Mobile */
+    .property-tabs-nav {
+        top: 70px;
+    }
+    
+    .tabs-container {
+        padding: 0 0.5rem;
+    }
+    
+    .tab-btn {
+        padding: 1rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .tab-btn i {
+        font-size: 0.9rem;
+        width: 18px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1662,6 +1777,35 @@
     
     .reviewer-avatar {
         align-self: center;
+    }
+    
+    /* Tab Navigation Mobile Small */
+    .property-tabs-nav {
+        top: 60px;
+    }
+    
+    .tab-btn {
+        padding: 0.8rem 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    .tab-btn span {
+        display: none;
+    }
+    
+    .tab-btn i {
+        font-size: 1.1rem;
+        width: 24px;
+    }
+    
+    .tab-btn.active span {
+        display: inline;
+    }
+    
+    .floating-call-btn {
+        right: 20px;
+        bottom: 20px;
+        padding: 0.8rem 1rem;
     }
 }
 
