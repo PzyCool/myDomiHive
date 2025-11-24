@@ -75,6 +75,9 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
+    position: sticky;
+    top: 100px;
+    z-index: 10;
 }
 
 .category-filters {

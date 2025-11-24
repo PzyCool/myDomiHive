@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial Property - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/tenant-property-commercial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Commercial Property Content -->
+    <div class="tenant-property-content">
+        <!-- Page Header with Back Button -->
+        <div class="property-page-header">
+            <button class="back-button" onclick="goBackToProperties()">
+                <i class="fas fa-arrow-left"></i>
+                Back to My Properties
+            </button>
+            <div class="header-content">
+                <h1 id="propertyPageTitle">
+                    <i class="fas fa-building"></i>
+                    Commercial Property Dashboard
+                </h1>
+                <p id="propertyPageSubtitle">Managing your commercial rental space</p>
+            </div>
+        </div>
+
+        <!-- Property Overview Card -->
+        <div class="property-overview-card" id="propertyOverview">
+            <!-- Property details loaded dynamically -->
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="property-tabs">
+            <button class="tab-btn active" data-tab="updates">
+                <i class="fas fa-bullhorn"></i>
+                <span class="tab-text">Updates</span>
+            </button>
+            <button class="tab-btn" data-tab="lease">
+                <i class="fas fa-file-contract"></i>
+                <span class="tab-text">Lease Management</span>
+            </button>
+            <button class="tab-btn" data-tab="rate">
+                <i class="fas fa-star"></i>
+                <span class="tab-text">Rate Property</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+
+            <!-- Updates Tab -->
+            <div class="tab-content active" id="updates-content">
+                <div class="tab-header">
+                    <h2>Property Updates & Announcements</h2>
+                    <p>Important updates and announcements about your commercial property</p>
+                </div>
+                <div class="updates-wrapper">
+                    <div class="updates-list">
+                        <div class="update-item">
+                            <div class="update-date">February 25, 2024</div>
+                            <div class="update-title">Building Maintenance Schedule 🛠️</div>
+                            <div class="update-content">Scheduled building maintenance will occur on March 1st from 8 AM - 5 PM. There will be temporary power shutdown during this period. Please plan your business operations accordingly.</div>
+                        </div>
+                        <div class="update-item">
+                            <div class="update-date">February 20, 2024</div>
+                            <div class="update-title">Rent Payment Reminder 💰</div>
+                            <div class="update-content">Friendly reminder: Your next rent payment of ₦2,500,000 is due on March 1st, 2024. You can make payments through your DomiHive portal or via bank transfer.</div>
+                        </div>
+                        <div class="update-item">
+                            <div class="update-date">February 15, 2024</div>
+                            <div class="update-title">Security System Upgrade 🔒</div>
+                            <div class="update-content">We are upgrading the building's security system this weekend. Access cards will need to be reactivated on Monday. Please visit the management office.</div>
+                        </div>
+                        <div class="update-item">
+                            <div class="update-date">February 10, 2024</div>
+                            <div class="update-title">Parking Space Allocation 🅿️</div>
+                            <div class="update-content">New parking space allocations have been assigned. Please check your email for your designated parking spots and access instructions.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lease Management Tab -->
+            <div class="tab-content" id="lease-content">
+                <div class="tab-header">
+                    <h2>Commercial Lease Management</h2>
+                    <p>Manage your commercial lease agreements and important documents</p>
+                </div>
+                
+                <!-- Lease Overview -->
+                <div class="lease-overview-section">
+                    <h3>Lease Overview</h3>
+                    <div class="lease-details-grid">
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Property Type</div>
+                            <div class="lease-detail-value">Office Space</div>
+                            <div class="lease-detail-note">Commercial space type</div>
+                        </div>
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Annual Rent</div>
+                            <div class="lease-detail-value">₦12,000,000</div>
+                            <div class="lease-detail-note">Per year</div>
+                        </div>
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Lease Duration</div>
+                            <div class="lease-detail-value">3 years</div>
+                            <div class="lease-detail-note">Remaining: 728 days</div>
+                        </div>
+                        <div class="lease-detail-card">
+                            <div class="lease-detail-label">Next Payment</div>
+                            <div class="lease-detail-value">March 1, 2024</div>
+                            <div class="lease-detail-note">₦1,000,000 due</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="openMaintenanceModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Request Maintenance</span>
+                                <span class="action-description">Report issues or schedule repairs</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="showPaymentSection()">
+                            <div class="action-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Make Payment</span>
+                                <span class="action-description">Pay rent or other fees</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="openMessageModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Message About Property</span>
+                                <span class="action-description">Contact DomiHive support</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lease Documents -->
+                <div class="documents-section">
+                    <h3>Lease Documents</h3>
+                    <div class="documents-grid">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Commercial Tenant Agreement</h4>
+                                <p>Professional commercial rental agreement with DomiHive</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewCommercialAgreement()">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadCommercialAgreement()">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lease Actions -->
+                <div class="lease-actions-section">
+                    <h3>Lease Management</h3>
+                    <div class="lease-actions-grid">
+                        <button class="btn-success" onclick="openRenewLeaseModal()">
+                            <i class="fas fa-sync-alt"></i>
+                            Renew Lease
+                        </button>
+                        <button class="btn-danger" onclick="openEndLeaseModal()">
+                            <i class="fas fa-times-circle"></i>
+                            End Lease
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rate Property Tab -->
+            <div class="tab-content" id="rate-content">
+                <div class="tab-header">
+                    <h2>Rate & Review Commercial Property</h2>
+                    <p>Share your experience to help future commercial tenants make informed decisions</p>
+                </div>
+                
+                <!-- Review History -->
+                <div class="review-history-section" style="display: none;">
+                    <h3>Your Previous Reviews</h3>
+                    <div class="review-history-list">
+                        <!-- Previous reviews will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Review Form -->
+                <div class="review-form-section">
+                    <div class="review-form-card">
+                        <h3>Write Your Review</h3>
+                        <p class="form-description">Your feedback helps improve our services and assists other commercial tenants</p>
+                        
+                        <!-- Overall Rating -->
+                        <div class="rating-section">
+                            <label class="rating-label">Overall Rating *</label>
+                            <div class="star-rating" id="overallRating">
+                                <div class="stars-container">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <div class="rating-text">Select your rating</div>
+                            </div>
+                        </div>
+
+                        <!-- Review Details -->
+                        <div class="review-details">
+                            <div class="form-group">
+                                <label for="reviewTitle">Review Title *</label>
+                                <input type="text" id="reviewTitle" class="form-input" placeholder="Summarize your experience" maxlength="100">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reviewText">Your Review *</label>
+                                <textarea id="reviewText" class="form-textarea" placeholder="Share your detailed experience about this commercial space. How is the location, accessibility, facilities, and overall suitability for your business?" rows="6"></textarea>
+                            </div>
+
+                            <!-- Recommendation -->
+                            <div class="recommendation-section">
+                                <label class="recommendation-label">Would you recommend this commercial space to other businesses? *</label>
+                                <div class="recommendation-options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="yes" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">Yes, I would recommend</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="no" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">No, I would not recommend</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Privacy Options -->
+                            <div class="privacy-section">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="anonymousPost">
+                                    <span class="checkbox-checkmark"></span>
+                                    <span class="checkbox-text">Post anonymously (your business name will not be shown)</span>
+                                </label>
+                                <p class="privacy-note">To keep our platform safe, reviews are verified for authenticity only. We do not alter or filter genuine feedback.</p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="clearReviewForm()">
+                                <i class="fas fa-eraser"></i>
+                                Clear Form
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitPropertyReview()">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods Section (Hidden by default) -->
+        <section class="payment-methods-section" id="paymentSection" style="display: none;">
+            <div class="payment-container">
+                <h2>Select Payment Method</h2>
+                <p>Choose your preferred payment method to complete your payment</p>
+
+                <form id="paymentForm" class="payment-form">
+                    <input type="hidden" id="paymentPropertyId" name="paymentPropertyId">
+                    <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="1000000">
+
+                    <!-- Payment Method Selection -->
+                    <div class="payment-methods">
+                        <div class="payment-method-card" data-method="card">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Credit/Debit Card</h4>
+                                    <p>Pay securely with your card</p>
+                                </div>
+                                <div class="method-check">
+                                    <div class="check-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" data-method="bank">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Bank Transfer</h4>
+                                    <p>Transfer directly from your bank</p>
+                                </div>
+                                <div class="method-check">
+                                    <div class="check-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" data-method="paystack">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Paystack</h4>
+                                    <p>Quick and secure payments</p>
+                                </div>
+                                <div class="method-check">
+                                    <div class="check-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Payment Form -->
+                    <div class="payment-details" id="cardDetails">
+                        <div class="form-section">
+                            <h3>Card Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="cardNumber" class="required">Card Number</label>
+                                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                    <div class="card-icons">
+                                        <i class="fab fa-cc-visa"></i>
+                                        <i class="fab fa-cc-mastercard"></i>
+                                        <i class="fab fa-cc-amex"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardHolder" class="required">Card Holder Name</label>
+                                    <input type="text" id="cardHolder" name="cardHolder" placeholder="John Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiryDate" class="required">Expiry Date</label>
+                                    <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv" class="required">CVV</label>
+                                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Details -->
+                    <div class="payment-details" id="bankDetails">
+                        <div class="form-section">
+                            <h3>Bank Transfer Instructions</h3>
+                            <div class="bank-instructions">
+                                <div class="instruction-item">
+                                    <strong>Bank Name:</strong>
+                                    <span>DomiHive Trust Bank</span>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Account Number:</strong>
+                                    <span id="bankAccountNumber">8325001746</span>
+                                    <button type="button" class="copy-btn" onclick="copyToClipboard('bankAccountNumber')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Account Name:</strong>
+                                    <span>DomiHive Escrow Services</span>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Reference:</strong>
+                                    <span id="paymentReference">DOMI-COMM-001</span>
+                                    <button type="button" class="copy-btn" onclick="copyToClipboard('paymentReference')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Amount:</strong>
+                                    <span id="bankAmount">₦1,000,000</span>
+                                </div>
+                            </div>
+                            <div class="upload-receipt">
+                                <label for="bankReceipt" class="required">Upload Transfer Receipt</label>
+                                <input type="file" id="bankReceipt" name="bankReceipt" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-note">Upload proof of payment after transfer</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Gateway Instructions -->
+                    <div class="payment-details" id="gatewayDetails">
+                        <div class="form-section">
+                            <h3>Gateway Payment</h3>
+                            <div class="gateway-instructions">
+                                <p>You will be redirected to a secure payment gateway to complete your transaction.</p>
+                                <div class="gateway-features">
+                                    <div class="feature">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Secure encrypted payment</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>Multiple payment options</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Instant confirmation</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Breakdown -->
+                    <div class="payment-breakdown">
+                        <h3>Payment Breakdown</h3>
+                        <div class="breakdown-list">
+                            <div class="breakdown-item">
+                                <span>Monthly Rent</span>
+                                <span id="breakdownRent">₦1,000,000</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span>Service Charge</span>
+                                <span id="breakdownService">₦0</span>
+                            </div>
+                            <div class="breakdown-item total">
+                                <span>Total Amount</span>
+                                <span id="breakdownTotal">₦1,000,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="form-section">
+                        <div class="terms-agreement">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreeEscrowTerms" name="agreeEscrowTerms" required>
+                                <span class="checkmark"></span>
+                                I understand and agree to the <a href="#" class="terms-link">Escrow Terms</a> and DomiHive's payment protection policy
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
+                                <span class="checkmark"></span>
+                                I understand that my payment will be held securely until the due date
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreePrivacyPolicy" name="agreePrivacyPolicy" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#" class="terms-link">Privacy Policy</a> and consent to the processing of my payment information
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="hidePaymentSection()">
+                            <i class="fas fa-times"></i>
+                            Cancel Payment
+                        </button>
+                        <button type="submit" class="btn-primary" id="submitPaymentBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Maintenance Request Modal -->
+    <div class="modal" id="maintenanceModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Request Maintenance</h3>
+                <button class="close-modal" onclick="closeMaintenanceModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="form-group">
+                            <label for="issueType">What's the issue?</label>
+                            <select id="issueType" class="form-input">
+                                <option value="">Select an issue type</option>
+                                <option value="ac">AC not cooling</option>
+                                <option value="water_heater">Water heater not working</option>
+                                <option value="lights">Light issues</option>
+                                <option value="locks">Lock problem</option>
+                                <option value="plumbing">Plumbing issue</option>
+                                <option value="electricity">Electricity problem</option>
+                                <option value="appliances">Appliance not working</option>
+                                <option value="other">Other issue</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issueDescription">Describe the issue</label>
+                            <textarea id="issueDescription" class="form-textarea" placeholder="Please describe the issue in detail..." rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issuePhoto">Upload photo (optional)</label>
+                            <input type="file" id="issuePhoto" class="form-input" accept="image/*">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeMaintenanceModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitMaintenanceRequest()">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Request
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Call Us Direct Instead</h4>
+                            <p>For immediate assistance</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Click to call our support team directly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Message About Property</h3>
+                <button class="close-modal" onclick="closeMessageModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-interface">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="message-content">
+                                <p>Hello! How can I help you with your commercial property?</p>
+                            </div>
+                            <div class="message-time">10:30 AM</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <textarea id="messageInput" placeholder="Type your message..." rows="3"></textarea>
+                        <button class="btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Renew Lease Modal -->
+    <div class="modal" id="renewLeaseModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Renew Your Commercial Lease</h3>
+                <button class="close-modal" onclick="closeRenewLeaseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="renewal-details">
+                            <h4>Lease Renewal Details</h4>
+                            <div class="detail-item">
+                                <span>Current Annual Rent:</span>
+                                <span>₦12,000,000</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>Proposed New Rent:</span>
+                                <span>₦12,500,000</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>Renewal Duration:</span>
+                                <span>3 Years</span>
+                            </div>
+                            <div class="detail-item total">
+                                <span>First Payment Due:</span>
+                                <span>₦1,041,667</span>
+                            </div>
+                        </div>
+
+                        <div class="form-note">
+                            <p><i class="fas fa-info-circle"></i> Your lease renewal requires payment of the first month's rent to confirm.</p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeRenewLeaseModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="proceedToRenewalPayment()">
+                                <i class="fas fa-credit-card"></i>
+                                Pay Now to Renew
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Call Us Direct Instead</h4>
+                            <p>For lease renewal inquiries</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Click to call our leasing team directly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Lease Modal -->
+    <div class="modal" id="endLeaseModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>End Your Commercial Lease</h3>
+                <button class="close-modal" onclick="closeEndLeaseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="termination-content">
+                    <div class="policy-section">
+                        <h4>Commercial Lease Termination Policy</h4>
+                        <p>If you need to end your commercial lease early, please review our policies below. Commercial leases have different terms than residential agreements.</p>
+                    </div>
+
+                    <div class="policy-section">
+                        <h4>Early Termination Fees</h4>
+                        <p>Early termination of commercial leases may incur fees equivalent to 2-3 months' rent, depending on the remaining lease term and circumstances.</p>
+                    </div>
+
+                    <div class="confirmation-section">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="confirmTermination" required>
+                            <span class="checkbox-checkmark"></span>
+                            <span class="checkbox-text">I confirm I want to terminate my commercial lease and understand the termination policies and potential fees</span>
+                        </label>
+
+                        <div class="waiting-options">
+                            <label class="radio-option">
+                                <input type="radio" name="waitingOption" value="can-wait" required>
+                                <span class="radio-checkmark"></span>
+                                <span class="radio-text">I can wait till next working day for processing</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="waitingOption" value="cannot-wait" required>
+                                <span class="radio-checkmark"></span>
+                                <span class="radio-text">This is urgent - I need immediate assistance</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="termination-note">
+                        <p><strong>Note:</strong> Our commercial leasing team will contact you within 24 hours to discuss the termination process. Please ensure all business operations are properly concluded before vacating the premises.</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeEndLeaseModal()">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn-danger" onclick="submitTerminationRequest()">
+                            <i class="fas fa-times-circle"></i>
+                            Submit Termination Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Viewer Modal -->
+    <div class="modal" id="documentViewerModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container document-viewer">
+            <div class="modal-header">
+                <h3 id="documentViewerTitle">Document Viewer</h3>
+                <button class="close-modal" onclick="closeDocumentViewer()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="document-viewer-content" id="documentViewerContent">
+                    <!-- Document content will be loaded here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeDocumentViewer()">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                    <button class="btn-primary" onclick="downloadCurrentDocument()">
+                        <i class="fas fa-download"></i>
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/tenant-property-commercial.js"></script>
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owned Property - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/tenant-property-buy.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Buy Property Content -->
+    <div class="tenant-property-content">
+        <!-- Page Header with Back Button -->
+        <div class="property-page-header">
+            <button class="back-button" onclick="goBackToProperties()">
+                <i class="fas fa-arrow-left"></i>
+                Back to My Properties
+            </button>
+            <div class="header-content">
+                <h1 id="propertyPageTitle">
+                    <i class="fas fa-key"></i>
+                    Owned Property Dashboard
+                </h1>
+                <p id="propertyPageSubtitle">Managing your property investment</p>
+            </div>
+        </div>
+
+        <!-- Property Overview Card -->
+        <div class="property-overview-card" id="propertyOverview">
+            <!-- Property details loaded dynamically -->
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="property-tabs">
+            <button class="tab-btn active" data-tab="portfolio">
+                <i class="fas fa-chart-line"></i>
+                <span class="tab-text">Property Portfolio</span>
+            </button>
+            <button class="tab-btn" data-tab="documents">
+                <i class="fas fa-file-contract"></i>
+                <span class="tab-text">Ownership Documents</span>
+            </button>
+            <button class="tab-btn" data-tab="updates">
+                <i class="fas fa-bullhorn"></i>
+                <span class="tab-text">Updates & Reviews</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+
+            <!-- Property Portfolio Tab -->
+            <div class="tab-content active" id="portfolio-content">
+                <div class="tab-header">
+                    <h2>Property Portfolio & Financial Overview</h2>
+                    <p>Manage your property investment and financial tracking</p>
+                </div>
+                
+                <!-- Property Details -->
+                <div class="portfolio-section">
+                    <h3>Property Details</h3>
+                    <div class="portfolio-details-grid">
+                        <div class="portfolio-detail-card">
+                            <div class="portfolio-detail-label">Property Type</div>
+                            <div class="portfolio-detail-value">Residential Duplex</div>
+                            <div class="portfolio-detail-note">4 Bedrooms, 5 Bathrooms</div>
+                        </div>
+                        <div class="portfolio-detail-card">
+                            <div class="portfolio-detail-label">Square Footage</div>
+                            <div class="portfolio-detail-value">3,200 sq ft</div>
+                            <div class="portfolio-detail-note">Land: 600 sq meters</div>
+                        </div>
+                        <div class="portfolio-detail-card">
+                            <div class="portfolio-detail-label">Purchase Price</div>
+                            <div class="portfolio-detail-value">₦85,000,000</div>
+                            <div class="portfolio-detail-note">Purchased: Jan 2024</div>
+                        </div>
+                        <div class="portfolio-detail-card">
+                            <div class="portfolio-detail-label">Current Value</div>
+                            <div class="portfolio-detail-value">₦92,000,000</div>
+                            <div class="portfolio-detail-note">+8.2% appreciation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Overview -->
+                <div class="portfolio-section">
+                    <h3>Financial Overview</h3>
+                    <div class="financial-grid">
+                        <div class="financial-card">
+                            <div class="financial-icon">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <div class="financial-content">
+                                <h4>Land Use Charge</h4>
+                                <div class="financial-amount">₦120,000/year</div>
+                                <div class="financial-status">Next due: Dec 2024</div>
+                            </div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="financial-content">
+                                <h4>HOA Dues</h4>
+                                <div class="financial-amount">₦60,000/year</div>
+                                <div class="financial-status">Paid annually</div>
+                            </div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="financial-content">
+                                <h4>Value Appreciation</h4>
+                                <div class="financial-amount">+₦7,000,000</div>
+                                <div class="financial-status">Since purchase</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Insights -->
+                <div class="portfolio-section">
+                    <h3>Market Analysis & Insights</h3>
+                    <div class="market-insights">
+                        <div class="insight-card">
+                            <h4>Neighborhood Trends</h4>
+                            <p>Property values in your area have increased by 12% over the past year. High demand for gated community properties.</p>
+                            <div class="insight-metric">
+                                <span>Market Demand:</span>
+                                <span class="metric-high">High</span>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Rental Potential</h4>
+                            <p>Similar properties in your area rent for ₦1.2M - ₦1.5M monthly. High occupancy rates observed.</p>
+                            <div class="insight-metric">
+                                <span>Rental Yield:</span>
+                                <span class="metric-medium">6.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h3>Property Management Services</h3>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="openAssignManagementModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Assign Management</span>
+                                <span class="action-description">Let DomiHive professionally manage your property</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="openListPropertyModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">List Property</span>
+                                <span class="action-description">Sell or rent your property through DomiHive</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="openMaintenanceModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Request Maintenance</span>
+                                <span class="action-description">Get professional quotes for repairs & services</span>
+                            </div>
+                        </button>
+
+                        <button class="quick-action-btn" onclick="openMessageModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Message Support</span>
+                                <span class="action-description">Chat with DomiHive property specialists</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ownership Documents Tab -->
+            <div class="tab-content" id="documents-content">
+                <div class="tab-header">
+                    <h2>Ownership Documents</h2>
+                    <p>Secure repository for all your property ownership documents</p>
+                </div>
+                
+                <!-- Documents Grid -->
+                <div class="documents-section">
+                    <div class="documents-grid">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-scroll"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Title Deed</h4>
+                                <p>Official Certificate of Occupancy and land title</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewDocument('Title Deed')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadDocument('Title Deed')">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Sale Agreement</h4>
+                                <p>Purchase contract and closing documents</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewDocument('Sale Agreement')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadDocument('Sale Agreement')">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-ruler-combined"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Survey Plan</h4>
+                                <p>Official survey and boundary documents</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewDocument('Survey Plan')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadDocument('Survey Plan')">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Warranties</h4>
+                                <p>Appliance and construction warranties</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewDocument('Warranties')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadDocument('Warranties')">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Payment Receipts</h4>
+                                <p>All purchase payment records and receipts</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewDocument('Payment Receipts')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadDocument('Payment Receipts')">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-blueprint"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Floor Plans</h4>
+                                <p>Architectural drawings and floor plans</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewDocument('Floor Plans')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadDocument('Floor Plans')">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updates & Reviews Tab -->
+            <div class="tab-content" id="updates-content">
+                <div class="tab-header">
+                    <h2>Updates & Property Reviews</h2>
+                    <p>Stay updated and share your experience</p>
+                </div>
+
+                <!-- Updates Section -->
+                <div class="updates-section">
+                    <h3>Property Updates & Announcements</h3>
+                    <div class="updates-wrapper">
+                        <div class="updates-list">
+                            <div class="update-item">
+                                <div class="update-date">March 1, 2024</div>
+                                <div class="update-title">Annual Community Meeting 🏘️</div>
+                                <div class="update-content">The annual homeowners association meeting is scheduled for March 15th. Important agenda includes security upgrades and community development projects.</div>
+                            </div>
+                            <div class="update-item">
+                                <div class="update-date">February 25, 2024</div>
+                                <div class="update-title">Property Tax Assessment 📊</div>
+                                <div class="update-content">New property tax assessments have been released. Your property's assessed value has increased by 8%. Contact us if you have questions about your tax obligations.</div>
+                            </div>
+                            <div class="update-item">
+                                <div class="update-date">February 20, 2024</div>
+                                <div class="update-title">Security System Upgrade 🔒</div>
+                                <div class="update-content">The community security system is being upgraded with new cameras and access control. Temporary access changes will be communicated via email.</div>
+                            </div>
+                            <div class="update-item">
+                                <div class="update-date">February 15, 2024</div>
+                                <div class="update-title">Market Value Report 📈</div>
+                                <div class="update-content">Latest market analysis shows continued growth in property values in your area. Your property has appreciated significantly since purchase.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rate Property Section -->
+                <div class="review-form-section">
+                    <div class="review-form-card">
+                        <h3>Rate Your Property & DomiHive Experience</h3>
+                        <p class="form-description">Share your experience as a property owner and with DomiHive services</p>
+                        
+                        <!-- Overall Rating -->
+                        <div class="rating-section">
+                            <label class="rating-label">Overall Rating *</label>
+                            <div class="star-rating" id="overallRating">
+                                <div class="stars-container">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <div class="rating-text">Select your rating</div>
+                            </div>
+                        </div>
+
+                        <!-- Review Details -->
+                        <div class="review-details">
+                            <div class="form-group">
+                                <label for="reviewTitle">Review Title *</label>
+                                <input type="text" id="reviewTitle" class="form-input" placeholder="Summarize your ownership experience" maxlength="100">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reviewText">Your Review *</label>
+                                <textarea id="reviewText" class="form-textarea" placeholder="Share your experience as a property owner - property quality, DomiHive services, investment satisfaction, etc." rows="6"></textarea>
+                            </div>
+
+                            <!-- Recommendation -->
+                            <div class="recommendation-section">
+                                <label class="recommendation-label">Would you recommend DomiHive to other property investors? *</label>
+                                <div class="recommendation-options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="yes" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">Yes, I would recommend</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="no" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">No, I would not recommend</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Privacy Options -->
+                            <div class="privacy-section">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="anonymousPost">
+                                    <span class="checkbox-checkmark"></span>
+                                    <span class="checkbox-text">Post anonymously (your name will not be shown)</span>
+                                </label>
+                                <p class="privacy-note">To keep our platform safe, reviews are verified for authenticity only.</p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="clearReviewForm()">
+                                <i class="fas fa-eraser"></i>
+                                Clear Form
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitPropertyReview()">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Management Modal -->
+    <div class="modal" id="assignManagementModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Assign Property Management to DomiHive</h3>
+                <button class="close-modal" onclick="closeAssignManagementModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="management-services">
+                            <h4>Professional Management Services</h4>
+                            <div class="service-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Tenant Screening & Placement</span>
+                            </div>
+                            <div class="service-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Rent Collection & Financial Reporting</span>
+                            </div>
+                            <div class="service-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Maintenance Coordination</span>
+                            </div>
+                            <div class="service-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Property Inspections</span>
+                            </div>
+                            <div class="service-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Legal Compliance & Documentation</span>
+                            </div>
+                        </div>
+
+                        <div class="pricing-section">
+                            <h4>Management Fees</h4>
+                            <div class="price-item">
+                                <span>Management Fee:</span>
+                                <span>10% added to yearly rent tenant fees</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Tenant Placement Fee:</span>
+                                <span>One year rent</span>
+                            </div>
+                            <div class="price-item total">
+                                <span>Contract Duration:</span>
+                                <span>12 months minimum</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeAssignManagementModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitManagementRequest()">
+                                <i class="fas fa-user-tie"></i>
+                                Assign Management
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Speak with Our Team</h4>
+                            <p>Discuss management options</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Our property managers are available to answer your questions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- List Property Modal -->
+    <div class="modal" id="listPropertyModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>List Your Property</h3>
+                <button class="close-modal" onclick="closeListPropertyModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="form-group">
+                            <label for="listingType">I want to:</label>
+                            <select id="listingType" class="form-input">
+                                <option value="">Select listing type</option>
+                                <option value="sale">Sell the Property</option>
+                                <option value="rent">Rent the Property</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="askingPrice">Asking Price/Rent</label>
+                            <input type="text" id="askingPrice" class="form-input" placeholder="Enter your desired price">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propertyCondition">Property Condition</label>
+                            <select id="propertyCondition" class="form-input">
+                                <option value="">Select condition</option>
+                                <option value="excellent">Excellent - Like new</option>
+                                <option value="good">Good - Well maintained</option>
+                                <option value="fair">Fair - Needs minor work</option>
+                                <option value="needs_work">Needs Renovation</option>
+                            </select>
+                        </div>
+
+                        <div class="pricing-section">
+                            <h4>DomiHive Listing Services</h4>
+                            <div class="price-item">
+                                <span>Professional Photography:</span>
+                                <span>Included</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Market Analysis & Pricing:</span>
+                                <span>Included</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Marketing & Advertising:</span>
+                                <span>Included</span>
+                            </div>
+                            <div class="price-item total">
+                                <span>Success Fee:</span>
+                                <span>10% of sale price / One year rent</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeListPropertyModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitListingRequest()">
+                                <i class="fas fa-tag"></i>
+                                Submit Listing Request
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Need Pricing Advice?</h4>
+                            <p>Get expert valuation</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Our sales team can provide current market valuation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Request Modal -->
+    <div class="modal" id="maintenanceModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Request Maintenance Service</h3>
+                <button class="close-modal" onclick="closeMaintenanceModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="form-group">
+                            <label for="serviceCategory">Service Category</label>
+                            <select id="serviceCategory" class="form-input">
+                                <option value="">Select service type</option>
+                                <option value="cleaning">Cleaning Services</option>
+                                <option value="plumbing">Plumbing Repairs</option>
+                                <option value="electrical">Electrical Works</option>
+                                <option value="carpentry">Carpentry & Furniture</option>
+                                <option value="painting">Painting & Renovation</option>
+                                <option value="handyman">General Handyman</option>
+                                <option value="construction">Light Construction</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serviceDescription">Describe the Service Needed</label>
+                            <textarea id="serviceDescription" class="form-textarea" placeholder="Please describe the work needed in detail..." rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servicePhotos">Upload Photos (Optional but recommended)</label>
+                            <input type="file" id="servicePhotos" class="form-input" accept="image/*" multiple>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeline">Preferred Timeline</label>
+                            <select id="timeline" class="form-input">
+                                <option value="">Select urgency</option>
+                                <option value="urgent">Urgent - Within 24 hours</option>
+                                <option value="soon">Soon - Within 3 days</option>
+                                <option value="flexible">Flexible - Within 2 weeks</option>
+                            </select>
+                        </div>
+
+                        <div class="quote-process">
+                            <h4>Professional Quote Process</h4>
+                            <div class="process-step">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>Submit your service request</span>
+                            </div>
+                            <div class="process-step">
+                                <i class="fas fa-tools"></i>
+                                <span>We assess and provide detailed quote</span>
+                            </div>
+                            <div class="process-step">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Approve quote and schedule service</span>
+                            </div>
+                            <div class="process-step">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Professional service completed</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeMaintenanceModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitMaintenanceRequest()">
+                                <i class="fas fa-paper-plane"></i>
+                                Request Professional Quote
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Call for Immediate Assistance</h4>
+                            <p>Urgent repairs & consultations</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Our maintenance team is available for urgent issues and consultations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Message DomiHive Support</h3>
+                <button class="close-modal" onclick="closeMessageModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-interface">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="message-content">
+                                <p>Hello! How can we assist you with your property today?</p>
+                            </div>
+                            <div class="message-time">10:30 AM</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <textarea id="messageInput" placeholder="Type your message..." rows="3"></textarea>
+                        <button class="btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Viewer Modal -->
+    <div class="modal" id="documentViewerModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container document-viewer">
+            <div class="modal-header">
+                <h3 id="documentViewerTitle">Document Viewer</h3>
+                <button class="close-modal" onclick="closeDocumentViewer()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="document-viewer-content" id="documentViewerContent">
+                    <!-- Document content will be loaded here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeDocumentViewer()">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                    <button class="btn-primary" onclick="downloadCurrentDocument()">
+                        <i class="fas fa-download"></i>
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/tenant-property-buy.js"></script>
+</body>
+</html>

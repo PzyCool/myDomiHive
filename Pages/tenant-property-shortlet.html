@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short-Let Property - DomiHive</title>
+    <link rel="stylesheet" href="/CSS/tenant-property-shortlet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Short-Let Property Content -->
+    <div class="tenant-property-content">
+        <!-- Page Header with Back Button -->
+        <div class="property-page-header">
+            <button class="back-button" onclick="goBackToProperties()">
+                <i class="fas fa-arrow-left"></i>
+                Back to My Properties
+            </button>
+            <div class="header-content">
+                <h1 id="propertyPageTitle">
+                    <i class="fas fa-calendar-day"></i>
+                    Short-Let Property Dashboard
+                </h1>
+                <p id="propertyPageSubtitle">Managing your short-term stay</p>
+            </div>
+        </div>
+
+        <!-- Property Overview Card (DYNAMIC - filled by JS) -->
+        <div class="property-overview-card" id="propertyOverview">
+            <!-- Property details loaded dynamically -->
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="property-tabs">
+            <button class="tab-btn active" data-tab="stay-management">
+                <i class="fas fa-home"></i>
+                <span class="tab-text">Stay Management</span>
+            </button>
+            <button class="tab-btn" data-tab="updates">
+                <i class="fas fa-bullhorn"></i>
+                <span class="tab-text">Updates</span>
+            </button>
+            <button class="tab-btn" data-tab="rate">
+                <i class="fas fa-star"></i>
+                <span class="tab-text">Rate & Review</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+
+            <!-- Stay Management Tab -->
+            <div class="tab-content active" id="stay-management-content">
+                <div class="tab-header">
+                    <h2>Stay Management</h2>
+                    <p>Manage your short-term stay, documents, and services</p>
+                </div>
+                
+                <!-- Guest Stay Overview (DYNAMIC - filled by JS) -->
+                <div class="guest-stay-overview" id="guestStayOverview">
+                    <!-- Guest stay details loaded dynamically -->
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="openCleaningModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-broom"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Request Cleaning</span>
+                                <span class="action-description">Schedule professional cleaning services</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="openMaintenanceModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Request Maintenance</span>
+                                <span class="action-description">Report issues with AC, water, lights, etc.</span>
+                            </div>
+                        </button>
+                        
+                        <button class="quick-action-btn" onclick="openExtendStayModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-calendar-plus"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Extend Stay</span>
+                                <span class="action-description">Add extra nights to your booking</span>
+                            </div>
+                        </button>
+
+                        <button class="quick-action-btn" onclick="openMessageHostModal()">
+                            <div class="action-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-title">Message Host</span>
+                                <span class="action-description">Chat with DomiHive support</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stay Documents -->
+                <div class="documents-section">
+                    <h3>Stay Documents</h3>
+                    <div class="documents-grid">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Booking Confirmation</h4>
+                                <p>Your booking details and confirmation</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewBookingConfirmation()">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadBookingConfirmation()">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>House Rules</h4>
+                                <p>Property rules and guidelines</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewHouseRules()">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadHouseRules()">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Check-In Instructions</h4>
+                                <p>Access codes and procedures</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewCheckInInstructions()">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadCheckInInstructions()">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="document-info">
+                                <h4>Receipt & Invoice</h4>
+                                <p>Payment receipt and booking invoice</p>
+                            </div>
+                            <div class="document-actions">
+                                <button class="btn-secondary" onclick="viewReceipt()">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="btn-primary" onclick="downloadReceipt()">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stay Management Actions -->
+                <div class="stay-management-section">
+                    <h3>Stay Management</h3>
+                    <div class="management-actions">
+                        <button class="btn-danger" onclick="openTerminationModal()">
+                            <i class="fas fa-times-circle"></i>
+                            End Your Shortlet Stay
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updates Tab -->
+            <div class="tab-content" id="updates-content">
+                <div class="tab-header">
+                    <h2>Property Updates & Announcements</h2>
+                    <p>Important updates about your short-term stay</p>
+                </div>
+                <div class="updates-wrapper">
+                    <div class="updates-list" id="updatesList">
+                        <div class="empty-updates">
+                            <i class="fas fa-bullhorn"></i>
+                            <h4>Loading Updates...</h4>
+                            <p>Property updates will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rate & Review Tab -->
+            <div class="tab-content" id="rate-content">
+                <div class="tab-header">
+                    <h2>Rate & Review Your Stay</h2>
+                    <p>Share your experience to help future guests</p>
+                </div>
+
+                <!-- Review Form -->
+                <div class="review-form-section">
+                    <div class="review-form-card">
+                        <h3>Write Your Review</h3>
+                        <p class="form-description">Your feedback helps improve our services</p>
+                        
+                        <!-- Overall Rating -->
+                        <div class="rating-section">
+                            <label class="rating-label">Overall Rating *</label>
+                            <div class="star-rating" id="overallRating">
+                                <div class="stars-container">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <div class="rating-text" id="overallRatingText">Select your rating</div>
+                            </div>
+                        </div>
+
+                        <!-- Review Details -->
+                        <div class="review-details">
+                            <div class="form-group">
+                                <label for="reviewTitle">Review Title *</label>
+                                <input type="text" id="reviewTitle" class="form-input" placeholder="Summarize your experience" maxlength="100">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reviewText">Your Review *</label>
+                                <textarea id="reviewText" class="form-textarea" placeholder="Share your detailed experience about your stay - comfort, cleanliness, communication, ease of check-in, etc." rows="6"></textarea>
+                            </div>
+
+                            <!-- Recommendation -->
+                            <div class="recommendation-section">
+                                <label class="recommendation-label">Would you recommend this apartment? *</label>
+                                <div class="recommendation-options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="yes" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">Yes, I would recommend</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="recommend" value="no" required>
+                                        <span class="radio-checkmark"></span>
+                                        <span class="radio-text">No, I would not recommend</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Privacy Options -->
+                            <div class="privacy-section">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="anonymousPost">
+                                    <span class="checkbox-checkmark"></span>
+                                    <span class="checkbox-text">Post anonymously (your name will not be shown)</span>
+                                </label>
+                                <p class="privacy-note">To keep our platform safe, reviews are verified for authenticity only.</p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="clearReviewForm()">
+                                <i class="fas fa-eraser"></i>
+                                Clear Form
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitPropertyReview()">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods Section (Hidden by default) -->
+        <section class="payment-methods-section" id="paymentSection" style="display: none;">
+            <!-- Your exact payment section HTML -->
+            <div class="payment-container">
+                <h2>Select Payment Method</h2>
+                <p>Choose your preferred payment method to complete your payment</p>
+
+                <form id="paymentForm" class="payment-form">
+                    <input type="hidden" id="paymentPropertyId" name="paymentPropertyId">
+                    <input type="hidden" id="totalPaymentAmount" name="totalPaymentAmount" value="1250000">
+
+                    <!-- Payment Method Selection -->
+                    <div class="payment-methods">
+                        <div class="payment-method-card" data-method="card">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Credit/Debit Card</h4>
+                                    <p>Pay securely with your card</p>
+                                </div>
+                                <div class="method-check">
+                                    <div class="check-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" data-method="bank">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Bank Transfer</h4>
+                                    <p>Transfer directly from your bank</p>
+                                </div>
+                                <div class="method-check">
+                                    <div class="check-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" data-method="paystack">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Paystack</h4>
+                                    <p>Quick and secure payments</p>
+                                </div>
+                                <div class="method-check">
+                                    <div class="check-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Payment Form -->
+                    <div class="payment-details" id="cardDetails">
+                        <div class="form-section">
+                            <h3>Card Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="cardNumber" class="required">Card Number</label>
+                                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                    <div class="card-icons">
+                                        <i class="fab fa-cc-visa"></i>
+                                        <i class="fab fa-cc-mastercard"></i>
+                                        <i class="fab fa-cc-amex"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardHolder" class="required">Card Holder Name</label>
+                                    <input type="text" id="cardHolder" name="cardHolder" placeholder="John Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiryDate" class="required">Expiry Date</label>
+                                    <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv" class="required">CVV</label>
+                                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Details -->
+                    <div class="payment-details" id="bankDetails">
+                        <div class="form-section">
+                            <h3>Bank Transfer Instructions</h3>
+                            <div class="bank-instructions">
+                                <div class="instruction-item">
+                                    <strong>Bank Name:</strong>
+                                    <span>DomiHive Trust Bank</span>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Account Number:</strong>
+                                    <span id="bankAccountNumber">8325001746</span>
+                                    <button type="button" class="copy-btn" onclick="copyToClipboard('bankAccountNumber')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Account Name:</strong>
+                                    <span>DomiHive Escrow Services</span>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Reference:</strong>
+                                    <span id="paymentReference">DOMI-RENT-001</span>
+                                    <button type="button" class="copy-btn" onclick="copyToClipboard('paymentReference')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="instruction-item">
+                                    <strong>Amount:</strong>
+                                    <span id="bankAmount">₦1,250,000</span>
+                                </div>
+                            </div>
+                            <div class="upload-receipt">
+                                <label for="bankReceipt" class="required">Upload Transfer Receipt</label>
+                                <input type="file" id="bankReceipt" name="bankReceipt" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-note">Upload proof of payment after transfer</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Gateway Instructions -->
+                    <div class="payment-details" id="gatewayDetails">
+                        <div class="form-section">
+                            <h3>Gateway Payment</h3>
+                            <div class="gateway-instructions">
+                                <p>You will be redirected to a secure payment gateway to complete your transaction.</p>
+                                <div class="gateway-features">
+                                    <div class="feature">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Secure encrypted payment</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>Multiple payment options</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Instant confirmation</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Breakdown -->
+                    <div class="payment-breakdown">
+                        <h3>Payment Breakdown</h3>
+                        <div class="breakdown-list">
+                            <div class="breakdown-item">
+                                <span>Additional Nights</span>
+                                <span id="breakdownNights">₦0</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span>Service Charge</span>
+                                <span id="breakdownService">₦0</span>
+                            </div>
+                            <div class="breakdown-item total">
+                                <span>Total Amount</span>
+                                <span id="breakdownTotal">₦0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="form-section">
+                        <div class="terms-agreement">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreeEscrowTerms" name="agreeEscrowTerms" required>
+                                <span class="checkmark"></span>
+                                I understand and agree to the <a href="#" class="terms-link">Escrow Terms</a> and DomiHive's payment protection policy
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreeRefundPolicy" name="agreeRefundPolicy" required>
+                                <span class="checkmark"></span>
+                                I understand that my payment will be held securely until the due date
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreePrivacyPolicy" name="agreePrivacyPolicy" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#" class="terms-link">Privacy Policy</a> and consent to the processing of my payment information
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="hidePaymentSection()">
+                            <i class="fas fa-times"></i>
+                            Cancel Payment
+                        </button>
+                        <button type="submit" class="btn-primary" id="submitPaymentBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Cleaning Request Modal -->
+    <div class="modal" id="cleaningModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Request a Cleaning Service</h3>
+                <p class="modal-subtitle">Cleaning services are optional and paid separately.</p>
+                <button class="close-modal" onclick="closeCleaningModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="cleaning-form">
+                    <div class="form-group">
+                        <label for="cleaningType">Cleaning Category</label>
+                        <select id="cleaningType" class="form-input" onchange="calculateCleaningCost()">
+                            <option value="">Select cleaning type</option>
+                            <option value="light" data-price="5000">Light Cleaning - ₦5,000 per session</option>
+                            <option value="standard" data-price="8000">Standard Cleaning - ₦8,000 per session</option>
+                            <option value="deep" data-price="12000">Deep Cleaning - ₦12,000 per session</option>
+                        </select>
+                        <div class="cleaning-description">
+                            <p id="light-desc" class="desc-hidden">Basic sweeping, mopping, trash removal, wipe-down of surfaces.</p>
+                            <p id="standard-desc" class="desc-hidden">Full room cleaning, bathroom cleaning, dishes, change of towels.</p>
+                            <p id="deep-desc" class="desc-hidden">Complete cleaning including under-bed, fridge, windows, and detailed sanitizing.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaningDuration">How many days do you want cleaning?</label>
+                        <select id="cleaningDuration" class="form-input" onchange="calculateCleaningCost()">
+                            <option value="1">Just for tonight</option>
+                            <option value="1">Tomorrow only</option>
+                            <option value="3">Every day for remaining 3 nights</option>
+                            <option value="custom">Select custom number of days</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaningDate">Preferred Date (Optional)</label>
+                        <input type="date" id="cleaningDate" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaningTime">Preferred Time Slot (Optional)</label>
+                        <select id="cleaningTime" class="form-input">
+                            <option value="">Select time slot</option>
+                            <option value="morning">Morning (8 AM – 12 PM)</option>
+                            <option value="afternoon">Afternoon (12 PM – 4 PM)</option>
+                            <option value="evening">Evening (4 PM – 7 PM)</option>
+                        </select>
+                    </div>
+
+                    <div class="price-calculation">
+                        <div class="price-item">
+                            <span>Cleaning Type Price:</span>
+                            <span id="cleaningTypePrice">₦0</span>
+                        </div>
+                        <div class="price-item">
+                            <span>Number of Days:</span>
+                            <span id="cleaningDays">0</span>
+                        </div>
+                        <div class="price-total">
+                            <span>Total Cost:</span>
+                            <span id="cleaningTotalCost">₦0</span>
+                        </div>
+                    </div>
+
+                    <div class="form-note">
+                        <p><i class="fas fa-info-circle"></i> Cleaners will need access to your apartment at the selected time.</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCleaningModal()">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn-primary" onclick="proceedToCleaningPayment()">
+                            <i class="fas fa-credit-card"></i>
+                            Proceed to Payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Request Modal -->
+    <div class="modal" id="maintenanceModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Request Maintenance</h3>
+                <button class="close-modal" onclick="closeMaintenanceModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="form-group">
+                            <label for="issueType">What's the issue?</label>
+                            <select id="issueType" class="form-input">
+                                <option value="">Select an issue type</option>
+                                <option value="ac">AC not cooling</option>
+                                <option value="water_heater">Water heater not working</option>
+                                <option value="lights">Light issues</option>
+                                <option value="locks">Lock problem</option>
+                                <option value="plumbing">Plumbing issue</option>
+                                <option value="electricity">Electricity problem</option>
+                                <option value="appliances">Appliance not working</option>
+                                <option value="other">Other issue</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issueDescription">Describe the issue</label>
+                            <textarea id="issueDescription" class="form-textarea" placeholder="Please describe the issue in detail..." rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issuePhoto">Upload photo (optional)</label>
+                            <input type="file" id="issuePhoto" class="form-input" accept="image/*">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeMaintenanceModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="submitMaintenanceRequest()">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Request
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Call Us Direct Instead</h4>
+                            <p>For immediate assistance</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Click to call our support team directly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extend Stay Modal -->
+    <div class="modal" id="extendStayModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Extend Your Stay</h3>
+                <button class="close-modal" onclick="closeExtendStayModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content-large">
+                    <div class="modal-form-side">
+                        <div class="form-group">
+                            <label for="extendDays">How many additional nights?</label>
+                            <select id="extendDays" class="form-input" onchange="calculateExtensionCost()">
+                                <option value="1">1 night</option>
+                                <option value="2">2 nights</option>
+                                <option value="3">3 nights</option>
+                                <option value="4">4 nights</option>
+                                <option value="5">5 nights</option>
+                                <option value="6">6 nights</option>
+                                <option value="7">7 nights</option>
+                            </select>
+                        </div>
+
+                        <div class="price-summary">
+                            <div class="price-item">
+                                <span>Nightly Rate:</span>
+                                <span id="nightlyRate">₦37,000</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Additional nights:</span>
+                                <span id="additionalNightsPrice">₦37,000</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Service fee:</span>
+                                <span id="serviceFee">₦0</span>
+                            </div>
+                            <div class="price-total">
+                                <span>Total:</span>
+                                <span id="extendTotalPrice">₦37,000</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeExtendStayModal()">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn-primary" onclick="proceedToPayment()">
+                                <i class="fas fa-credit-card"></i>
+                                Make Payment
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-call-side">
+                        <div class="call-option">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Call Us Direct Instead</h4>
+                            <p>For immediate extension</p>
+                            <div class="phone-number">
+                                <a href="tel:+23408103279654" class="call-link">
+                                    <i class="fas fa-phone"></i>
+                                    +234 08103279654
+                                </a>
+                            </div>
+                            <p class="call-note">Click to call our support team directly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Host Modal -->
+    <div class="modal" id="messageHostModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>Message Host / Support</h3>
+                <button class="close-modal" onclick="closeMessageHostModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-interface">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="message-content">
+                                <p>Hello! How can I help you with your stay?</p>
+                            </div>
+                            <div class="message-time">10:30 AM</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <textarea id="messageInput" placeholder="Type your message..." rows="3"></textarea>
+                        <button class="btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stay Termination Modal -->
+    <div class="modal" id="terminationModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container large-modal">
+            <div class="modal-header">
+                <h3>End Your Shortlet Stay</h3>
+                <button class="close-modal" onclick="closeTerminationModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="termination-content">
+                    <div class="policy-section">
+                        <h4>Emergency Policy</h4>
+                        <p>If you need to end your stay early due to emergency reasons, please review our policies below.</p>
+                    </div>
+
+                    <div class="policy-section">
+                        <h4>Refund Policy</h4>
+                        <p>Refunds for early termination are subject to review and may be prorated based on the duration of your stay and the circumstances.</p>
+                    </div>
+
+                    <div class="confirmation-section">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="confirmTermination" required>
+                            <span class="checkbox-checkmark"></span>
+                            <span class="checkbox-text">I confirm I want to terminate my stay and understand the policies</span>
+                        </label>
+
+                        <div class="waiting-options">
+                            <label class="radio-option">
+                                <input type="radio" name="waitingOption" value="can-wait" required>
+                                <span class="radio-checkmark"></span>
+                                <span class="radio-text">I can wait till next working day</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="waitingOption" value="cannot-wait" required>
+                                <span class="radio-checkmark"></span>
+                                <span class="radio-text">I can't wait, I'm leaving now</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="termination-note">
+                        <p><strong>Note:</strong> Our team will call you within 5 minutes to arrange your departure. If ending stay outside 9am-5pm, you may need to wait until next working day. Please ensure the property is left in good condition.</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeTerminationModal()">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn-danger" onclick="submitTerminationRequest()">
+                            <i class="fas fa-times-circle"></i>
+                            Submit Termination Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Viewer Modal -->
+    <div class="modal" id="documentViewerModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container document-viewer">
+            <div class="modal-header">
+                <h3 id="documentViewerTitle">Document Viewer</h3>
+                <button class="close-modal" onclick="closeDocumentViewer()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="document-viewer-content" id="documentViewerContent">
+                    <!-- Document content will be loaded here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeDocumentViewer()">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                    <button class="btn-primary" onclick="downloadCurrentDocument()">
+                        <i class="fas fa-download"></i>
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/JAVASCRIPT/tenant-property-shortlet.js"></script>
+</body>
+</html>

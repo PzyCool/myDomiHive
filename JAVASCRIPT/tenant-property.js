@@ -10,13 +10,7 @@ window.spaTenantPropertyInit = function() {
 if (window.location.pathname.includes('tenant-property.html')) {
     document.addEventListener('DOMContentLoaded', initializeTenantProperty);
 } else {
-    // SPA environment - check if we're on the page and initialize
-    setTimeout(function() {
-        if (document.querySelector('.tenant-property-content')) {
-            console.log('🔍 Detected SPA environment - auto-initializing tenant property');
-            initializeTenantProperty();
-        }
-    }, 500);
+   
 }
 
 function initializeTenantProperty() {

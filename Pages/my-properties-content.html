@@ -13,11 +13,8 @@
         <!-- Page Header -->
         <div class="properties-header">
             <div class="header-content">
-                <h1>
-                    <i class="fas fa-home"></i>
-                    My Properties
-                </h1>
-                <p>Manage your rented properties and access important documents</p>
+                <h1>My Properties</h1>
+                <p>Manage your properties across all property types</p>
             </div>
             <div class="header-stats">
                 <div class="stat-card">
@@ -25,8 +22,8 @@
                         <i class="fas fa-house-user"></i>
                     </div>
                     <div class="stat-info">
-                        <span class="stat-number" id="activeProperties">0</span>
-                        <span class="stat-label">Active</span>
+                        <span class="stat-number" id="totalActiveCount">0</span>
+                        <span class="stat-label">Total Active</span>
                     </div>
                 </div>
                 <div class="stat-card">
@@ -34,7 +31,7 @@
                         <i class="fas fa-file-contract"></i>
                     </div>
                     <div class="stat-info">
-                        <span class="stat-number" id="signedDocuments">0</span>
+                        <span class="stat-number" id="totalDocumentsCount">0</span>
                         <span class="stat-label">Signed Docs</span>
                     </div>
                 </div>
@@ -43,37 +40,111 @@
                         <i class="fas fa-credit-card"></i>
                     </div>
                     <div class="stat-info">
-                        <span class="stat-number" id="upcomingPayments">0</span>
+                        <span class="stat-number" id="totalPaymentsCount">0</span>
                         <span class="stat-label">Due Soon</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Properties Grid Section -->
-        <section class="properties-section">
-            <div class="section-header">
-                <h2>Your Rented Properties</h2>
-                <p>Click on any property to view dashboard and manage your lease</p>
-            </div>
-
-            <div class="properties-grid" id="propertiesGrid">
-                <!-- Properties will be dynamically loaded here -->
-            </div>
-
-            <!-- Empty State -->
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">
+        <!-- Tab Navigation -->
+        <div class="properties-tabs">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="rent">
                     <i class="fas fa-home"></i>
-                </div>
-                <h3>No Properties Yet</h3>
-                <p>Your rented properties will appear here once you become a tenant</p>
-                <button class="btn-primary" onclick="window.location.href='/Pages/rent.html'">
-                    <i class="fas fa-search"></i>
-                    Browse Properties
+                    For Rent
+                    <span class="tab-count" id="rentTabCount">0</span>
+                </button>
+                <button class="tab-btn" data-tab="shortlet">
+                    <i class="fas fa-calendar-day"></i>
+                    Shortlet
+                    <span class="tab-count" id="shortletTabCount">0</span>
+                </button>
+                <button class="tab-btn" data-tab="commercial">
+                    <i class="fas fa-building"></i>
+                    Commercial
+                    <span class="tab-count" id="commercialTabCount">0</span>
+                </button>
+                <button class="tab-btn" data-tab="buy">
+                    <i class="fas fa-key"></i>
+                    Buy
+                    <span class="tab-count" id="buyTabCount">0</span>
                 </button>
             </div>
+        </div>
+
+        <!-- For Rent Properties Section -->
+        <section class="properties-section active" id="rentSection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-home"></i> For Rent Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge active">Active: <span id="rentActiveCount">0</span></span>
+                        <span class="stat-badge documents">Signed: <span id="rentDocumentsCount">0</span></span>
+                        <span class="stat-badge payments">Due: <span id="rentPaymentsCount">0</span></span>
+                    </div>
+                </div>
+                <p>Manage your rental properties and access important documents</p>
+            </div>
+            <div class="properties-grid" id="rentPropertiesGrid">
+                <!-- Rent properties will be dynamically loaded here -->
+            </div>
         </section>
+
+        <!-- Shortlet Properties Section -->
+        <section class="properties-section" id="shortletSection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-calendar-day"></i> Shortlet Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge active">Active: <span id="shortletActiveCount">0</span></span>
+                        <span class="stat-badge documents">Signed: <span id="shortletDocumentsCount">0</span></span>
+                        <span class="stat-badge payments">Due: <span id="shortletPaymentsCount">0</span></span>
+                    </div>
+                </div>
+                <p>Manage your short-term stay properties</p>
+            </div>
+            <div class="properties-grid" id="shortletPropertiesGrid">
+                <!-- Shortlet properties will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Commercial Properties Section -->
+        <section class="properties-section" id="commercialSection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-building"></i> Commercial Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge active">Active: <span id="commercialActiveCount">0</span></span>
+                        <span class="stat-badge documents">Signed: <span id="commercialDocumentsCount">0</span></span>
+                        <span class="stat-badge payments">Due: <span id="commercialPaymentsCount">0</span></span>
+                    </div>
+                </div>
+                <p>Manage your commercial property leases</p>
+            </div>
+            <div class="properties-grid" id="commercialPropertiesGrid">
+                <!-- Commercial properties will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Buy Properties Section -->
+        <section class="properties-section" id="buySection">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2><i class="fas fa-key"></i> Buy Properties</h2>
+                    <div class="section-stats">
+                        <span class="stat-badge active">Active: <span id="buyActiveCount">0</span></span>
+                        <span class="stat-badge documents">Signed: <span id="buyDocumentsCount">0</span></span>
+                        <span class="stat-badge payments">Due: <span id="buyPaymentsCount">0</span></span>
+                    </div>
+                </div>
+                <p>Manage your purchased properties</p>
+            </div>
+            <div class="properties-grid" id="buyPropertiesGrid">
+                <!-- Buy properties will be dynamically loaded here -->
+            </div>
+        </section>
+
     </div>
 
     <!-- JavaScript Files -->

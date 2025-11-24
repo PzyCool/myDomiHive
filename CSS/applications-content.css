@@ -162,6 +162,9 @@ body {
     margin-bottom: 2rem;
     border: 2px solid var(--border-color);
     overflow: hidden;
+    position: sticky;
+    top: 100px;
+    z-index: 10;
 }
 
 .tabs-container {
@@ -203,22 +206,22 @@ body {
 /* Property type specific tab colors */
 .tab-btn[data-tab="rent"].active {
     color: var(--rent-color);
-    border-bottom-color: var(--rent-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .tab-btn[data-tab="shortlet"].active {
     color: var(--shortlet-color);
-    border-bottom-color: var(--shortlet-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .tab-btn[data-tab="commercial"].active {
     color: var(--commercial-color);
-    border-bottom-color: var(--commercial-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .tab-btn[data-tab="buy"].active {
     color: var(--buy-color);
-    border-bottom-color: var(--buy-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .tab-btn i {
@@ -347,19 +350,19 @@ body {
 
 /* Property type specific section borders */
 #rentSection {
-    border-left: 4px solid var(--rent-color);
+    
 }
 
 #shortletSection {
-    border-left: 4px solid var(--shortlet-color);
+    
 }
 
 #commercialSection {
-    border-left: 4px solid var(--commercial-color);
+    
 }
 
 #buySection {
-    border-left: 4px solid var(--buy-color);
+    
 }
 
 .properties-grid {
@@ -455,22 +458,6 @@ body {
     color: var(--white);
 }
 
-/* Property type specific badges */
-.property-card[data-property-type="rent"] .badge-ready {
-    background: var(--rent-color);
-}
-
-.property-card[data-property-type="shortlet"] .badge-ready {
-    background: var(--shortlet-color);
-}
-
-.property-card[data-property-type="commercial"] .badge-ready {
-    background: var(--commercial-color);
-}
-
-.property-card[data-property-type="buy"] .badge-ready {
-    background: var(--buy-color);
-}
 
 .property-details {
     padding: 1.5rem;

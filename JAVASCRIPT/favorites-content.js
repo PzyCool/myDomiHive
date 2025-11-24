@@ -77,7 +77,6 @@ function createDemoFavorites() {
             bathrooms: 3,
             size: '180 sqm',
             type: 'Apartment',
-            category: 'top-picks',
             addedDate: new Date('2024-01-15').toISOString(),
             features: ['Swimming Pool', '24/7 Security', 'Modern Kitchen', 'Balcony'],
             description: 'Stunning 3-bedroom apartment with luxurious finishes in the heart of Ikoyi.'
@@ -94,7 +93,6 @@ function createDemoFavorites() {
             bathrooms: 4,
             size: '320 sqm',
             type: 'Duplex',
-            category: 'top-picks',
             addedDate: new Date('2024-01-10').toISOString(),
             features: ['Private Garden', 'Smart Home', '3 Car Parking', 'Maid Room'],
             description: 'Spacious modern duplex with premium amenities and excellent location.'
@@ -111,7 +109,6 @@ function createDemoFavorites() {
             bathrooms: 3,
             size: '280 sqm',
             type: 'Penthouse',
-            category: 'top-picks',
             addedDate: new Date('2024-01-08').toISOString(),
             features: ['Panoramic Views', 'Private Elevator', 'Roof Terrace', 'Wine Cellar'],
             description: 'Luxurious penthouse offering breathtaking city views and exclusive amenities.'

@@ -47,6 +47,9 @@ class DomiHiveEnterpriseSPA {
     this.registerPage("browse", "/Pages/browse-content.html");
     this.registerPage("applications", "/Pages/applications-content.html");
     this.registerPage("tenant-property", "/Pages/tenant-property.html");
+    this.registerPage("tenant-property-shortlet", "/Pages/tenant-property-shortlet.html");
+    this.registerPage("tenant-property-commercial", "/Pages/tenant-property-commercial.html");
+    this.registerPage("tenant-property-buy", "/Pages/tenant-property-buy.html");
     this.registerPage("my-properties", "/Pages/my-properties-content.html");
     this.registerPage("tenant-maintenance", "/Pages/tenant-maintenance.html");
     this.registerPage("maintenance", "/Pages/maintenance-content.html");
@@ -290,28 +293,113 @@ waitForDOMReady() {
   });
 }
 
+// ✅ COMPLETE: Initialize all Tenant Property Sections
+async initializeTenantPropertyContent() {
+    console.log('🎯 SPA: Initializing Tenant Property Content');
+    await this.waitForDOMReady();
+    
+    if (typeof window.spaTenantPropertyInit === 'function') {
+        console.log('🔄 Calling spaTenantPropertyInit');
+        window.spaTenantPropertyInit();
+    } else if (typeof window.initializeTenantProperty === 'function') {
+        console.log('🔄 Calling initializeTenantProperty');
+        window.initializeTenantProperty();
+    } else if (typeof initializeTenantProperty === 'function') {
+        console.log('🔄 Calling initializeTenantProperty directly');
+        initializeTenantProperty();
+    } else {
+        console.log('⚠️ No tenant property init function found');
+    }
+}
+
+async initializeTenantPropertyShortletContent() {
+    console.log('🎯 SPA: Initializing Tenant Property Shortlet Content');
+    await this.waitForDOMReady();
+    
+    if (typeof window.spaTenantPropertyShortletInit === 'function') {
+        console.log('🔄 Calling spaTenantPropertyShortletInit');
+        window.spaTenantPropertyShortletInit();
+    } else if (typeof window.initializeTenantPropertyShortlet === 'function') {
+        console.log('🔄 Calling initializeTenantPropertyShortlet');
+        window.initializeTenantPropertyShortlet();
+    } else if (typeof initializeTenantPropertyShortlet === 'function') {
+        console.log('🔄 Calling initializeTenantPropertyShortlet directly');
+        initializeTenantPropertyShortlet();
+    } else {
+        console.log('⚠️ No tenant property shortlet init function found');
+    }
+}
+
+async initializeTenantPropertyCommercialContent() {
+    console.log('🎯 SPA: Initializing Tenant Property Commercial Content');
+    await this.waitForDOMReady();
+    
+    if (typeof window.spaTenantPropertyCommercialInit === 'function') {
+        console.log('🔄 Calling spaTenantPropertyCommercialInit');
+        window.spaTenantPropertyCommercialInit();
+    } else if (typeof window.initializeTenantPropertyCommercial === 'function') {
+        console.log('🔄 Calling initializeTenantPropertyCommercial');
+        window.initializeTenantPropertyCommercial();
+    } else if (typeof initializeTenantPropertyCommercial === 'function') {
+        console.log('🔄 Calling initializeTenantPropertyCommercial directly');
+        initializeTenantPropertyCommercial();
+    } else {
+        console.log('⚠️ No tenant property commercial init function found');
+    }
+}
+
+async initializeTenantPropertyBuyContent() {
+    console.log('🎯 SPA: Initializing Tenant Property Buy Content');
+    await this.waitForDOMReady();
+    
+    if (typeof window.spaTenantPropertyBuyInit === 'function') {
+        console.log('🔄 Calling spaTenantPropertyBuyInit');
+        window.spaTenantPropertyBuyInit();
+    } else if (typeof window.initializeTenantPropertyBuy === 'function') {
+        console.log('🔄 Calling initializeTenantPropertyBuy');
+        window.initializeTenantPropertyBuy();
+    } else if (typeof initializeTenantPropertyBuy === 'function') {
+        console.log('🔄 Calling initializeTenantPropertyBuy directly');
+        initializeTenantPropertyBuy();
+    } else {
+        console.log('⚠️ No tenant property buy init function found');
+    }
+}
+
 // ✅ NEW: Initialize SPA-specific content
 async initializeSPAContent(sectionId) {
-  console.log(`🎯 Initializing SPA content for: ${sectionId}`);
-  
-  switch(sectionId) {
-    case 'overview':
-      await this.initializeOverviewContent();
-      break;
-    case 'property-details-rent':
-      await this.initializePropertyDetailsContent();
-      break;
-    case 'property-details-shortlet':
-      await this.initializePropertyDetailsShortletContent();
-      break;
-    case 'property-details-commercial':
-      await this.initializePropertyDetailsCommercialContent();
-      break;
-    case 'property-details-buy':
-      await this.initializePropertyDetailsBuyContent();
-      break;
-    // Add other sections as needed
-  }
+    console.log(`🎯 Initializing SPA content for: ${sectionId}`);
+    
+    switch(sectionId) {
+        case 'overview':
+            await this.initializeOverviewContent();
+            break;
+        case 'tenant-property':
+            await this.initializeTenantPropertyContent();
+            break;
+        case 'tenant-property-shortlet':
+            await this.initializeTenantPropertyShortletContent();
+            break;
+        case 'tenant-property-commercial':
+            await this.initializeTenantPropertyCommercialContent();
+            break;
+        case 'tenant-property-buy':
+            await this.initializeTenantPropertyBuyContent();
+            break;
+        case 'property-details-rent':
+            await this.initializePropertyDetailsContent();
+            break;
+        case 'property-details-shortlet':
+            await this.initializePropertyDetailsShortletContent();
+            break;
+        case 'property-details-commercial':
+            await this.initializePropertyDetailsCommercialContent();
+            break;
+        case 'property-details-buy':
+            await this.initializePropertyDetailsBuyContent();
+            break;
+        // Add other sections as needed
+    }
 }
 
 // ✅ NEW: Initialize Overview Content specifically
