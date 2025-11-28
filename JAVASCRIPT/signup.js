@@ -10,12 +10,13 @@ class DomiHiveAuth {
 
     // ===== INITIALIZATION =====
     init() {
-        console.log('🚀 DomiHive Enterprise Auth Initialized');
-        this.initializeSocialAuth();
-        this.initializePhoneAuth();
-        this.initializeEventListeners();
-        this.checkExistingSession();
-    }
+    console.log('🚀 DomiHive Enterprise Auth Initialized');
+    this.initializeSocialAuth();
+    this.initializePhoneAuth();
+    this.initializeProfilePhotoUpload(); // ADD THIS LINE
+    this.initializeEventListeners();
+    this.checkExistingSession();
+}
 
     // ===== GOOGLE/APPLE ACCOUNT SELECTION =====
     initializeSocialAuth() {
@@ -425,80 +426,80 @@ class DomiHiveAuth {
 
     // ===== FORM STEP MANAGEMENT =====
     async handleNextToOtp() {
-        if (!this.validateSignupForm()) {
-            return;
-        }
-        
-        const phoneNumber = document.getElementById('phoneNumber').value;
-        document.getElementById('verificationPhoneNumber').textContent = `+234 ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)} ${phoneNumber.substring(6)}`;
-        
-        // Send OTP via Backend API
-        await this.sendOtpToPhone(phoneNumber);
-        
-        // Switch to OTP step
-        this.showStep(2);
-        document.getElementById('otp1').focus();
+    if (!this.validateSignupForm()) {
+        return;
+    }
+    
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    document.getElementById('verificationPhoneNumber').textContent = `+234 ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)} ${phoneNumber.substring(6)}`;
+    
+    // Send OTP via Backend API
+    await this.sendOtpToPhone(phoneNumber);
+    
+    // Switch to OTP step
+    this.showStep(2);
+    document.getElementById('otp1').focus();
     }
 
-    handleBackToInfo() {
-        this.showStep(1);
+async handleVerifyOtp() {
+    if (this.isSubmitting) return;
+    
+    const enteredOtp = this.getEnteredOtp();
+    if (!this.validateOtp(enteredOtp)) {
+        return;
     }
+    
+    this.isSubmitting = true;
+    const verifyBtn = document.getElementById('verifyOtpBtn');
+    this.showButtonLoading(verifyBtn, 'Verifying...');
+    
+    try {
+        // Backend OTP Verification
+        const isValid = await this.verifyOtpWithBackend(enteredOtp);
+        
+        if (isValid) {
+            await this.completePhoneSignup(); // This now goes to step 3 instead of dashboard
+        } else {
+            this.showError('otpError', 'Invalid verification code');
+        }
+    } catch (error) {
+        console.error('OTP verification failed:', error);
+        this.showError('otpError', 'Verification failed. Please try again.');
+    } finally {
+        this.isSubmitting = false;
+        this.hideButtonLoading(verifyBtn, 'Verify & Create Account');
+    }
+}
 
-    async handleVerifyOtp() {
-        if (this.isSubmitting) return;
-        
-        const enteredOtp = this.getEnteredOtp();
-        if (!this.validateOtp(enteredOtp)) {
-            return;
-        }
-        
-        this.isSubmitting = true;
-        const verifyBtn = document.getElementById('verifyOtpBtn');
-        this.showButtonLoading(verifyBtn, 'Verifying...');
-        
-        try {
-            // Backend OTP Verification
-            const isValid = await this.verifyOtpWithBackend(enteredOtp);
-            
-            if (isValid) {
-                await this.completePhoneSignup();
-            } else {
-                this.showError('otpError', 'Invalid verification code');
-            }
-        } catch (error) {
-            console.error('OTP verification failed:', error);
-            this.showError('otpError', 'Verification failed. Please try again.');
-        } finally {
-            this.isSubmitting = false;
-            this.hideButtonLoading(verifyBtn, 'Verify & Create Account');
-        }
-    }
 
     // ===== BACKEND OTP INTEGRATION =====
     async sendOtpToPhone(phoneNumber) {
-        console.log(`📱 Sending OTP to +234${phoneNumber}`);
+    console.log(`📱 Sending OTP to +234${phoneNumber}`);
+    
+    try {
+        // Backend API Integration Point
+        const response = await this.callSendOtpAPI(phoneNumber);
         
-        try {
-            // Backend API Integration Point
-            const response = await this.callSendOtpAPI(phoneNumber);
-            
-            // Store OTP data (in real app, backend handles this)
-            const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            sessionStorage.setItem('domihive_signup_otp', generatedOtp);
-            sessionStorage.setItem('domihive_signup_phone', phoneNumber);
-            sessionStorage.setItem('domihive_otp_expires', Date.now() + 300000);
-            
-            this.showNotification(`OTP sent to +234${phoneNumber}`, 'success');
-            this.startResendTimer();
-            
-            // For testing - show OTP in console
-            console.log(`🔐 Generated OTP: ${generatedOtp}`);
-            
-        } catch (error) {
-            console.error('OTP sending failed:', error);
-            this.showNotification('Failed to send OTP. Please try again.', 'error');
-        }
+        // Store OTP data (in real app, backend handles this)
+        const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        sessionStorage.setItem('domihive_signup_otp', generatedOtp);
+        sessionStorage.setItem('domihive_signup_phone', phoneNumber);
+        sessionStorage.setItem('domihive_otp_expires', Date.now() + 300000);
+        
+        // Display OTP for testing
+        document.getElementById('generatedOtp').textContent = generatedOtp;
+        
+        this.showNotification(`OTP sent to +234${phoneNumber}`, 'success');
+        this.startResendTimer();
+        
+        // For testing - show OTP in console
+        console.log(`🔐 Generated OTP: ${generatedOtp}`);
+        
+    } catch (error) {
+        console.error('OTP sending failed:', error);
+        this.showNotification('Failed to send OTP. Please try again.', 'error');
     }
+}
 
     async callSendOtpAPI(phoneNumber) {
         // Simulate API call - REPLACE WITH ACTUAL BACKEND ENDPOINT
@@ -527,35 +528,32 @@ class DomiHiveAuth {
 
     // ===== PHONE SIGNUP COMPLETION =====
     async completePhoneSignup() {
-        const formData = new FormData(document.getElementById('phoneSignupForm'));
-        const fullName = formData.get('fullName');
-        const phoneNumber = formData.get('phoneNumber');
+    const formData = new FormData(document.getElementById('phoneSignupForm'));
+    const fullName = formData.get('fullName');
+    const phoneNumber = formData.get('phoneNumber');
+    
+    try {
+        // Backend API Integration Point
+        const userData = await this.callPhoneSignupAPI({
+            fullName,
+            phoneNumber: '+234' + phoneNumber,
+            password: formData.get('password')
+        });
         
-        try {
-            // Backend API Integration Point
-            const userData = await this.callPhoneSignupAPI({
-                fullName,
-                phoneNumber: '+234' + phoneNumber,
-                password: formData.get('password')
-            });
-            
-            this.saveUserSession(userData);
-            this.showNotification(`Welcome to DomiHive, ${userData.name}!`, 'success');
-            
-            // Clean up OTP data
-            this.cleanupOtpData();
-            
-            // Redirect to SPA
-            setTimeout(() => {
-                this.redirectToSPA('overview');
-            }, 1500);
-            
-        } catch (error) {
-            console.error('Phone signup failed:', error);
-            this.showNotification('Signup failed. Please try again.', 'error');
-        }
+        this.saveUserSession(userData);
+        this.showNotification(`Welcome to DomiHive, ${userData.name}!`, 'success');
+        
+        // Clean up OTP data
+        this.cleanupOtpData();
+        
+        // Go to profile photo step instead of dashboard
+        this.showStep(3);
+        
+    } catch (error) {
+        console.error('Phone signup failed:', error);
+        this.showNotification('Signup failed. Please try again.', 'error');
     }
-
+}
     async callPhoneSignupAPI(userData) {
         // Simulate API call - REPLACE WITH ACTUAL BACKEND ENDPOINT
         console.log('🔐 Calling phone signup API for:', userData.phone);
@@ -652,10 +650,11 @@ class DomiHiveAuth {
 
     // ===== UI HELPERS =====
     showStep(step) {
-        document.getElementById('step1').classList.toggle('hidden', step !== 1);
-        document.getElementById('step2').classList.toggle('hidden', step !== 2);
-        this.currentStep = step;
-    }
+    document.getElementById('step1').classList.toggle('hidden', step !== 1);
+    document.getElementById('step2').classList.toggle('hidden', step !== 2);
+    document.getElementById('step3').classList.toggle('hidden', step !== 3);
+    this.currentStep = step;
+}
 
     showButtonLoading(button, loadingText) {
         const originalHTML = button.innerHTML;

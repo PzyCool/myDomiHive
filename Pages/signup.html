@@ -139,6 +139,10 @@
                         <div class="otp-header">
                             <h3>Phone Verification</h3>
                             <p>We've sent a 4-digit code to <span id="verificationPhoneNumber">+234 801 234 5678</span></p>
+                            <div class="test-otp-notice" id="testOtpNotice">
+                                <i class="fas fa-info-circle"></i>
+                                <span>For testing: Your OTP is <strong id="generatedOtp">1234</strong></span>
+                            </div>
                         </div>
 
                         <div class="otp-container">
@@ -162,8 +166,48 @@
                                 <i class="fas fa-arrow-left"></i>
                                 Back
                             </button>
-                            <button type="submit" class="signup-btn verify-btn" id="verifyOtpBtn">
+                            <button type="button" class="signup-btn verify-btn" id="verifyOtpBtn">
                                 Verify & Create Account
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Profile Photo Upload -->
+                    <div class="form-step hidden" id="step3">
+                        <div class="profile-photo-header">
+                            <h3>Add Profile Photo</h3>
+                            <p>Upload a photo for your profile. This will appear in your dashboard.</p>
+                        </div>
+
+                        <div class="profile-photo-container">
+                            <div class="photo-upload-area" id="photoUploadArea">
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-camera"></i>
+                                    <p>Click to upload profile photo</p>
+                                    <span>JPG, PNG or GIF (Max 5MB)</span>
+                                </div>
+                                <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" class="photo-input">
+                            </div>
+                            
+                            <div class="photo-preview hidden" id="photoPreview">
+                                <div class="preview-container">
+                                    <img id="previewImage" src="" alt="Profile preview">
+                                    <button type="button" class="remove-photo-btn" id="removePhotoBtn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <p class="preview-text">Your profile photo</p>
+                            </div>
+                            
+                            <div class="error-message" id="photoError"></div>
+                        </div>
+
+                        <div class="profile-actions">
+                            <button type="button" class="skip-btn" id="skipPhotoBtn">
+                                Skip for now
+                            </button>
+                            <button type="button" class="signup-btn proceed-btn" id="proceedWithPhotoBtn">
+                                Proceed to Dashboard
                             </button>
                         </div>
                     </div>
