@@ -1,4 +1,4 @@
-// signup.js - ENTERPRISE AUTHENTICATION WITH GOOGLE/APPLE ACCOUNT SELECTION
+// signup.js - ENTERPRISE AUTHENTICATION WITH PROFILE PHOTO & ONBOARDING REDIRECT
 // Production-ready for millions of users
 
 class DomiHiveAuth {
@@ -6,17 +6,18 @@ class DomiHiveAuth {
         this.currentStep = 1;
         this.otpTimer = null;
         this.isSubmitting = false;
+        this.userData = null;
     }
 
     // ===== INITIALIZATION =====
     init() {
-    console.log('🚀 DomiHive Enterprise Auth Initialized');
-    this.initializeSocialAuth();
-    this.initializePhoneAuth();
-    this.initializeProfilePhotoUpload(); // ADD THIS LINE
-    this.initializeEventListeners();
-    this.checkExistingSession();
-}
+        console.log('🚀 DomiHive Enterprise Auth Initialized');
+        this.initializeSocialAuth();
+        this.initializePhoneAuth();
+        this.initializeProfilePhotoUpload();
+        this.initializeEventListeners();
+        this.checkExistingSession();
+    }
 
     // ===== GOOGLE/APPLE ACCOUNT SELECTION =====
     initializeSocialAuth() {
@@ -248,11 +249,11 @@ class DomiHiveAuth {
             // Save user session
             this.saveUserSession(userData);
             
-            // Show success and redirect
+            // Show success and redirect to profile photo step
             this.showNotification(`Welcome to DomiHive, ${userData.name}!`, 'success');
             
             setTimeout(() => {
-                this.redirectToSPA('overview');
+                this.showProfilePhotoStep(userData);
             }, 1500);
             
         } catch (error) {
@@ -281,7 +282,7 @@ class DomiHiveAuth {
             avatar: account.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name)}&background=9f7539&color=fff`,
             createdAt: new Date().toISOString(),
             isVerified: true,
-            authToken: 'simulated_jwt_token_' + Date.now() // Backend will provide real JWT
+            authToken: 'simulated_jwt_token_' + Date.now()
         };
     }
 
@@ -426,80 +427,83 @@ class DomiHiveAuth {
 
     // ===== FORM STEP MANAGEMENT =====
     async handleNextToOtp() {
-    if (!this.validateSignupForm()) {
-        return;
-    }
-    
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    document.getElementById('verificationPhoneNumber').textContent = `+234 ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)} ${phoneNumber.substring(6)}`;
-    
-    // Send OTP via Backend API
-    await this.sendOtpToPhone(phoneNumber);
-    
-    // Switch to OTP step
-    this.showStep(2);
-    document.getElementById('otp1').focus();
-    }
-
-async handleVerifyOtp() {
-    if (this.isSubmitting) return;
-    
-    const enteredOtp = this.getEnteredOtp();
-    if (!this.validateOtp(enteredOtp)) {
-        return;
-    }
-    
-    this.isSubmitting = true;
-    const verifyBtn = document.getElementById('verifyOtpBtn');
-    this.showButtonLoading(verifyBtn, 'Verifying...');
-    
-    try {
-        // Backend OTP Verification
-        const isValid = await this.verifyOtpWithBackend(enteredOtp);
-        
-        if (isValid) {
-            await this.completePhoneSignup(); // This now goes to step 3 instead of dashboard
-        } else {
-            this.showError('otpError', 'Invalid verification code');
+        if (!this.validateSignupForm()) {
+            return;
         }
-    } catch (error) {
-        console.error('OTP verification failed:', error);
-        this.showError('otpError', 'Verification failed. Please try again.');
-    } finally {
-        this.isSubmitting = false;
-        this.hideButtonLoading(verifyBtn, 'Verify & Create Account');
+        
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        document.getElementById('verificationPhoneNumber').textContent = `+234 ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)} ${phoneNumber.substring(6)}`;
+        
+        // Send OTP via Backend API
+        await this.sendOtpToPhone(phoneNumber);
+        
+        // Switch to OTP step
+        this.showStep(2);
+        document.getElementById('otp1').focus();
     }
-}
 
+    async handleVerifyOtp() {
+        if (this.isSubmitting) return;
+        
+        const enteredOtp = this.getEnteredOtp();
+        if (!this.validateOtp(enteredOtp)) {
+            return;
+        }
+        
+        this.isSubmitting = true;
+        const verifyBtn = document.getElementById('verifyOtpBtn');
+        this.showButtonLoading(verifyBtn, 'Verifying...');
+        
+        try {
+            // Backend OTP Verification
+            const isValid = await this.verifyOtpWithBackend(enteredOtp);
+            
+            if (isValid) {
+                await this.completePhoneSignup();
+            } else {
+                this.showError('otpError', 'Invalid verification code');
+            }
+        } catch (error) {
+            console.error('OTP verification failed:', error);
+            this.showError('otpError', 'Verification failed. Please try again.');
+        } finally {
+            this.isSubmitting = false;
+            this.hideButtonLoading(verifyBtn, 'Verify & Create Account');
+        }
+    }
+
+    handleBackToInfo() {
+        this.showStep(1);
+    }
 
     // ===== BACKEND OTP INTEGRATION =====
     async sendOtpToPhone(phoneNumber) {
-    console.log(`📱 Sending OTP to +234${phoneNumber}`);
-    
-    try {
-        // Backend API Integration Point
-        const response = await this.callSendOtpAPI(phoneNumber);
+        console.log(`📱 Sending OTP to +234${phoneNumber}`);
         
-        // Store OTP data (in real app, backend handles this)
-        const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        sessionStorage.setItem('domihive_signup_otp', generatedOtp);
-        sessionStorage.setItem('domihive_signup_phone', phoneNumber);
-        sessionStorage.setItem('domihive_otp_expires', Date.now() + 300000);
-        
-        // Display OTP for testing
-        document.getElementById('generatedOtp').textContent = generatedOtp;
-        
-        this.showNotification(`OTP sent to +234${phoneNumber}`, 'success');
-        this.startResendTimer();
-        
-        // For testing - show OTP in console
-        console.log(`🔐 Generated OTP: ${generatedOtp}`);
-        
-    } catch (error) {
-        console.error('OTP sending failed:', error);
-        this.showNotification('Failed to send OTP. Please try again.', 'error');
+        try {
+            // Backend API Integration Point
+            const response = await this.callSendOtpAPI(phoneNumber);
+            
+            // Store OTP data (in real app, backend handles this)
+            const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            sessionStorage.setItem('domihive_signup_otp', generatedOtp);
+            sessionStorage.setItem('domihive_signup_phone', phoneNumber);
+            sessionStorage.setItem('domihive_otp_expires', Date.now() + 300000);
+            
+            // Display OTP for testing
+            document.getElementById('generatedOtp').textContent = generatedOtp;
+            
+            this.showNotification(`OTP sent to +234${phoneNumber}`, 'success');
+            this.startResendTimer();
+            
+            // For testing - show OTP in console
+            console.log(`🔐 Generated OTP: ${generatedOtp}`);
+            
+        } catch (error) {
+            console.error('OTP sending failed:', error);
+            this.showNotification('Failed to send OTP. Please try again.', 'error');
+        }
     }
-}
 
     async callSendOtpAPI(phoneNumber) {
         // Simulate API call - REPLACE WITH ACTUAL BACKEND ENDPOINT
@@ -509,9 +513,6 @@ async handleVerifyOtp() {
         return {
             success: true,
             message: 'OTP sent successfully',
-            // Backend would provide these:
-            // otpId: 'otp_123456',
-            // expiresIn: 300
         };
     }
 
@@ -528,32 +529,33 @@ async handleVerifyOtp() {
 
     // ===== PHONE SIGNUP COMPLETION =====
     async completePhoneSignup() {
-    const formData = new FormData(document.getElementById('phoneSignupForm'));
-    const fullName = formData.get('fullName');
-    const phoneNumber = formData.get('phoneNumber');
-    
-    try {
-        // Backend API Integration Point
-        const userData = await this.callPhoneSignupAPI({
-            fullName,
-            phoneNumber: '+234' + phoneNumber,
-            password: formData.get('password')
-        });
+        const formData = new FormData(document.getElementById('phoneSignupForm'));
+        const fullName = formData.get('fullName');
+        const phoneNumber = formData.get('phoneNumber');
         
-        this.saveUserSession(userData);
-        this.showNotification(`Welcome to DomiHive, ${userData.name}!`, 'success');
-        
-        // Clean up OTP data
-        this.cleanupOtpData();
-        
-        // Go to profile photo step instead of dashboard
-        this.showStep(3);
-        
-    } catch (error) {
-        console.error('Phone signup failed:', error);
-        this.showNotification('Signup failed. Please try again.', 'error');
+        try {
+            // Backend API Integration Point
+            const userData = await this.callPhoneSignupAPI({
+                fullName,
+                phoneNumber: '+234' + phoneNumber,
+                password: formData.get('password')
+            });
+            
+            this.saveUserSession(userData);
+            this.showNotification(`Welcome to DomiHive, ${userData.name}!`, 'success');
+            
+            // Clean up OTP data
+            this.cleanupOtpData();
+            
+            // Go to profile photo step
+            this.showProfilePhotoStep(userData);
+            
+        } catch (error) {
+            console.error('Phone signup failed:', error);
+            this.showNotification('Signup failed. Please try again.', 'error');
+        }
     }
-}
+
     async callPhoneSignupAPI(userData) {
         // Simulate API call - REPLACE WITH ACTUAL BACKEND ENDPOINT
         console.log('🔐 Calling phone signup API for:', userData.phone);
@@ -572,6 +574,210 @@ async handleVerifyOtp() {
         };
     }
 
+    // ===== PROFILE PHOTO UPLOAD =====
+    initializeProfilePhotoUpload() {
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        const profilePhotoInput = document.getElementById('profilePhoto');
+        const removePhotoBtn = document.getElementById('removePhotoBtn');
+        const skipPhotoBtn = document.getElementById('skipPhotoBtn');
+        const proceedWithPhotoBtn = document.getElementById('proceedWithPhotoBtn');
+
+        if (photoUploadArea && profilePhotoInput) {
+            // Click to upload
+            photoUploadArea.addEventListener('click', () => {
+                profilePhotoInput.click();
+            });
+
+            // Drag and drop functionality
+            photoUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                photoUploadArea.classList.add('dragover');
+            });
+
+            photoUploadArea.addEventListener('dragleave', () => {
+                photoUploadArea.classList.remove('dragover');
+            });
+
+            photoUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                photoUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.handleProfilePhoto(files[0]);
+                }
+            });
+
+            // File input change
+            profilePhotoInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    this.handleProfilePhoto(e.target.files[0]);
+                }
+            });
+        }
+
+        // Remove photo button
+        if (removePhotoBtn) {
+            removePhotoBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.removeProfilePhoto();
+            });
+        }
+
+        // Skip photo button
+        if (skipPhotoBtn) {
+            skipPhotoBtn.addEventListener('click', () => {
+                this.skipProfilePhoto();
+            });
+        }
+
+        // Proceed with photo button
+        if (proceedWithPhotoBtn) {
+            proceedWithPhotoBtn.addEventListener('click', () => {
+                this.proceedWithProfilePhoto();
+            });
+        }
+    }
+
+    handleProfilePhoto(file) {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!validTypes.includes(file.type)) {
+            this.showError('photoError', 'Please select a valid image file (JPG, PNG, or GIF)');
+            return;
+        }
+
+        // Validate file size (5MB max)
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (file.size > maxSize) {
+            this.showError('photoError', 'Image size must be less than 5MB');
+            return;
+        }
+
+        // Clear any previous errors
+        this.clearError('photoError');
+
+        // Show loading state
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        photoUploadArea.classList.add('uploading');
+
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Simulate upload delay
+            setTimeout(() => {
+                this.showPhotoPreview(e.target.result);
+                photoUploadArea.classList.remove('uploading');
+                
+                // Store the file for later upload
+                this.profilePhotoFile = file;
+                
+                this.showNotification('Profile photo uploaded successfully!', 'success');
+            }, 1000);
+        };
+        
+        reader.onerror = () => {
+            photoUploadArea.classList.remove('uploading');
+            this.showError('photoError', 'Failed to read the image file');
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    showPhotoPreview(imageSrc) {
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        const photoPreview = document.getElementById('photoPreview');
+        const previewImage = document.getElementById('previewImage');
+
+        if (previewImage && photoPreview) {
+            previewImage.src = imageSrc;
+            photoUploadArea.classList.add('hidden');
+            photoPreview.classList.remove('hidden');
+        }
+    }
+
+    removeProfilePhoto() {
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        const photoPreview = document.getElementById('photoPreview');
+        const profilePhotoInput = document.getElementById('profilePhoto');
+
+        if (photoUploadArea && photoPreview && profilePhotoInput) {
+            // Reset file input
+            profilePhotoInput.value = '';
+            
+            // Show upload area, hide preview
+            photoUploadArea.classList.remove('hidden');
+            photoPreview.classList.add('hidden');
+            
+            // Clear stored file
+            this.profilePhotoFile = null;
+            
+            this.showNotification('Profile photo removed', 'info');
+        }
+    }
+
+    skipProfilePhoto() {
+        this.showNotification('You can add a profile photo later in your settings', 'info');
+        this.redirectToOnboarding();
+    }
+
+    async proceedWithProfilePhoto() {
+        if (this.profilePhotoFile) {
+            // Upload profile photo to backend
+            try {
+                this.showNotification('Uploading profile photo...', 'info');
+                
+                // Simulate photo upload to backend
+                const uploadedPhotoUrl = await this.uploadProfilePhotoToBackend(this.profilePhotoFile);
+                
+                // Update user data with new photo URL
+                if (this.userData) {
+                    this.userData.avatar = uploadedPhotoUrl;
+                    this.saveUserSession(this.userData);
+                }
+                
+                this.showNotification('Profile photo saved successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Profile photo upload failed:', error);
+                this.showNotification('Failed to upload profile photo, but you can continue', 'warning');
+            }
+        }
+        
+        // Redirect to onboarding regardless of photo upload success
+        setTimeout(() => {
+            this.redirectToOnboarding();
+        }, 1000);
+    }
+
+    async uploadProfilePhotoToBackend(file) {
+        // Simulate backend upload - REPLACE WITH ACTUAL BACKEND UPLOAD
+        console.log('📸 Uploading profile photo to backend...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Return a simulated URL - in real app, backend returns the actual URL
+        return URL.createObjectURL(file); // This is just for demo - use actual backend URL
+    }
+
+    showProfilePhotoStep(userData) {
+        this.userData = userData;
+        this.showStep(3);
+    }
+
+    // ===== STEP MANAGEMENT =====
+    showStep(stepNumber) {
+        // Hide all steps
+        document.querySelectorAll('.form-step').forEach(step => {
+            step.classList.add('hidden');
+        });
+        
+        // Show target step
+        const targetStep = document.getElementById(`step${stepNumber}`);
+        if (targetStep) {
+            targetStep.classList.remove('hidden');
+            this.currentStep = stepNumber;
+        }
+    }
+
     // ===== SESSION MANAGEMENT =====
     saveUserSession(userData) {
         localStorage.setItem('domihive_current_user', JSON.stringify(userData));
@@ -585,21 +791,49 @@ async handleVerifyOtp() {
         const userData = localStorage.getItem('domihive_current_user');
         if (userData) {
             console.log('👋 User already logged in, redirecting...');
-            this.redirectToSPA('overview');
+            this.redirectToDashboard();
         }
     }
 
     // ===== REDIRECT LOGIC =====
-    redirectToSPA(section = 'overview') {
+    redirectToOnboarding() {
+        // Clear any previous onboarding progress
+        localStorage.removeItem('domihive_onboarding_progress');
+        
         // Get any redirect context from property viewing
         const redirectContext = sessionStorage.getItem('domihive_redirect_section');
-        const finalSection = redirectContext || section;
+        const favoriteProperty = sessionStorage.getItem('domihive_favorite_property_id');
+        
+        // Store context for onboarding to use
+        if (redirectContext) {
+            sessionStorage.setItem('domihive_onboarding_redirect', redirectContext);
+        }
+        if (favoriteProperty) {
+            sessionStorage.setItem('domihive_onboarding_favorite', favoriteProperty);
+        }
+        
+        // Clear the original context
+        sessionStorage.removeItem('domihive_redirect_section');
+        sessionStorage.removeItem('domihive_favorite_property_id');
+        sessionStorage.removeItem('domihive_previous_page');
+        
+        // Redirect to onboarding
+        window.location.href = '/Pages/onboarding.html';
+    }
+
+    redirectToDashboard() {
+        // Get any saved redirect context
+        const redirectContext = sessionStorage.getItem('domihive_redirect_section') || 
+                              sessionStorage.getItem('domihive_onboarding_redirect') || 
+                              'overview';
         
         // Clear redirect context
         sessionStorage.removeItem('domihive_redirect_section');
+        sessionStorage.removeItem('domihive_onboarding_redirect');
+        sessionStorage.removeItem('domihive_onboarding_favorite');
         
         // Redirect to SPA
-        window.location.href = `/Pages/spa.html?section=${finalSection}`;
+        window.location.href = `/Pages/spa.html?section=${redirectContext}`;
     }
 
     // ===== VALIDATION HELPERS =====
@@ -649,13 +883,6 @@ async handleVerifyOtp() {
     }
 
     // ===== UI HELPERS =====
-    showStep(step) {
-    document.getElementById('step1').classList.toggle('hidden', step !== 1);
-    document.getElementById('step2').classList.toggle('hidden', step !== 2);
-    document.getElementById('step3').classList.toggle('hidden', step !== 3);
-    this.currentStep = step;
-}
-
     showButtonLoading(button, loadingText) {
         const originalHTML = button.innerHTML;
         button.setAttribute('data-original-html', originalHTML);
