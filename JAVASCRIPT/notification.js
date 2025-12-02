@@ -1,194 +1,241 @@
-// notification.js - Clean Notification System
+// notification.js - Clean Modern Notification System
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔔 Initializing DomiHive Notification System...');
-    
-    // Global variables
-    let notifications = [];
-    let currentFilter = 'all';
-    let currentSort = 'newest';
-    let currentSearch = '';
-
-    // Initialize the notification system
-    initNotificationSystem();
-
-    function initNotificationSystem() {
-        console.log('🚀 Starting Notification System...');
+class NotificationSystem {
+    constructor() {
+        this.notifications = [];
+        this.currentFilter = 'all';
+        this.currentSort = 'newest';
+        this.currentSearch = '';
         
-        // Load notifications from storage
-        loadNotifications();
-        
-        // Initialize event listeners
-        initEventListeners();
-        
-        // Render notifications
-        renderNotifications();
-        
-        // Update statistics
-        updateStatistics();
-        
-        console.log('✅ Notification system ready');
+        this.init();
     }
 
-    function loadNotifications() {
-        // Load from localStorage
-        const storedNotifications = localStorage.getItem('domihive_notifications');
+    async init() {
+        console.log('🔔 Initializing Notification System...');
         
-        if (storedNotifications) {
-            notifications = JSON.parse(storedNotifications);
-            console.log('📧 Loaded notifications from storage:', notifications.length);
+        // Load notifications
+        this.loadNotifications();
+        
+        // Initialize UI
+        this.initUI();
+        
+        // Render initial state
+        this.render();
+        
+        console.log('✅ Notification System Ready');
+    }
+
+    loadNotifications() {
+        const stored = localStorage.getItem('domihive_notifications');
+        
+        if (stored) {
+            this.notifications = JSON.parse(stored);
+            console.log(`📧 Loaded ${this.notifications.length} notifications`);
         } else {
-            // Create sample notifications if none exist
-            createSampleNotifications();
+            this.createSampleNotifications();
         }
         
         // Sort by newest first
-        notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        this.notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     }
 
-    function createSampleNotifications() {
-        const sampleNotifications = [
+    createSampleNotifications() {
+        this.notifications = [
             {
                 id: 'notif_1',
                 type: 'welcome',
                 title: 'Welcome to DomiHive! 🎉',
-                message: 'Thank you for joining DomiHive. Start your rental journey by browsing available properties.',
+                message: 'Thank you for joining DomiHive. Start exploring properties and begin your rental journey.',
                 timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
                 read: true,
-                category: 'system'
+                category: 'system',
+                icon: 'fas fa-home'
             },
             {
                 id: 'notif_2',
-                type: 'application_submitted',
-                title: 'Application Submitted Successfully 📄',
-                message: 'Your rental application has been received and is now being processed by our team.',
+                type: 'application_started',
+                title: 'Application Started 📝',
+                message: 'You\'ve started a rental application for "Luxury Apartment, Ikoyi". Complete it to proceed.',
                 timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
                 read: true,
-                category: 'application',
-                applicationId: 'APP-2024-00123'
+                category: 'applications',
+                icon: 'fas fa-file-alt',
+                actions: [
+                    {
+                        text: 'Continue Application',
+                        type: 'primary',
+                        action: 'continue_application',
+                        data: { applicationId: 'APP-2024-00123' }
+                    }
+                ]
             },
             {
                 id: 'notif_3',
-                type: 'payment_confirmation',
-                title: 'Payment Received Successfully 💳',
-                message: 'Your payment of ₦22,500 has been processed and secured in escrow.',
-                timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                type: 'payment_success',
+                title: 'Payment Successful 💳',
+                message: 'Your payment of ₦250,000 for application fees has been processed successfully.',
+                timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
                 read: false,
-                category: 'payment',
-                paymentId: 'PAY-2024-00123',
+                category: 'payments',
+                icon: 'fas fa-credit-card',
                 actions: [
                     {
-                        action: 'view_payment',
                         text: 'View Receipt',
-                        id: 'PAY-2024-00123'
+                        type: 'default',
+                        action: 'view_receipt',
+                        data: { paymentId: 'PAY-2024-00123' }
                     }
                 ]
             },
             {
                 id: 'notif_4',
                 type: 'application_approved',
-                title: 'Application Approved! 🎊',
-                message: 'Congratulations! Your rental application has been approved. Activate tenant mode to proceed.',
+                title: 'Congratulations! Application Approved 🎊',
+                message: 'Your rental application has been approved! You can now activate your tenant account.',
                 timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
                 read: false,
-                category: 'approval',
-                propertyId: 'prop_1',
+                category: 'applications',
+                icon: 'fas fa-check-circle',
                 actions: [
                     {
-                        action: 'activate_tenant_mode',
                         text: 'Activate Tenant Mode',
-                        id: 'prop_1'
+                        type: 'primary',
+                        action: 'activate_tenant',
+                        data: { propertyId: 'PROP-001' }
+                    },
+                    {
+                        text: 'View Details',
+                        type: 'default',
+                        action: 'view_details'
                     }
                 ]
+            },
+            {
+                id: 'notif_5',
+                type: 'system_update',
+                title: 'System Maintenance ⚙️',
+                message: 'Scheduled maintenance on Sunday, 2 AM - 4 AM. The system may be temporarily unavailable.',
+                timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+                read: false,
+                category: 'system',
+                icon: 'fas fa-cog'
             }
         ];
         
-        notifications = sampleNotifications;
-        saveNotifications();
+        this.saveNotifications();
         console.log('📧 Created sample notifications');
     }
 
-    function initEventListeners() {
-        // Filter buttons
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', handleFilterChange);
+    initUI() {
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                this.handleFilterChange(e.currentTarget);
+            });
         });
         
-        // Sort dropdown
-        document.getElementById('sortNotifications').addEventListener('change', handleSortChange);
-        
         // Search input
-        document.getElementById('notificationSearch').addEventListener('input', handleSearch);
+        const searchInput = document.getElementById('notificationSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.handleSearch(e.target.value);
+            });
+        }
+        
+        // Sort select
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                this.handleSortChange(e.target.value);
+            });
+        }
         
         // Action buttons
-        document.getElementById('markAllRead').addEventListener('click', markAllAsRead);
-        document.getElementById('refreshNotifications').addEventListener('click', refreshNotifications);
-        document.getElementById('clearAllNotifications').addEventListener('click', clearAllNotifications);
-        document.getElementById('exportNotifications').addEventListener('click', exportNotifications);
+        const markAllReadBtn = document.getElementById('markAllReadBtn');
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', () => this.markAllAsRead());
+        }
         
-        // Close modals when clicking outside
-        setupModalCloseHandlers();
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => this.refresh());
+        }
         
-        console.log('🎯 Event listeners initialized');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', () => this.clearAll());
+        }
+        
+        // Modal close
+        const modalClose = document.getElementById('modalClose');
+        if (modalClose) {
+            modalClose.addEventListener('click', () => this.closeModal());
+        }
+        
+        // Close modal on backdrop click
+        const modal = document.getElementById('notificationModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeModal();
+                }
+            });
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeModal();
+            }
+        });
     }
 
-    function handleFilterChange(event) {
-        const filter = event.currentTarget.getAttribute('data-filter');
+    handleFilterChange(tab) {
+        // Update active tab
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
         
-        // Update active filter
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        // Update current filter
+        this.currentFilter = tab.dataset.filter;
         
-        currentFilter = filter;
+        // Re-render
+        this.render();
         
-        // Update UI title
-        updateFilterTitle(event.currentTarget);
-        
-        // Re-render notifications
-        renderNotifications();
-        
-        console.log('🔍 Filter changed to:', filter);
+        console.log(`🔍 Filter changed to: ${this.currentFilter}`);
     }
 
-    function updateFilterTitle(buttonElement) {
-        const filterText = buttonElement.querySelector('span').textContent.trim();
-        document.getElementById('currentFilterTitle').textContent = filterText;
-    }
-
-    function handleSortChange(event) {
-        currentSort = event.target.value;
-        renderNotifications();
-        console.log('🔄 Sort changed to:', currentSort);
-    }
-
-    function handleSearch(event) {
-        currentSearch = event.target.value.toLowerCase();
-        renderNotifications();
+    handleSearch(query) {
+        this.currentSearch = query.toLowerCase();
+        this.render();
         
-        if (currentSearch) {
-            console.log('🔎 Searching for:', currentSearch);
+        if (query) {
+            console.log(`🔎 Searching for: ${query}`);
         }
     }
 
-    function getFilteredNotifications() {
-        let filtered = [...notifications];
+    handleSortChange(sort) {
+        this.currentSort = sort;
+        this.render();
+        console.log(`🔄 Sort changed to: ${sort}`);
+    }
+
+    getFilteredNotifications() {
+        let filtered = [...this.notifications];
         
         // Apply search filter
-        if (currentSearch) {
+        if (this.currentSearch) {
             filtered = filtered.filter(notification => 
-                notification.title.toLowerCase().includes(currentSearch) ||
-                notification.message.toLowerCase().includes(currentSearch) ||
-                (notification.category && notification.category.toLowerCase().includes(currentSearch))
+                notification.title.toLowerCase().includes(this.currentSearch) ||
+                notification.message.toLowerCase().includes(this.currentSearch)
             );
         }
         
         // Apply category filter
-        if (currentFilter !== 'all') {
-            if (currentFilter === 'unread') {
+        if (this.currentFilter !== 'all') {
+            if (this.currentFilter === 'unread') {
                 filtered = filtered.filter(notification => !notification.read);
             } else {
-                filtered = filtered.filter(notification => notification.category === currentFilter);
+                filtered = filtered.filter(notification => notification.category === this.currentFilter);
             }
         }
         
@@ -197,95 +244,94 @@ document.addEventListener('DOMContentLoaded', function() {
             const dateA = new Date(a.timestamp);
             const dateB = new Date(b.timestamp);
             
-            switch (currentSort) {
-                case 'newest':
-                    return dateB - dateA;
-                case 'oldest':
-                    return dateA - dateB;
-                case 'unread':
-                    if (a.read === b.read) return dateB - dateA;
-                    return a.read ? 1 : -1;
-                default:
-                    return dateB - dateA;
+            if (this.currentSort === 'oldest') {
+                return dateA - dateB;
+            } else {
+                return dateB - dateA; // newest first (default)
             }
         });
         
         return filtered;
     }
 
-    function renderNotifications() {
-        const notificationsList = document.getElementById('notificationsList');
-        const filteredNotifications = getFilteredNotifications();
-        
-        // Show/hide empty state
+    render() {
+        this.renderNotificationsList();
+        this.updateStats();
+        this.updateFilterCounts();
+    }
+
+    renderNotificationsList() {
+        const listContainer = document.getElementById('notificationsList');
         const emptyState = document.getElementById('emptyState');
+        const filteredNotifications = this.getFilteredNotifications();
+        
+        if (!listContainer) return;
+        
         if (filteredNotifications.length === 0) {
-            emptyState.style.display = 'block';
-            notificationsList.innerHTML = '';
-            notificationsList.appendChild(emptyState);
+            // Show empty state
+            if (emptyState) {
+                emptyState.style.display = 'block';
+                listContainer.innerHTML = '';
+                listContainer.appendChild(emptyState);
+            }
         } else {
-            emptyState.style.display = 'none';
+            // Hide empty state
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
             
-            // Clear existing notifications
-            notificationsList.innerHTML = '';
+            // Clear and render notifications
+            listContainer.innerHTML = '';
             
-            // Add notifications to the list
             filteredNotifications.forEach(notification => {
-                const notificationElement = createNotificationElement(notification);
-                notificationsList.appendChild(notificationElement);
+                const notificationElement = this.createNotificationElement(notification);
+                listContainer.appendChild(notificationElement);
             });
         }
-        
-        // Update results count
-        updateResultsCount(filteredNotifications.length);
-        
-        console.log('📋 Rendered', filteredNotifications.length, 'notifications');
     }
 
-    function createNotificationElement(notification) {
-        const notificationDiv = document.createElement('div');
-        notificationDiv.className = `notification-item ${notification.read ? '' : 'unread'}`;
-        notificationDiv.setAttribute('data-id', notification.id);
+    createNotificationElement(notification) {
+        const element = document.createElement('div');
+        element.className = `notification-item ${notification.read ? 'read' : 'unread'}`;
+        element.dataset.id = notification.id;
         
-        const timeAgo = getTimeAgo(notification.timestamp);
-        const iconClass = getNotificationIconClass(notification.type);
+        const timeAgo = this.getTimeAgo(notification.timestamp);
+        const iconClass = this.getIconClass(notification.category);
         
-        notificationDiv.innerHTML = `
-            <div class="notification-icon ${iconClass}">
-                <i class="${getNotificationIcon(notification.type)}"></i>
-            </div>
-            <div class="notification-content">
-                <div class="notification-header">
-                    <h4 class="notification-title">${notification.title}</h4>
-                    <span class="notification-time">${timeAgo}</span>
+        element.innerHTML = `
+            <div class="notification-item-header">
+                <div class="notification-item-title">
+                    <div class="notification-icon ${iconClass}">
+                        <i class="${notification.icon || 'fas fa-bell'}"></i>
+                    </div>
+                    <div class="notification-text">
+                        <h4>${notification.title}</h4>
+                        <p>${notification.message}</p>
+                    </div>
                 </div>
-                <p class="notification-message">${notification.message}</p>
-                ${notification.actions ? renderNotificationActions(notification.actions) : ''}
-                <div class="notification-meta">
-                    <span class="notification-type">${notification.category}</span>
-                    ${!notification.read ? '<div class="unread-badge"></div>' : ''}
-                </div>
+                <div class="notification-time">${timeAgo}</div>
             </div>
+            ${notification.read ? '' : '<div class="unread-indicator"></div>'}
+            ${notification.actions ? this.renderNotificationActions(notification.actions, notification.id) : ''}
         `;
         
-        // Add click event to mark as read and show details
-        notificationDiv.addEventListener('click', () => {
-            markAsRead(notification.id);
-            openNotificationDetail(notification);
+        // Add click event
+        element.addEventListener('click', (e) => {
+            if (!e.target.closest('.notification-action-btn')) {
+                this.markAsRead(notification.id);
+                this.openNotificationDetail(notification);
+            }
         });
         
-        return notificationDiv;
+        return element;
     }
 
-    function renderNotificationActions(actions) {
-        if (!actions || actions.length === 0) return '';
-        
+    renderNotificationActions(actions, notificationId) {
         return `
             <div class="notification-actions">
                 ${actions.map(action => `
-                    <button class="btn-notification ${action.primary ? 'primary' : ''}" 
-                            onclick="event.stopPropagation(); handleNotificationAction('${action.action}', '${action.id || ''}')">
-                        <i class="${getActionIcon(action.action)}"></i>
+                    <button class="notification-action-btn ${action.type === 'primary' ? 'primary' : ''}"
+                            onclick="event.stopPropagation(); notificationSystem.handleAction('${action.action}', ${JSON.stringify(action.data)}, '${notificationId}')">
                         ${action.text}
                     </button>
                 `).join('')}
@@ -293,42 +339,17 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    function getNotificationIcon(type) {
-        const icons = {
-            'welcome': 'fas fa-home',
-            'application_submitted': 'fas fa-file-alt',
-            'application_approved': 'fas fa-check-circle',
-            'payment_confirmation': 'fas fa-credit-card',
-            'tenant_approval': 'fas fa-key'
+    getIconClass(category) {
+        const iconMap = {
+            'applications': 'application',
+            'payments': 'payment',
+            'system': 'system',
+            'alerts': 'alert'
         };
-        
-        return icons[type] || 'fas fa-bell';
+        return iconMap[category] || 'general';
     }
 
-    function getNotificationIconClass(type) {
-        const classes = {
-            'welcome': 'system',
-            'application_submitted': 'application',
-            'application_approved': 'approval',
-            'payment_confirmation': 'payment',
-            'tenant_approval': 'approval'
-        };
-        
-        return classes[type] || 'system';
-    }
-
-    function getActionIcon(action) {
-        const icons = {
-            'activate_tenant_mode': 'fas fa-rocket',
-            'view_payment': 'fas fa-receipt',
-            'view_application': 'fas fa-file-alt',
-            'contact_support': 'fas fa-headset'
-        };
-        
-        return icons[action] || 'fas fa-arrow-right';
-    }
-
-    function getTimeAgo(timestamp) {
+    getTimeAgo(timestamp) {
         const now = new Date();
         const time = new Date(timestamp);
         const diffInSeconds = Math.floor((now - time) / 1000);
@@ -341,212 +362,80 @@ document.addEventListener('DOMContentLoaded', function() {
         return time.toLocaleDateString('en-US', { 
             month: 'short', 
             day: 'numeric',
-            year: 'numeric'
+            year: time.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
         });
     }
 
-    function openNotificationDetail(notification) {
-        // Update notification in modal
-        document.getElementById('modalNotificationTitle').textContent = notification.title;
+    updateStats() {
+        const total = this.notifications.length;
+        const unread = this.notifications.filter(n => !n.read).length;
+        const today = this.notifications.filter(n => {
+            const notificationDate = new Date(n.timestamp);
+            const today = new Date();
+            return notificationDate.toDateString() === today.toDateString();
+        }).length;
         
-        const detailContent = document.getElementById('notificationDetailContent');
-        const timeAgo = getTimeAgo(notification.timestamp);
-        
-        detailContent.innerHTML = `
-            <div class="detail-header">
-                <div class="detail-icon ${getNotificationIconClass(notification.type)}">
-                    <i class="${getNotificationIcon(notification.type)}"></i>
-                </div>
-                <div class="detail-title">
-                    <h4>${notification.title}</h4>
-                    <div class="detail-meta">
-                        <span>${timeAgo}</span>
-                        <span class="notification-type">${notification.category}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="detail-content">
-                <p>${notification.message}</p>
-                ${getAdditionalDetails(notification)}
-            </div>
-            <div class="detail-actions">
-                <button class="btn-secondary" onclick="closeNotificationModal()">
-                    <i class="fas fa-times"></i>
-                    Close
-                </button>
-                ${notification.actions ? renderNotificationActions(notification.actions) : ''}
-            </div>
-        `;
-        
-        // Show modal
-        document.getElementById('notificationDetailModal').classList.add('active');
-        
-        console.log('📖 Opened notification detail:', notification.id);
-    }
-
-    function getAdditionalDetails(notification) {
-        if (notification.paymentId) {
-            return `
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
-                    <strong>Payment Details:</strong><br>
-                    Transaction ID: ${notification.paymentId}<br>
-                    Status: Completed
-                </div>
-            `;
+        // Update header count
+        const headerCount = document.getElementById('totalNotificationCount');
+        if (headerCount) {
+            headerCount.textContent = unread > 0 ? unread : '';
         }
         
-        if (notification.applicationId) {
-            return `
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
-                    <strong>Application Details:</strong><br>
-                    Application ID: ${notification.applicationId}<br>
-                    Status: Under Review
-                </div>
-            `;
-        }
+        // Update stats bar
+        const updateElement = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        };
         
-        return '';
+        updateElement('statsTotal', total);
+        updateElement('statsUnread', unread);
+        updateElement('statsToday', today);
     }
 
-    // Global function for notification actions
-    window.handleNotificationAction = function(action, actionId) {
-        console.log('🔄 Handling action:', action, 'ID:', actionId);
+    updateFilterCounts() {
+        const total = this.notifications.length;
+        const unread = this.notifications.filter(n => !n.read).length;
+        const applications = this.notifications.filter(n => n.category === 'applications').length;
+        const payments = this.notifications.filter(n => n.category === 'payments').length;
+        const system = this.notifications.filter(n => n.category === 'system').length;
         
-        switch (action) {
-            case 'activate_tenant_mode':
-                activateTenantMode(actionId);
-                break;
-            case 'view_payment':
-                viewPaymentDetails(actionId);
-                break;
-            case 'view_application':
-                viewApplicationDetails(actionId);
-                break;
-            default:
-                console.log('Unknown action:', action);
-                showNotification('Action not implemented yet', 'info');
-        }
-    };
-
-    function activateTenantMode(propertyId) {
-        console.log('🔑 Activating tenant mode for property:', propertyId);
+        const updateElement = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        };
         
-        // Get property data from applications
-        const applications = JSON.parse(localStorage.getItem('domihive_applications')) || [];
-        const application = applications.find(app => app.propertyId === propertyId);
-        
-        // Show activation modal
-        showActivationModal(application);
-        
-        // Mark related notification as read
-        const relatedNotification = notifications.find(n => 
-            n.type === 'application_approved' && n.propertyId === propertyId
-        );
-        if (relatedNotification) {
-            markAsRead(relatedNotification.id);
-        }
+        updateElement('filterAllCount', total);
+        updateElement('filterUnreadCount', unread);
+        updateElement('filterAppCount', applications);
+        updateElement('filterPaymentCount', payments);
+        updateElement('filterSystemCount', system);
     }
 
-    function showActivationModal(applicationData = null) {
-        const propertySummary = document.getElementById('activatedPropertySummary');
-        
-        if (applicationData && applicationData.propertyTitle) {
-            propertySummary.innerHTML = `
-                <h5>${applicationData.propertyTitle}</h5>
-                <p>${applicationData.propertyLocation || 'Your new home'}</p>
-                <p style="color: var(--accent-color); font-weight: 600; margin-top: 0.5rem;">
-                    ₦${applicationData.propertyPrice ? applicationData.propertyPrice.toLocaleString() : '0'}/year
-                </p>
-            `;
-        } else {
-            propertySummary.innerHTML = `
-                <h5>Your New Property</h5>
-                <p>Welcome to your new home with DomiHive!</p>
-            `;
-        }
-        
-        // Show modal
-        document.getElementById('activateTenantModal').classList.add('active');
-        
-        console.log('🏠 Showing tenant activation modal');
-    }
-
-    window.closeActivateTenantModal = function() {
-        document.getElementById('activateTenantModal').classList.remove('active');
-        console.log('🚪 Closed tenant activation modal');
-    };
-
-    window.completeTenantActivation = function() {
-        console.log('✅ Completing tenant activation...');
-        
-        // Update user status to tenant
-        const currentUser = JSON.parse(localStorage.getItem('domihive_current_user') || sessionStorage.getItem('domihive_current_user') || '{}');
-        currentUser.userType = 'tenant';
-        currentUser.tenantActivated = true;
-        currentUser.tenantSince = new Date().toISOString();
-        
-        localStorage.setItem('domihive_current_user', JSON.stringify(currentUser));
-        sessionStorage.setItem('domihive_current_user', JSON.stringify(currentUser));
-        
-        // Show success message
-        showNotification('🎉 Tenant mode activated successfully!', 'success');
-        
-        // Close modal and redirect
-        closeActivateTenantModal();
-        
-        setTimeout(() => {
-            if (window.spa && typeof window.spa.navigateToSection === 'function') {
-                window.spa.navigateToSection('my-properties');
-            } else {
-                window.location.href = '/Pages/dashboard-rent.html';
-            }
-        }, 1500);
-    };
-
-    function viewPaymentDetails(paymentId) {
-        console.log('💰 Viewing payment details:', paymentId);
-        showNotification('Opening payment receipt...', 'info');
-        
-        // In a real app, this would open payment details
-        // For now, just show a notification
-        setTimeout(() => {
-            showNotification('Payment receipt loaded successfully', 'success');
-        }, 1000);
-    }
-
-    function viewApplicationDetails(applicationId) {
-        console.log('📄 Viewing application details:', applicationId);
-        showNotification('Opening application details...', 'info');
-        
-        // In a real app, this would open application details
-        // For now, just show a notification
-        setTimeout(() => {
-            showNotification('Application details loaded', 'success');
-        }, 1000);
-    }
-
-    function markAsRead(notificationId) {
-        const notification = notifications.find(n => n.id === notificationId);
+    markAsRead(notificationId) {
+        const notification = this.notifications.find(n => n.id === notificationId);
         if (notification && !notification.read) {
             notification.read = true;
-            saveNotifications();
-            updateStatistics();
+            this.saveNotifications();
+            this.updateStats();
+            this.updateFilterCounts();
             
             // Update UI
-            const notificationElement = document.querySelector(`[data-id="${notificationId}"]`);
-            if (notificationElement) {
-                notificationElement.classList.remove('unread');
-                const badge = notificationElement.querySelector('.unread-badge');
-                if (badge) badge.remove();
+            const element = document.querySelector(`[data-id="${notificationId}"]`);
+            if (element) {
+                element.classList.remove('unread');
+                element.classList.add('read');
+                const indicator = element.querySelector('.unread-indicator');
+                if (indicator) indicator.remove();
             }
             
-            console.log('📭 Marked notification as read:', notificationId);
+            console.log(`📭 Marked notification as read: ${notificationId}`);
         }
     }
 
-    function markAllAsRead() {
+    markAllAsRead() {
         let updated = false;
-        notifications.forEach(notification => {
+        
+        this.notifications.forEach(notification => {
             if (!notification.read) {
                 notification.read = true;
                 updated = true;
@@ -554,258 +443,283 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         if (updated) {
-            saveNotifications();
-            updateStatistics();
-            renderNotifications();
-            showNotification('All notifications marked as read', 'success');
+            this.saveNotifications();
+            this.render();
+            this.showToast('All notifications marked as read', 'success');
             console.log('📭 Marked all notifications as read');
         } else {
-            showNotification('All notifications are already read', 'info');
+            this.showToast('All notifications are already read', 'info');
         }
     }
 
-    function refreshNotifications() {
-        loadNotifications();
-        renderNotifications();
-        updateStatistics();
-        showNotification('Notifications refreshed', 'success');
+    refresh() {
+        this.loadNotifications();
+        this.render();
+        this.showToast('Notifications refreshed', 'success');
         console.log('🔄 Refreshed notifications');
     }
 
-    function clearAllNotifications() {
+    clearAll() {
         if (confirm('Are you sure you want to clear all notifications? This action cannot be undone.')) {
-            notifications = [];
-            saveNotifications();
-            renderNotifications();
-            updateStatistics();
-            showNotification('All notifications cleared', 'success');
+            this.notifications = [];
+            this.saveNotifications();
+            this.render();
+            this.showToast('All notifications cleared', 'success');
             console.log('🗑️ Cleared all notifications');
         }
     }
 
-    function exportNotifications() {
-        const dataStr = JSON.stringify(notifications, null, 2);
-        const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    openNotificationDetail(notification) {
+        const modal = document.getElementById('notificationModal');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalTime = document.getElementById('modalTime');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalActions = document.getElementById('modalActions');
         
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(dataBlob);
-        link.download = `domihive-notifications-${new Date().toISOString().split('T')[0]}.json`;
-        link.click();
+        if (!modal) return;
         
-        showNotification('Notifications exported successfully', 'success');
-        console.log('📤 Exported notifications');
-    }
-
-    function updateStatistics() {
-        const total = notifications.length;
-        const unread = notifications.filter(n => !n.read).length;
-        const today = notifications.filter(n => {
-            const notificationDate = new Date(n.timestamp);
-            const today = new Date();
-            return notificationDate.toDateString() === today.toDateString();
-        }).length;
-        
-        // Update counts in sidebar
-        document.getElementById('totalNotifications').textContent = total;
-        document.getElementById('unreadNotifications').textContent = unread;
-        document.getElementById('todayNotifications').textContent = today;
-        
-        // Update filter counts
-        document.getElementById('countAll').textContent = total;
-        document.getElementById('countUnread').textContent = unread;
-        document.getElementById('countApplication').textContent = notifications.filter(n => n.category === 'application').length;
-        document.getElementById('countPayment').textContent = notifications.filter(n => n.category === 'payment').length;
-        document.getElementById('countApproval').textContent = notifications.filter(n => n.category === 'approval').length;
-        document.getElementById('countSystem').textContent = notifications.filter(n => n.category === 'system').length;
-        
-        console.log('📊 Updated statistics - Total:', total, 'Unread:', unread, 'Today:', today);
-    }
-
-    function updateResultsCount(count) {
-        document.getElementById('resultsCount').textContent = 
-            `${count} notification${count !== 1 ? 's' : ''}`;
-    }
-
-    function saveNotifications() {
-        localStorage.setItem('domihive_notifications', JSON.stringify(notifications));
-    }
-
-    window.closeNotificationModal = function() {
-        document.getElementById('notificationDetailModal').classList.remove('active');
-        console.log('🚪 Closed notification detail modal');
-    };
-
-    function setupModalCloseHandlers() {
-        // Close modals when clicking outside
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                    console.log('🚪 Closed modal by clicking outside');
-                }
-            });
-        });
-
-        // Close modals with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-                console.log('🚪 Closed all modals with Escape key');
-            }
-        });
-    }
-
-    // Utility function for showing notifications
-    function showNotification(message, type = 'success') {
-        // Remove existing notifications
-        const existingNotification = document.querySelector('.global-notification');
-        if (existingNotification) {
-            existingNotification.remove();
+        // Update modal content
+        if (modalIcon) {
+            modalIcon.innerHTML = `<i class="${notification.icon || 'fas fa-bell'}"></i>`;
+            modalIcon.className = `modal-icon ${this.getIconClass(notification.category)}`;
         }
         
-        const notification = document.createElement('div');
-        notification.className = `global-notification notification-${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        if (modalTitle) modalTitle.textContent = notification.title;
+        if (modalTime) modalTime.textContent = this.getTimeAgo(notification.timestamp);
+        if (modalCategory) modalCategory.textContent = notification.category;
+        if (modalMessage) modalMessage.textContent = notification.message;
+        
+        // Update actions
+        if (modalActions) {
+            modalActions.innerHTML = '';
+            
+            if (notification.actions && notification.actions.length > 0) {
+                notification.actions.forEach(action => {
+                    const button = document.createElement('button');
+                    button.className = `modal-action-btn ${action.type === 'primary' ? 'primary' : ''}`;
+                    button.textContent = action.text;
+                    button.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.handleAction(action.action, action.data, notification.id);
+                        this.closeModal();
+                    });
+                    modalActions.appendChild(button);
+                });
+            }
+            
+            // Always add close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'modal-action-btn';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i> Close';
+            closeBtn.addEventListener('click', () => this.closeModal());
+            modalActions.appendChild(closeBtn);
+        }
+        
+        // Show modal
+        modal.classList.add('active');
+        
+        console.log(`📖 Opened notification detail: ${notification.id}`);
+    }
+
+    closeModal() {
+        const modal = document.getElementById('notificationModal');
+        if (modal) {
+            modal.classList.remove('active');
+            console.log('🚪 Closed notification modal');
+        }
+    }
+
+    handleAction(action, data, notificationId) {
+        console.log(`🔄 Handling action: ${action}`, data);
+        
+        switch (action) {
+            case 'continue_application':
+                this.showToast('Opening application...', 'info');
+                // In real app: window.spa.navigateToSection('applications');
+                break;
+                
+            case 'view_receipt':
+                this.showToast('Opening receipt...', 'info');
+                // In real app: window.spa.navigateToSection('payments');
+                break;
+                
+            case 'activate_tenant':
+                this.showToast('Activating tenant mode...', 'success');
+                // In real app: window.spa.navigateToSection('tenant-activation');
+                break;
+                
+            case 'view_details':
+                // Already viewing details in modal
+                break;
+                
+            default:
+                this.showToast('Action completed', 'success');
+        }
+        
+        // Mark as read if not already
+        this.markAsRead(notificationId);
+    }
+
+    showToast(message, type = 'info') {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container';
+            toastContainer.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10001;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            `;
+            document.body.appendChild(toastContainer);
+        }
+        
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.style.cssText = `
             background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
             color: white;
-            padding: 1rem 1.5rem;
+            padding: 12px 20px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 10000;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
+            gap: 10px;
+            font-weight: 500;
             animation: slideInRight 0.3s ease;
+            max-width: 300px;
         `;
         
         const icon = type === 'success' ? 'fa-check-circle' : 
                      type === 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle';
         
-        notification.innerHTML = `
+        toast.innerHTML = `
             <i class="fas ${icon}"></i>
             <span>${message}</span>
         `;
         
-        document.body.appendChild(notification);
+        toastContainer.appendChild(toast);
         
-        // Remove after 4 seconds
+        // Remove after 3 seconds
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.style.animation = 'slideOutRight 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }
-        }, 4000);
+            toast.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
     }
 
-    // Add CSS animations for notifications
-    if (!document.querySelector('#notification-animations')) {
-        const style = document.createElement('style');
-        style.id = 'notification-animations';
-        style.textContent = `
-            @keyframes slideInRight {
-                from {
-                    opacity: 0;
-                    transform: translateX(100%);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-            }
-            
-            @keyframes slideOutRight {
-                from {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-                to {
-                    opacity: 0;
-                    transform: translateX(100%);
-                }
-            }
-        `;
-        document.head.appendChild(style);
+    saveNotifications() {
+        localStorage.setItem('domihive_notifications', JSON.stringify(this.notifications));
     }
+}
 
-    console.log('🎉 DomiHive Notification System Ready!');
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 DOM Content Loaded - Starting Notification System...');
+    window.notificationSystem = new NotificationSystem();
 });
 
-// Global function to add new notification
+// Global function to add new notification (for other parts of the app)
 window.addNotification = function(notificationData) {
-    const notifications = JSON.parse(localStorage.getItem('domihive_notifications')) || [];
-    
-    const newNotification = {
-        id: 'notif_' + Date.now(),
-        timestamp: new Date().toISOString(),
-        read: false,
-        ...notificationData
-    };
-    
-    notifications.unshift(newNotification);
-    localStorage.setItem('domihive_notifications', JSON.stringify(notifications));
-    
-    // Update notification badge if exists
-    const badge = document.querySelector('.notification-badge');
-    if (badge) {
-        const unreadCount = notifications.filter(n => !n.read).length;
-        badge.textContent = unreadCount > 0 ? unreadCount : '';
-        badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+    if (window.notificationSystem) {
+        const newNotification = {
+            id: 'notif_' + Date.now(),
+            timestamp: new Date().toISOString(),
+            read: false,
+            icon: 'fas fa-bell',
+            ...notificationData
+        };
+        
+        window.notificationSystem.notifications.unshift(newNotification);
+        window.notificationSystem.saveNotifications();
+        window.notificationSystem.render();
+        
+        console.log('📨 Added new notification:', newNotification.id);
+        return newNotification.id;
     }
-    
-    console.log('📨 Added new notification:', newNotification.id);
-    return newNotification.id;
+    return null;
 };
 
 // Global function to create specific notification types
 window.createApplicationNotification = function(type, propertyData) {
-    const notificationTypes = {
+    const templates = {
         'application_started': {
             title: 'Application Started 📝',
-            message: `You've started an application for ${propertyData.title}`,
-            category: 'application',
-            type: 'application_submitted'
+            message: `You've started an application for "${propertyData.title}"`,
+            category: 'applications',
+            icon: 'fas fa-file-alt'
         },
         'application_approved': {
             title: 'Application Approved! 🎊',
-            message: `Congratulations! Your application for ${propertyData.title} has been approved.`,
-            category: 'approval',
-            type: 'application_approved',
-            propertyId: propertyData.id,
+            message: `Congratulations! Your application for "${propertyData.title}" has been approved.`,
+            category: 'applications',
+            icon: 'fas fa-check-circle',
             actions: [
                 {
-                    action: 'activate_tenant_mode',
-                    text: 'Activate Tenant Mode',
-                    id: propertyData.id,
-                    primary: true
+                    text: 'Activate Tenant',
+                    type: 'primary',
+                    action: 'activate_tenant',
+                    data: { propertyId: propertyData.id }
                 }
             ]
         },
         'payment_received': {
             title: 'Payment Received 💳',
-            message: `Your payment for ${propertyData.title} has been processed successfully.`,
-            category: 'payment',
-            type: 'payment_confirmation',
+            message: `Payment for "${propertyData.title}" has been processed successfully.`,
+            category: 'payments',
+            icon: 'fas fa-credit-card',
             actions: [
                 {
-                    action: 'view_payment',
                     text: 'View Receipt',
-                    id: 'PAY-' + Date.now()
+                    type: 'default',
+                    action: 'view_receipt'
                 }
             ]
         }
     };
     
-    const notificationConfig = notificationTypes[type];
-    if (notificationConfig) {
-        return window.addNotification(notificationConfig);
+    const template = templates[type];
+    if (template) {
+        return window.addNotification(template);
     }
     
     return null;
 };
+
+// Add CSS animations for toasts
+if (!document.querySelector('#toast-animations')) {
+    const style = document.createElement('style');
+    style.id = 'toast-animations';
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+console.log('🎉 Notification System Module Loaded!');

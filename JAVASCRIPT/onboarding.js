@@ -1,13 +1,12 @@
 // ===== ONBOARDING JAVASCRIPT =====
-// DomiHive User Onboarding Flow
+// DomiHive User Onboarding - 3 Step Flow
 
 class DomiHiveOnboarding {
     constructor() {
         this.currentStep = 1;
-        this.totalSteps = 4;
+        this.totalSteps = 3;
         this.userPreferences = {
-            goal: null,
-            questions: {}
+            goal: null
         };
         this.videoPlayed = false;
         this.init();
@@ -15,7 +14,7 @@ class DomiHiveOnboarding {
 
     // ===== INITIALIZATION =====
     init() {
-        console.log('🚀 DomiHive Onboarding Initialized');
+        console.log('🚀 DomiHive Onboarding Initialized - 3 Step Flow');
         this.initializeVideo();
         this.initializeGoalSelection();
         this.initializeEventListeners();
@@ -27,6 +26,12 @@ class DomiHiveOnboarding {
 
     // ===== STEP MANAGEMENT =====
     showStep(stepNumber) {
+        // Validate step number
+        if (stepNumber < 1 || stepNumber > this.totalSteps) {
+            console.error('Invalid step number:', stepNumber);
+            return;
+        }
+        
         // Hide all steps
         document.querySelectorAll('.onboarding-step').forEach(step => {
             step.classList.remove('active');
@@ -54,9 +59,6 @@ class DomiHiveOnboarding {
                 this.handleGoalStep();
                 break;
             case 3:
-                this.handleQuestionsStep();
-                break;
-            case 4:
                 this.handleFinalStep();
                 break;
         }
@@ -91,6 +93,7 @@ class DomiHiveOnboarding {
             // Video event listeners
             this.video.addEventListener('loadeddata', () => {
                 this.hideVideoLoading();
+                console.log('✅ Video loaded successfully');
             });
 
             this.video.addEventListener('waiting', () => {
@@ -105,15 +108,24 @@ class DomiHiveOnboarding {
                 this.hideVideoOverlay();
                 this.videoPlayed = true;
                 this.saveUserProgress();
+                console.log('▶️ Video playing');
             });
 
             this.video.addEventListener('ended', () => {
                 this.markVideoCompleted();
+                console.log('✅ Video completed');
+            });
+
+            this.video.addEventListener('error', (e) => {
+                console.error('❌ Video error:', e);
+                this.showNotification('Unable to load video. Please try again later.', 'error');
+                this.hideVideoLoading();
             });
 
             // Play button click
             if (this.playButton) {
-                this.playButton.addEventListener('click', () => {
+                this.playButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     this.playVideo();
                 });
             }
@@ -124,6 +136,9 @@ class DomiHiveOnboarding {
                     this.playVideo();
                 });
             }
+            
+            // Try to preload video
+            this.video.load();
         }
     }
 
@@ -170,12 +185,7 @@ class DomiHiveOnboarding {
     markVideoCompleted() {
         this.videoPlayed = true;
         this.saveUserProgress();
-        
-        // Enable continue button if it was disabled
-        const continueBtn = document.querySelector('#step1 .btn-primary');
-        if (continueBtn) {
-            continueBtn.disabled = false;
-        }
+        console.log('✅ Video marked as completed');
     }
 
     // ===== STEP 2: GOAL SELECTION =====
@@ -186,6 +196,18 @@ class DomiHiveOnboarding {
             option.addEventListener('click', () => {
                 this.selectGoal(option);
             });
+            
+            // Add keyboard support
+            option.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectGoal(option);
+                }
+            });
+            
+            // Make focusable
+            option.setAttribute('tabindex', '0');
+            option.setAttribute('role', 'button');
         });
     }
 
@@ -193,10 +215,13 @@ class DomiHiveOnboarding {
         // Remove selection from all options
         document.querySelectorAll('.goal-option').forEach(option => {
             option.classList.remove('selected');
+            option.setAttribute('aria-selected', 'false');
         });
         
         // Add selection to clicked option
         selectedOption.classList.add('selected');
+        selectedOption.setAttribute('aria-selected', 'true');
+        selectedOption.focus();
         
         // Store the selected goal
         const goal = selectedOption.getAttribute('data-goal');
@@ -222,457 +247,28 @@ class DomiHiveOnboarding {
             const selectedOption = document.querySelector(`.goal-option[data-goal="${this.userPreferences.goal}"]`);
             if (selectedOption) {
                 selectedOption.classList.add('selected');
+                selectedOption.setAttribute('aria-selected', 'true');
             }
         }
     }
 
-    // ===== STEP 3: DYNAMIC QUESTIONS =====
-    handleQuestionsStep() {
-        if (!this.userPreferences.goal) {
-            this.showNotification('Please select a goal first', 'error');
-            this.showStep(2);
-            return;
-        }
-
-        this.loadQuestionsForGoal(this.userPreferences.goal);
-    }
-
-    loadQuestionsForGoal(goal) {
-        const questionsContainer = document.getElementById('questionsContainer');
-        if (!questionsContainer) return;
-
-        // Clear previous questions
-        questionsContainer.innerHTML = '';
-
-        // Get questions for the selected goal
-        const questions = this.getQuestionsByGoal(goal);
-        
-        // Update step title based on goal
-        this.updateQuestionsStepTitle(goal);
-
-        // Render questions
-        questions.forEach((question, index) => {
-            const questionElement = this.createQuestionElement(question, index);
-            questionsContainer.appendChild(questionElement);
-        });
-
-        // Load saved answers if any
-        this.loadSavedAnswers();
-    }
-
-    getQuestionsByGoal(goal) {
-        const questions = {
-            rent: [
-                {
-                    id: 'property_type',
-                    type: 'single',
-                    question: 'What type of property are you looking to rent?',
-                    options: [
-                        'Self-contain / Studio',
-                        '1 Bedroom',
-                        '2 Bedroom',
-                        '3+ Bedrooms',
-                        'Shared apartment'
-                    ]
-                },
-                {
-                    id: 'budget_range',
-                    type: 'single',
-                    question: 'What is your preferred budget range?',
-                    options: [
-                        '₦50,000 - ₦100,000/year',
-                        '₦100,000 - ₦300,000/year',
-                        '₦300,000 - ₦500,000/year',
-                        '₦500,000 - ₦1,000,000/year',
-                        '₦1,000,000+/year'
-                    ]
-                },
-                {
-                    id: 'location',
-                    type: 'multi',
-                    question: 'Which location(s) are you targeting?',
-                    options: [
-                        'Lagos Mainland',
-                        'Lagos Island',
-                        'Ikeja',
-                        'Lekki',
-                        'Victoria Island',
-                        'Surulere',
-                        'Yaba'
-                    ]
-                },
-                {
-                    id: 'move_in',
-                    type: 'single',
-                    question: 'When do you want to move in?',
-                    options: [
-                        'Immediately',
-                        'In 1–3 months',
-                        '3+ months'
-                    ]
-                },
-                {
-                    id: 'features',
-                    type: 'multi',
-                    question: 'Any specific features?',
-                    options: [
-                        'Parking',
-                        'Constant light',
-                        'Fully furnished',
-                        'Gated estate',
-                        'Pet-friendly',
-                        'Security'
-                    ]
-                }
-            ],
-            buy: [
-                {
-                    id: 'property_type',
-                    type: 'single',
-                    question: 'What type of property are you looking to buy?',
-                    options: [
-                        'Land',
-                        'Apartment',
-                        'Duplex',
-                        'Bungalow',
-                        'Commercial building'
-                    ]
-                },
-                {
-                    id: 'purpose',
-                    type: 'single',
-                    question: 'Is this for investment or personal use?',
-                    options: [
-                        'Investment',
-                        'Personal use',
-                        'Both'
-                    ]
-                },
-                {
-                    id: 'budget_range',
-                    type: 'single',
-                    question: 'What is your budget range?',
-                    options: [
-                        '₦5M - ₦10M',
-                        '₦10M - ₦20M',
-                        '₦20M - ₦50M',
-                        '₦50M - ₦100M',
-                        '₦100M+'
-                    ]
-                },
-                {
-                    id: 'location',
-                    type: 'multi',
-                    question: 'Preferred location(s)?',
-                    options: [
-                        'Lagos Mainland',
-                        'Lagos Island',
-                        'Ikeja GRA',
-                        'Lekki Phase 1',
-                        'Victoria Island',
-                        'Banana Island'
-                    ]
-                },
-                {
-                    id: 'property_status',
-                    type: 'single',
-                    question: 'Do you want off-plan or ready-to-move-in property?',
-                    options: [
-                        'Off-plan',
-                        'Ready-to-move-in',
-                        'Either'
-                    ]
-                }
-            ],
-            shortlet: [
-                {
-                    id: 'duration',
-                    type: 'single',
-                    question: 'How long do you want to stay?',
-                    options: [
-                        '1–7 days',
-                        '1–3 weeks',
-                        '1–6 months'
-                    ]
-                },
-                {
-                    id: 'apartment_type',
-                    type: 'single',
-                    question: 'What type of apartment?',
-                    options: [
-                        'Studio',
-                        '1 Bedroom',
-                        '2 Bedroom',
-                        'Luxury apartment'
-                    ]
-                },
-                {
-                    id: 'purpose',
-                    type: 'single',
-                    question: 'Purpose of stay?',
-                    options: [
-                        'Vacation',
-                        'Work trip',
-                        'Celebration',
-                        'Medical stay'
-                    ]
-                },
-                {
-                    id: 'location',
-                    type: 'multi',
-                    question: 'Preferred location?',
-                    options: [
-                        'Lagos Island',
-                        'Lagos Mainland',
-                        'Victoria Island',
-                        'Lekki',
-                        'Ikeja'
-                    ]
-                },
-                {
-                    id: 'features',
-                    type: 'multi',
-                    question: 'Do you need special features?',
-                    options: [
-                        'Pool',
-                        'WiFi',
-                        'Parking',
-                        'Generator',
-                        'Housekeeping'
-                    ]
-                }
-            ],
-            commercial: [
-                {
-                    id: 'space_type',
-                    type: 'single',
-                    question: 'What type of commercial space do you need?',
-                    options: [
-                        'Office',
-                        'Shop',
-                        'Warehouse',
-                        'Restaurant space',
-                        'Event hall',
-                        'Co-working space'
-                    ]
-                },
-                {
-                    id: 'budget_range',
-                    type: 'single',
-                    question: 'What is your budget range?',
-                    options: [
-                        '₦500,000 - ₦1M/year',
-                        '₦1M - ₦2M/year',
-                        '₦2M - ₦5M/year',
-                        '₦5M+/year'
-                    ]
-                },
-                {
-                    id: 'location',
-                    type: 'multi',
-                    question: 'Preferred location(s)?',
-                    options: [
-                        'Lagos Island',
-                        'Lagos Mainland',
-                        'Ikeja',
-                        'Victoria Island',
-                        'Lekki'
-                    ]
-                },
-                {
-                    id: 'arrangement',
-                    type: 'single',
-                    question: 'Duration / type of arrangement?',
-                    options: [
-                        'Lease',
-                        'Rent',
-                        'Buy'
-                    ]
-                },
-                {
-                    id: 'features',
-                    type: 'multi',
-                    question: 'Required features?',
-                    options: [
-                        'Parking',
-                        'High foot traffic',
-                        'Road visibility',
-                        'Security',
-                        'Large floor space'
-                    ]
-                }
-            ]
-        };
-
-        return questions[goal] || [];
-    }
-
-    updateQuestionsStepTitle(goal) {
-        const titleElement = document.getElementById('dynamicQuestionTitle');
-        const subtitleElement = document.getElementById('dynamicQuestionSubtitle');
-        
-        if (titleElement && subtitleElement) {
-            const titles = {
-                rent: 'Tell us about your rental needs',
-                buy: 'Help us find your perfect property to buy',
-                shortlet: 'Customize your shortlet experience',
-                commercial: 'Tell us about your commercial space requirements'
-            };
-            
-            titleElement.textContent = titles[goal] || 'Tell us more about your needs';
-            subtitleElement.textContent = 'This helps us find the perfect properties for you';
-        }
-    }
-
-    createQuestionElement(question, index) {
-        const questionGroup = document.createElement('div');
-        questionGroup.className = 'question-group';
-        questionGroup.style.animationDelay = `${index * 0.1}s`;
-
-        let optionsHTML = '';
-        
-        if (question.type === 'single') {
-            optionsHTML = this.createSingleSelectOptions(question);
-        } else if (question.type === 'multi') {
-            optionsHTML = this.createMultiSelectOptions(question);
-        }
-
-        questionGroup.innerHTML = `
-            <div class="question-title">
-                <span>${index + 1}.</span>
-                ${question.question}
-            </div>
-            <div class="question-options">
-                ${optionsHTML}
-            </div>
-        `;
-
-        return questionGroup;
-    }
-
-    createSingleSelectOptions(question) {
-        return question.options.map(option => `
-            <button type="button" class="option-button" 
-                    data-question="${question.id}" 
-                    data-value="${option}">
-                ${option}
-            </button>
-        `).join('');
-    }
-
-    createMultiSelectOptions(question) {
-        return `
-            <div class="multi-select-options">
-                ${question.options.map(option => `
-                    <div class="multi-option" 
-                         data-question="${question.id}" 
-                         data-value="${option}">
-                        ${option}
-                    </div>
-                `).join('')}
-            </div>
-        `;
-    }
-
-    loadSavedAnswers() {
-        // Add event listeners to options
-        const singleOptions = document.querySelectorAll('.option-button');
-        const multiOptions = document.querySelectorAll('.multi-option');
-
-        singleOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                this.handleSingleSelect(e.target);
-            });
-        });
-
-        multiOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                this.handleMultiSelect(e.target);
-            });
-        });
-
-        // Load previously saved answers
-        if (this.userPreferences.questions) {
-            Object.keys(this.userPreferences.questions).forEach(questionId => {
-                const answer = this.userPreferences.questions[questionId];
-                this.applySavedAnswer(questionId, answer);
-            });
-        }
-    }
-
-    handleSingleSelect(selectedOption) {
-        const questionId = selectedOption.getAttribute('data-question');
-        const value = selectedOption.getAttribute('data-value');
-        
-        // Remove selection from other options in same question
-        const allOptions = selectedOption.parentElement.querySelectorAll('.option-button');
-        allOptions.forEach(option => {
-            option.classList.remove('selected');
-        });
-        
-        // Add selection to clicked option
-        selectedOption.classList.add('selected');
-        
-        // Save answer
-        this.saveAnswer(questionId, value);
-    }
-
-    handleMultiSelect(selectedOption) {
-        const questionId = selectedOption.getAttribute('data-question');
-        const value = selectedOption.getAttribute('data-value');
-        
-        // Toggle selection
-        selectedOption.classList.toggle('selected');
-        
-        // Get all selected values for this question
-        const selectedValues = Array.from(
-            selectedOption.parentElement.querySelectorAll('.multi-option.selected')
-        ).map(option => option.getAttribute('data-value'));
-        
-        // Save answer
-        this.saveAnswer(questionId, selectedValues);
-    }
-
-    applySavedAnswer(questionId, savedAnswer) {
-        if (Array.isArray(savedAnswer)) {
-            // Multi-select
-            savedAnswer.forEach(value => {
-                const option = document.querySelector(
-                    `.multi-option[data-question="${questionId}"][data-value="${value}"]`
-                );
-                if (option) {
-                    option.classList.add('selected');
-                }
-            });
-        } else {
-            // Single select
-            const option = document.querySelector(
-                `.option-button[data-question="${questionId}"][data-value="${savedAnswer}"]`
-            );
-            if (option) {
-                option.classList.add('selected');
-            }
-        }
-    }
-
-    saveAnswer(questionId, answer) {
-        if (!this.userPreferences.questions) {
-            this.userPreferences.questions = {};
-        }
-        
-        this.userPreferences.questions[questionId] = answer;
-        this.saveUserProgress();
-        
-        console.log('💾 Saved answer:', questionId, answer);
-    }
-
-    // ===== STEP 4: FINAL STEP =====
+    // ===== STEP 3: FINAL STEP =====
     handleFinalStep() {
         // Save all preferences to localStorage for dashboard use
         this.savePreferencesToStorage();
         
-        // Add any final step animations or logic
-        console.log('🎉 Onboarding completed with preferences:', this.userPreferences);
+        // Log completion
+        console.log('🎉 Onboarding completed with goal:', this.userPreferences.goal);
+        
+        // Add any final animations
+        this.animateSuccessIcon();
+    }
+
+    animateSuccessIcon() {
+        const successIcon = document.querySelector('.success-icon');
+        if (successIcon) {
+            successIcon.style.animation = 'bounceIn 0.6s ease';
+        }
     }
 
     // ===== PROGRESS SAVING =====
@@ -685,6 +281,7 @@ class DomiHiveOnboarding {
         };
         
         localStorage.setItem('domihive_onboarding_progress', JSON.stringify(progress));
+        console.log('💾 Saved progress for step:', this.currentStep);
     }
 
     loadUserProgress() {
@@ -699,23 +296,35 @@ class DomiHiveOnboarding {
                 console.log('📁 Loaded saved progress:', progress);
             } catch (error) {
                 console.error('Error loading saved progress:', error);
+                this.clearSavedProgress();
             }
         }
     }
 
+    clearSavedProgress() {
+        localStorage.removeItem('domihive_onboarding_progress');
+        console.log('🧹 Cleared saved progress');
+    }
+
     savePreferencesToStorage() {
-        // Save to user profile in localStorage
+        // Get existing user data or create new
         const userData = JSON.parse(localStorage.getItem('domihive_current_user') || '{}');
+        
+        // Update with onboarding preferences
         userData.preferences = this.userPreferences;
         userData.onboardingCompleted = true;
         userData.onboardingCompletedAt = new Date().toISOString();
+        userData.goal = this.userPreferences.goal;
         
+        // Save back to localStorage
         localStorage.setItem('domihive_current_user', JSON.stringify(userData));
         
         // Also save separately for easy access
         localStorage.setItem('domihive_user_preferences', JSON.stringify(this.userPreferences));
+        localStorage.setItem('domihive_user_goal', this.userPreferences.goal || 'rent');
         
         console.log('💾 Preferences saved to user profile');
+        console.log('📊 User goal:', this.userPreferences.goal);
     }
 
     // ===== NAVIGATION FUNCTIONS =====
@@ -740,7 +349,7 @@ class DomiHiveOnboarding {
         // Show completion notification
         this.showNotification('Welcome to DomiHive! Your dashboard is ready.', 'success');
         
-        // Redirect to dashboard
+        // Add a slight delay for better UX
         setTimeout(() => {
             this.redirectToDashboard();
         }, 1500);
@@ -748,14 +357,31 @@ class DomiHiveOnboarding {
 
     redirectToDashboard() {
         // Get any saved redirect context
-        const redirectContext = sessionStorage.getItem('domihive_redirect_section');
-        const finalSection = redirectContext || 'overview';
+        const redirectContext = sessionStorage.getItem('domihive_redirect_section') || 
+                               sessionStorage.getItem('domihive_onboarding_redirect') || 
+                               'overview';
         
-        // Clear redirect context
+        // Get favorite property if any
+        const favoriteProperty = sessionStorage.getItem('domihive_onboarding_favorite');
+        
+        // Clear all onboarding context
         sessionStorage.removeItem('domihive_redirect_section');
+        sessionStorage.removeItem('domihive_onboarding_redirect');
+        sessionStorage.removeItem('domihive_onboarding_favorite');
         
-        // Redirect to SPA with user preferences
-        window.location.href = `/Pages/spa.html?section=${finalSection}&onboarding=completed`;
+        // Build dashboard URL with context
+        let dashboardUrl = `/Pages/spa.html?section=${redirectContext}&onboarding=completed`;
+        
+        if (favoriteProperty) {
+            dashboardUrl += `&favorite=${favoriteProperty}`;
+        }
+        
+        if (this.userPreferences.goal) {
+            dashboardUrl += `&goal=${this.userPreferences.goal}`;
+        }
+        
+        console.log('🔗 Redirecting to dashboard:', dashboardUrl);
+        window.location.href = dashboardUrl;
     }
 
     // ===== SKIP FUNCTIONALITY =====
@@ -767,6 +393,13 @@ class DomiHiveOnboarding {
         const modal = document.getElementById('skipModal');
         if (modal) {
             modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Focus on first button for accessibility
+            setTimeout(() => {
+                const firstBtn = modal.querySelector('button');
+                if (firstBtn) firstBtn.focus();
+            }, 100);
         }
     }
 
@@ -774,19 +407,18 @@ class DomiHiveOnboarding {
         const modal = document.getElementById('skipModal');
         if (modal) {
             modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Return focus to skip button
+            const skipBtn = document.querySelector('.btn-skip');
+            if (skipBtn) skipBtn.focus();
         }
     }
 
     confirmSkipOnboarding() {
         // Set default preferences
         this.userPreferences = {
-            goal: 'rent',
-            questions: {
-                property_type: '2 Bedroom',
-                budget_range: '₦100,000 - ₦300,000/year',
-                location: ['Lagos Mainland'],
-                move_in: 'In 1–3 months'
-            }
+            goal: 'rent'
         };
         
         // Save and redirect
@@ -809,6 +441,9 @@ class DomiHiveOnboarding {
 
         const notification = document.createElement('div');
         notification.className = `onboarding-notification notification-${type}`;
+        notification.setAttribute('role', 'alert');
+        notification.setAttribute('aria-live', 'polite');
+        
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -827,18 +462,22 @@ class DomiHiveOnboarding {
         `;
         
         notification.innerHTML = `
-            <i class="fas ${this.getNotificationIcon(type)}"></i>
+            <i class="fas ${this.getNotificationIcon(type)}" aria-hidden="true"></i>
             <span>${message}</span>
         `;
         
         document.body.appendChild(notification);
 
+        // Auto-remove after delay
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
             }
         }, 4000);
+        
+        // Also log to console for debugging
+        console.log(`📢 ${type.toUpperCase()}: ${message}`);
     }
 
     getNotificationColor(type) {
@@ -861,17 +500,44 @@ class DomiHiveOnboarding {
         return icons[type] || icons.info;
     }
 
-    // ===== EVENT LISTENERS =====
+    // ===== EVENT LISTENERS & KEYBOARD NAVIGATION =====
     initializeEventListeners() {
         // Global keyboard shortcuts
         document.addEventListener('keydown', (e) => {
+            // Escape key closes modal
             if (e.key === 'Escape') {
                 this.closeSkipModal();
+            }
+            
+            // Arrow keys for goal selection
+            if (this.currentStep === 2 && !e.target.closest('.modal-overlay')) {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    this.navigateGoals(1);
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    this.navigateGoals(-1);
+                }
             }
         });
 
         // Add CSS animations
         this.addPageAnimations();
+    }
+
+    navigateGoals(direction) {
+        const goals = Array.from(document.querySelectorAll('.goal-option'));
+        if (goals.length === 0) return;
+        
+        const currentIndex = goals.findIndex(g => g.classList.contains('selected'));
+        let newIndex = currentIndex + direction;
+        
+        // Wrap around
+        if (newIndex < 0) newIndex = goals.length - 1;
+        if (newIndex >= goals.length) newIndex = 0;
+        
+        // Select new goal
+        this.selectGoal(goals[newIndex]);
     }
 
     addPageAnimations() {
@@ -899,11 +565,30 @@ class DomiHiveOnboarding {
                 }
             }
             
-            .question-group {
-                animation: fadeInUp 0.5s ease both;
+            .goal-option {
+                transition: all 0.3s ease;
+            }
+            
+            .onboarding-step {
+                transition: opacity 0.3s ease;
             }
         `;
         document.head.appendChild(style);
+    }
+
+    // ===== ACCESSIBILITY HELPERS =====
+    announceToScreenReader(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'assertive');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
+        
+        document.body.appendChild(announcement);
+        
+        setTimeout(() => {
+            document.body.removeChild(announcement);
+        }, 1000);
     }
 }
 
@@ -938,21 +623,28 @@ function completeOnboarding() {
 // Make onboarding instance globally available
 window.domiHiveOnboarding = domiHiveOnboarding;
 
-console.log('🎉 DomiHive Onboarding System Loaded!');
+console.log('🎉 DomiHive Onboarding System Loaded - 3 Step Flow!');
 
-// ===== UPDATE SIGNUP.JS REDIRECT =====
-// Add this to your signup.js to redirect to onboarding instead of dashboard:
-
-/*
-// In signup.js, replace the redirectToSPA function with:
-redirectToOnboarding() {
-    // Clear any previous onboarding progress
-    localStorage.removeItem('domihive_onboarding_progress');
+// ===== PAGE LOAD COMPLETION =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Set page title based on step
+    const updatePageTitle = () => {
+        const step = domiHiveOnboarding.currentStep;
+        const titles = {
+            1: 'Watch Tutorial - DomiHive',
+            2: 'Choose Goal - DomiHive', 
+            3: 'Get Started - DomiHive'
+        };
+        document.title = titles[step] || 'DomiHive Onboarding';
+    };
     
-    // Redirect to onboarding
-    window.location.href = '/Pages/onboarding.html';
-}
-
-// And update both social and phone signup completions to use:
-this.redirectToOnboarding();
-*/
+    // Initial title
+    updatePageTitle();
+    
+    // Update on step change
+    const originalShowStep = domiHiveOnboarding.showStep.bind(domiHiveOnboarding);
+    domiHiveOnboarding.showStep = function(stepNumber) {
+        originalShowStep(stepNumber);
+        updatePageTitle();
+    };
+});

@@ -1,4 +1,4 @@
-/* spa.css - Pure SPA Framework Styles */
+/* spa.css - Pure SPA Framework Styles - Updated for Three-State Sidebar */
 
 * {
     margin: 0;
@@ -26,8 +26,10 @@ body {
     --error: #dc2626;
     --sidebar-width: 280px;
     --sidebar-collapsed: 80px;
+    --sidebar-hidden: 0px;
     --sidebar-bg: #f8fafc;
     --sidebar-border: #e2e8f0;
+    --transition-speed: 0.3s;
 }
 
 /* ===== DASHBOARD LAYOUT STYLES ===== */
@@ -35,35 +37,37 @@ body {
     display: flex;
     min-height: 100vh;
     background: var(--light-gray);
+    position: relative;
 }
 
-/* Dashboard Sidebar */
+/* Dashboard Sidebar - THREE STATES */
 .dashboard-sidebar {
     width: var(--sidebar-width);
     background: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     position: fixed;
     left: 0;
     top: 0;
     height: 100vh;
     z-index: 1000;
     box-shadow: 1px 0 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
 
+/* STATE 2: Collapsed (still visible) */
 .dashboard-sidebar.collapsed {
     width: var(--sidebar-collapsed);
 }
 
-.dashboard-sidebar.collapsed .nav-text,
-.dashboard-sidebar.collapsed .nav-section-title,
-.dashboard-sidebar.collapsed .sidebar-company,
-.dashboard-sidebar.collapsed .user-name,
-.dashboard-sidebar.collapsed .user-role,
-.dashboard-sidebar.collapsed .logout-btn span {
-    display: none;
+/* STATE 3: Hidden (not visible) */
+.dashboard-sidebar.hidden {
+    transform: translateX(-100%);
+    width: var(--sidebar-width); /* Keep original width for smooth transition */
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* Sidebar Header */
@@ -74,25 +78,31 @@ body {
     align-items: center;
     justify-content: space-between;
     background: var(--white);
+    min-height: 80px;
 }
 
 .sidebar-logo {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    transition: opacity var(--transition-speed) ease;
 }
 
 .sidebar-logo-img {
     height: 32px;
     width: auto;
+    transition: transform var(--transition-speed) ease;
 }
 
 .sidebar-company {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--primary-color);
+    white-space: nowrap;
+    transition: opacity var(--transition-speed) ease;
 }
 
+/* Toggle button rotation effects */
 .sidebar-toggle {
     background: none;
     border: none;
@@ -100,7 +110,12 @@ body {
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 6px;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sidebar-toggle:hover {
@@ -108,15 +123,70 @@ body {
     color: var(--primary-color);
 }
 
+/* Rotate icon when collapsed */
+.dashboard-sidebar:not(.collapsed):not(.hidden) .sidebar-toggle i {
+    transform: rotate(0deg);
+    transition: transform var(--transition-speed) ease;
+}
+
+.dashboard-sidebar.collapsed .sidebar-toggle i {
+    transform: rotate(180deg);
+}
+
+.dashboard-sidebar.hidden .sidebar-toggle {
+    display: none; /* Hide when sidebar is hidden */
+}
+
+/* STATE 2 & 3: Hide text elements */
+.dashboard-sidebar.collapsed .nav-text,
+.dashboard-sidebar.collapsed .nav-section-title,
+.dashboard-sidebar.collapsed .sidebar-company,
+.dashboard-sidebar.collapsed .user-name,
+.dashboard-sidebar.collapsed .user-role,
+.dashboard-sidebar.collapsed .logout-btn span,
+.dashboard-sidebar.hidden .nav-text,
+.dashboard-sidebar.hidden .nav-section-title,
+.dashboard-sidebar.hidden .sidebar-company,
+.dashboard-sidebar.hidden .user-name,
+.dashboard-sidebar.hidden .user-role,
+.dashboard-sidebar.hidden .logout-btn span {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+}
+
+/* STATE 2 & 3: Adjust logo */
+.dashboard-sidebar.collapsed .sidebar-logo,
+.dashboard-sidebar.hidden .sidebar-logo {
+    justify-content: center;
+    width: 100%;
+}
+
+.dashboard-sidebar.collapsed .sidebar-logo-img,
+.dashboard-sidebar.hidden .sidebar-logo-img {
+    transform: scale(0.9);
+}
+
 /* Sidebar Navigation */
 .sidebar-nav {
     flex: 1;
     padding: 1rem 0;
     overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth; /* Enable smooth scrolling for auto-scroll feature */
 }
 
 .nav-section {
     margin-bottom: 1.5rem;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.dashboard-sidebar.collapsed .nav-section,
+.dashboard-sidebar.hidden .nav-section {
+    opacity: 0.9;
 }
 
 .nav-section-title {
@@ -127,6 +197,9 @@ body {
     color: var(--gray);
     padding: 0 1.5rem;
     margin-bottom: 0.75rem;
+    transition: all var(--transition-speed) ease;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .nav-link {
@@ -136,13 +209,14 @@ body {
     padding: 0.75rem 1.5rem;
     color: var(--dark-gray);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     position: relative;
     cursor: pointer;
     border: none;
     background: none;
     width: 100%;
     text-align: left;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -161,6 +235,8 @@ body {
     text-align: center;
     font-size: 1.1rem;
     color: var(--gray);
+    flex-shrink: 0;
+    transition: transform var(--transition-speed) ease;
 }
 
 .nav-link:hover i,
@@ -171,6 +247,9 @@ body {
 .nav-text {
     flex: 1;
     font-weight: 500;
+    transition: opacity var(--transition-speed) ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .nav-badge {
@@ -182,13 +261,38 @@ body {
     font-weight: 600;
     min-width: 20px;
     text-align: center;
+    flex-shrink: 0;
+    transition: opacity var(--transition-speed) ease;
 }
 
-/* Sidebar Footer */
+/* STATE 2 & 3: Adjust badges */
+.dashboard-sidebar.collapsed .nav-badge,
+.dashboard-sidebar.hidden .nav-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    min-width: 16px;
+}
+
+/* Sidebar Footer - Only visible in STATE 1 */
 .sidebar-footer {
     padding: 1.5rem;
     border-top: 1px solid var(--sidebar-border);
     background: var(--white);
+    transition: all var(--transition-speed) ease;
+}
+
+/* Hide footer in collapsed and hidden states */
+.dashboard-sidebar.collapsed .sidebar-footer,
+.dashboard-sidebar.hidden .sidebar-footer {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
 }
 
 .user-profile {
@@ -196,6 +300,7 @@ body {
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
+    transition: all var(--transition-speed) ease;
 }
 
 .user-avatar {
@@ -205,6 +310,7 @@ body {
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid var(--gray-light);
+    flex-shrink: 0;
 }
 
 .user-avatar img {
@@ -215,6 +321,7 @@ body {
 
 .user-info {
     flex: 1;
+    min-width: 0;
 }
 
 .user-name {
@@ -222,12 +329,18 @@ body {
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--dark-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-role {
     display: block;
     font-size: 0.75rem;
     color: var(--gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .logout-btn {
@@ -241,7 +354,7 @@ body {
     border-radius: 6px;
     color: var(--dark-gray);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     font-size: 0.9rem;
 }
 
@@ -255,14 +368,20 @@ body {
 .dashboard-main {
     flex: 1;
     margin-left: var(--sidebar-width);
-    transition: margin-left 0.3s ease;
+    transition: all var(--transition-speed) ease;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
+/* Adjust main content margin for different sidebar states */
 .dashboard-sidebar.collapsed ~ .dashboard-main {
     margin-left: var(--sidebar-collapsed);
+}
+
+.dashboard-sidebar.hidden ~ .dashboard-main {
+    margin-left: 0;
 }
 
 /* Dashboard Header */
@@ -285,6 +404,7 @@ body {
     gap: 1rem;
 }
 
+/* Mobile Menu Button */
 .mobile-menu-btn {
     display: none;
     background: none;
@@ -294,11 +414,45 @@ body {
     padding: 0.5rem;
     font-size: 1.2rem;
     border-radius: 6px;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
+    min-width: 40px;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
 }
 
 .mobile-menu-btn:hover {
     background: var(--light-gray);
+}
+
+/* Desktop Toggle Button */
+.desktop-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--dark-gray);
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    transition: all var(--transition-speed) ease;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.desktop-toggle-btn:hover {
+    background: var(--light-gray);
+}
+
+/* Hide desktop toggle when sidebar is hidden */
+.dashboard-sidebar.hidden ~ .dashboard-main .desktop-toggle-btn {
+    display: flex;
+}
+
+.dashboard-sidebar:not(.hidden) ~ .dashboard-main .desktop-toggle-btn {
+    display: none;
 }
 
 .breadcrumb {
@@ -307,6 +461,7 @@ body {
     gap: 0.5rem;
     color: var(--gray);
     font-size: 0.9rem;
+    flex-wrap: wrap;
 }
 
 .breadcrumb i {
@@ -338,8 +493,13 @@ body {
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 6px;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     font-size: 1.1rem;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-btn:hover {
@@ -377,7 +537,7 @@ body {
     padding: 0.5rem;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     color: var(--dark-gray);
 }
 
@@ -391,6 +551,7 @@ body {
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid var(--gray-light);
+    flex-shrink: 0;
 }
 
 .user-avatar-sm img {
@@ -402,6 +563,7 @@ body {
 .user-name-sm {
     font-weight: 500;
     font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .user-dropdown {
@@ -429,7 +591,7 @@ body {
     padding: 0.75rem 1rem;
     color: var(--dark-gray);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     border: none;
     background: none;
     width: 100%;
@@ -463,6 +625,8 @@ body {
     flex: 1;
     padding: 2rem;
     background: var(--light-gray);
+    width: 100%;
+    transition: all var(--transition-speed) ease;
 }
 
 /* Loading States */
@@ -512,6 +676,27 @@ body {
     margin-bottom: 2rem;
 }
 
+/* Add this to your CSS file - logo transition effects */
+.sidebar-logo-img {
+  transition: all var(--transition-speed) ease;
+  height: 32px; /* Fixed height for consistency */
+  object-fit: contain; /* Ensures logos don't get distorted */
+}
+
+.dashboard-sidebar.collapsed .sidebar-logo-img {
+  transform: scale(0.9);
+  height: 28px; /* Slightly smaller for icon */
+}
+
+/* Ensure logo container maintains proper size */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  min-width: 32px;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
     .dashboard-sidebar {
@@ -542,10 +727,18 @@ body {
     .dashboard-sidebar {
         transform: translateX(-100%);
         width: 280px;
+        opacity: 1;
+        pointer-events: auto;
     }
     
     .dashboard-sidebar.mobile-open {
         transform: translateX(0);
+    }
+    
+    /* Hide hidden state on mobile - use mobile-open instead */
+    .dashboard-sidebar.hidden {
+        transform: translateX(-100%);
+        opacity: 1;
     }
     
     .dashboard-main {
@@ -554,7 +747,11 @@ body {
     }
     
     .mobile-menu-btn {
-        display: block;
+        display: flex;
+    }
+    
+    .desktop-toggle-btn {
+        display: none !important;
     }
     
     .sidebar-toggle {
@@ -574,6 +771,10 @@ body {
     .user-name-sm {
         display: none;
     }
+    
+    .dashboard-content {
+        padding: 1.5rem;
+    }
 }
 
 @media (max-width: 600px) {
@@ -590,6 +791,11 @@ body {
     
     .dashboard-content {
         padding: 1rem;
+    }
+    
+    .sidebar-header {
+        padding: 1rem;
+        min-height: 70px;
     }
 }
 
@@ -710,7 +916,6 @@ body {
     50% { opacity: 0.7; transform: scale(1.05); }
 }
 
-
 /* ===== SIDEBAR SCROLLBAR STYLING ===== */
 .sidebar-nav::-webkit-scrollbar {
     width: 6px;
@@ -729,3 +934,105 @@ body {
     background: #8a6a32;
 }
 
+/* ===== AUTO-SCROLL HIGHLIGHT ===== */
+.nav-link.scroll-highlight {
+    animation: highlightPulse 1.5s ease;
+    background: rgba(159, 117, 57, 0.1);
+}
+
+@keyframes highlightPulse {
+    0% { background: rgba(159, 117, 57, 0.1); }
+    50% { background: rgba(159, 117, 57, 0.2); }
+    100% { background: rgba(159, 117, 57, 0.1); }
+}
+
+/* ===== SMOOTH TRANSITIONS ===== */
+.dashboard-sidebar,
+.dashboard-main,
+.sidebar-nav,
+.nav-link,
+.nav-text,
+.nav-section-title,
+.sidebar-logo,
+.user-profile,
+.logout-btn {
+    transition: all var(--transition-speed) ease;
+}
+
+
+/* ===== NOTIFICATION PANEL STYLES ===== */
+.notification-panel-container {
+    position: fixed;
+    top: 70px; /* Below header */
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    width: 90%;
+    max-width: 700px;
+    max-height: 70vh;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-xl);
+    z-index: 2000;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-panel-container.active {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Panel backdrop */
+.notification-panel-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.notification-panel-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Close button */
+.notification-panel-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: var(--dark-gray);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.notification-panel-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notification-panel-container {
+        width: 95%;
+        max-height: 80vh;
+        top: 60px;
+    }
+}
