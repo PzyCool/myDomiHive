@@ -6,86 +6,107 @@
     <title>Notifications - DomiHive</title>
     <link rel="stylesheet" href="/CSS/notification.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Panel-specific overrides that don't need to be in the main CSS */
+        .notification-panel-container .notifications-panel {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Ensure proper loading state */
+        .notifications-panel.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="notifications-container">
-        <!-- Header -->
-        <header class="notifications-header">
+    <!-- Main Panel Container -->
+    <div class="notifications-panel">
+        <!-- Panel Header -->
+        <div class="panel-header">
             <div class="header-left">
-                <h1>
-                    <i class="fas fa-bell"></i>
-                    Notifications
-                    <span class="notification-count" id="totalNotificationCount">0</span>
-                </h1>
-                <p class="header-subtitle">Stay updated with your activity</p>
+                <i class="fas fa-bell"></i>
+                <h2>Notifications</h2>
+                <span class="notification-count" id="notificationCount">0</span>
             </div>
-            <div class="header-right">
-                <button class="header-action-btn" id="markAllReadBtn">
+            <div class="header-actions">
+                <button class="header-btn" id="markAllReadBtn" title="Mark all as read">
                     <i class="fas fa-check-double"></i>
-                    Mark all as read
+                    <span class="btn-text">Mark All</span>
                 </button>
-                <button class="header-action-btn secondary" id="refreshBtn">
+                <button class="header-btn" id="refreshBtn" title="Refresh notifications">
                     <i class="fas fa-sync-alt"></i>
-                    Refresh
                 </button>
             </div>
-        </header>
+        </div>
 
-        <!-- Main Content -->
-        <main class="notifications-main">
-            <!-- Filters -->
-            <div class="notifications-filters">
-                <div class="filter-tabs">
-                    <button class="filter-tab active" data-filter="all">
-                        All
-                        <span class="filter-count" id="filterAllCount">0</span>
-                    </button>
-                    <button class="filter-tab" data-filter="unread">
-                        Unread
-                        <span class="filter-count" id="filterUnreadCount">0</span>
-                    </button>
-                    <button class="filter-tab" data-filter="applications">
-                        <i class="fas fa-file-alt"></i>
-                        Applications
-                        <span class="filter-count" id="filterAppCount">0</span>
-                    </button>
-                    <button class="filter-tab" data-filter="payments">
-                        <i class="fas fa-credit-card"></i>
-                        Payments
-                        <span class="filter-count" id="filterPaymentCount">0</span>
-                    </button>
-                    <button class="filter-tab" data-filter="system">
-                        <i class="fas fa-cog"></i>
-                        System
-                        <span class="filter-count" id="filterSystemCount">0</span>
-                    </button>
-                </div>
-                <div class="filter-actions">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="notificationSearch" placeholder="Search notifications...">
-                    </div>
-                    <select class="sort-select" id="sortSelect">
-                        <option value="newest">Newest first</option>
-                        <option value="oldest">Oldest first</option>
-                    </select>
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+            <div class="filter-tabs" id="filterTabs">
+                <button class="filter-tab active" data-filter="all">
+                    All
+                    <span class="filter-count" id="filterAllCount">0</span>
+                </button>
+                <button class="filter-tab" data-filter="unread">
+                    Unread
+                    <span class="filter-count" id="filterUnreadCount">0</span>
+                </button>
+                <button class="filter-tab" data-filter="applications">
+                    <i class="fas fa-file-alt"></i>
+                    Apps
+                    <span class="filter-count" id="filterAppCount">0</span>
+                </button>
+                <button class="filter-tab" data-filter="payments">
+                    <i class="fas fa-credit-card"></i>
+                    Payments
+                    <span class="filter-count" id="filterPaymentCount">0</span>
+                </button>
+                <button class="filter-tab" data-filter="system">
+                    <i class="fas fa-cog"></i>
+                    System
+                    <span class="filter-count" id="filterSystemCount">0</span>
+                </button>
+            </div>
+            <div class="filter-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="notificationSearch" placeholder="Search...">
                 </div>
             </div>
+        </div>
 
-            <!-- Notifications List -->
+        <!-- Notifications List -->
+        <div class="notifications-list-container" id="notificationsListContainer">
             <div class="notifications-list" id="notificationsList">
-                <!-- Dynamic content will go here -->
+                <!-- Notifications will be loaded here -->
+                
+                <!-- Empty State -->
                 <div class="empty-state" id="emptyState">
                     <div class="empty-icon">
                         <i class="fas fa-bell-slash"></i>
                     </div>
-                    <h3>No notifications yet</h3>
-                    <p>You're all caught up! New notifications will appear here.</p>
+                    <h3>No notifications</h3>
+                    <p>You're all caught up!</p>
                 </div>
             </div>
+            
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <p>Loading notifications...</p>
+            </div>
+        </div>
 
-            <!-- Stats Bar -->
-            <div class="notifications-stats">
+        <!-- Panel Footer -->
+        <div class="panel-footer">
+            <div class="footer-stats">
                 <div class="stat-item">
                     <span class="stat-value" id="statsTotal">0</span>
                     <span class="stat-label">Total</span>
@@ -98,16 +119,18 @@
                     <span class="stat-value" id="statsToday">0</span>
                     <span class="stat-label">Today</span>
                 </div>
-                <button class="clear-btn" id="clearAllBtn">
+            </div>
+            <div class="footer-actions">
+                <button class="footer-btn" id="clearAllBtn" title="Clear all notifications">
                     <i class="fas fa-trash"></i>
-                    Clear all
+                    <span class="btn-text">Clear All</span>
                 </button>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Notification Detail Modal -->
-    <div class="modal" id="notificationModal">
+    <div class="notification-modal" id="notificationModal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-icon" id="modalIcon">

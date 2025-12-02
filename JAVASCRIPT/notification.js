@@ -1,17 +1,16 @@
-// notification.js - Clean Modern Notification System
+// notification.js - OPTIMIZED FOR PANEL LAYOUT - FILLED WITH CONTENT
 
-class NotificationSystem {
+class NotificationPanel {
     constructor() {
         this.notifications = [];
         this.currentFilter = 'all';
-        this.currentSort = 'newest';
         this.currentSearch = '';
         
         this.init();
     }
 
     async init() {
-        console.log('🔔 Initializing Notification System...');
+        console.log('🔔 Initializing Notification Panel...');
         
         // Load notifications
         this.loadNotifications();
@@ -22,7 +21,7 @@ class NotificationSystem {
         // Render initial state
         this.render();
         
-        console.log('✅ Notification System Ready');
+        console.log('✅ Notification Panel Ready');
     }
 
     loadNotifications() {
@@ -44,8 +43,8 @@ class NotificationSystem {
             {
                 id: 'notif_1',
                 type: 'welcome',
-                title: 'Welcome to DomiHive! 🎉',
-                message: 'Thank you for joining DomiHive. Start exploring properties and begin your rental journey.',
+                title: 'Welcome to DomiHive!',
+                message: 'Thank you for joining DomiHive. Start exploring properties and begin your rental journey. We\'re excited to have you on board!',
                 timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
                 read: true,
                 category: 'system',
@@ -54,8 +53,8 @@ class NotificationSystem {
             {
                 id: 'notif_2',
                 type: 'application_started',
-                title: 'Application Started 📝',
-                message: 'You\'ve started a rental application for "Luxury Apartment, Ikoyi". Complete it to proceed.',
+                title: 'Application Started - Luxury Apartment, Ikoyi',
+                message: 'You\'ve started a rental application for "Luxury Apartment, Ikoyi". Complete the required documents to proceed with verification.',
                 timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
                 read: true,
                 category: 'applications',
@@ -72,8 +71,8 @@ class NotificationSystem {
             {
                 id: 'notif_3',
                 type: 'payment_success',
-                title: 'Payment Successful 💳',
-                message: 'Your payment of ₦250,000 for application fees has been processed successfully.',
+                title: 'Payment Successful - ₦250,000',
+                message: 'Your payment of ₦250,000 for application fees has been processed successfully. The funds are secured in escrow.',
                 timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
                 read: false,
                 category: 'payments',
@@ -84,41 +83,124 @@ class NotificationSystem {
                         type: 'default',
                         action: 'view_receipt',
                         data: { paymentId: 'PAY-2024-00123' }
+                    },
+                    {
+                        text: 'Download PDF',
+                        type: 'default',
+                        action: 'download_receipt'
                     }
                 ]
             },
             {
                 id: 'notif_4',
                 type: 'application_approved',
-                title: 'Congratulations! Application Approved 🎊',
-                message: 'Your rental application has been approved! You can now activate your tenant account.',
+                title: 'Congratulations! Application Approved!',
+                message: 'Your rental application for "Luxury Apartment, Ikoyi" has been approved! You can now activate your tenant account and schedule move-in.',
                 timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
                 read: false,
                 category: 'applications',
                 icon: 'fas fa-check-circle',
                 actions: [
                     {
-                        text: 'Activate Tenant Mode',
+                        text: 'Activate Tenant',
                         type: 'primary',
                         action: 'activate_tenant',
                         data: { propertyId: 'PROP-001' }
                     },
                     {
-                        text: 'View Details',
+                        text: 'Schedule Move-in',
                         type: 'default',
-                        action: 'view_details'
+                        action: 'schedule_movein'
                     }
                 ]
             },
             {
                 id: 'notif_5',
                 type: 'system_update',
-                title: 'System Maintenance ⚙️',
-                message: 'Scheduled maintenance on Sunday, 2 AM - 4 AM. The system may be temporarily unavailable.',
+                title: 'Scheduled System Maintenance',
+                message: 'Planned system maintenance on Sunday, December 15th, 2:00 AM - 4:00 AM. Services may be temporarily unavailable during this period.',
                 timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
                 read: false,
                 category: 'system',
                 icon: 'fas fa-cog'
+            },
+            {
+                id: 'notif_6',
+                type: 'rent_reminder',
+                title: 'Rent Due Soon - ₦85,000',
+                message: 'Your rent payment of ₦85,000 for "Luxury Apartment, Ikoyi" is due in 3 days. Please make payment before December 20th to avoid late fees.',
+                timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+                read: false,
+                category: 'payments',
+                icon: 'fas fa-calendar-alt',
+                actions: [
+                    {
+                        text: 'Pay Now',
+                        type: 'primary',
+                        action: 'pay_rent'
+                    }
+                ]
+            },
+            {
+                id: 'notif_7',
+                type: 'maintenance_scheduled',
+                title: 'Maintenance Scheduled',
+                message: 'Plumbing maintenance has been scheduled for your apartment on December 18th, 10:00 AM. A technician will visit your unit.',
+                timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+                read: true,
+                category: 'applications',
+                icon: 'fas fa-tools',
+                actions: [
+                    {
+                        text: 'View Details',
+                        type: 'default',
+                        action: 'view_maintenance'
+                    }
+                ]
+            },
+            {
+                id: 'notif_8',
+                type: 'new_message',
+                title: 'New Message from Property Manager',
+                message: 'You have a new message regarding your recent inquiry about parking availability. Please check your messages.',
+                timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+                read: false,
+                category: 'applications',
+                icon: 'fas fa-envelope',
+                actions: [
+                    {
+                        text: 'View Message',
+                        type: 'primary',
+                        action: 'view_message'
+                    }
+                ]
+            },
+            {
+                id: 'notif_9',
+                type: 'document_approved',
+                title: 'Document Approved - ID Verification',
+                message: 'Your identification document has been approved by our verification team. Your application is one step closer to completion.',
+                timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                read: true,
+                category: 'system',
+                icon: 'fas fa-check-double'
+            },
+            {
+                id: 'notif_10',
+                type: 'payment_failed',
+                title: 'Payment Failed - Please Retry',
+                message: 'Your recent payment attempt failed due to insufficient funds. Please update your payment method and try again.',
+                timestamp: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
+                read: false,
+                category: 'payments',
+                icon: 'fas fa-exclamation-triangle',
+                actions: [
+                    {
+                        text: 'Update Payment',
+                        type: 'primary',
+                        action: 'update_payment'
+                    }
+                ]
             }
         ];
         
@@ -134,19 +216,15 @@ class NotificationSystem {
             });
         });
         
-        // Search input
+        // Search input - with debounce for better performance
         const searchInput = document.getElementById('notificationSearch');
         if (searchInput) {
+            let searchTimeout;
             searchInput.addEventListener('input', (e) => {
-                this.handleSearch(e.target.value);
-            });
-        }
-        
-        // Sort select
-        const sortSelect = document.getElementById('sortSelect');
-        if (sortSelect) {
-            sortSelect.addEventListener('change', (e) => {
-                this.handleSortChange(e.target.value);
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    this.handleSearch(e.target.value);
+                }, 300);
             });
         }
         
@@ -188,6 +266,11 @@ class NotificationSystem {
                 this.closeModal();
             }
         });
+        
+        // Initialize search placeholder
+        if (searchInput) {
+            searchInput.placeholder = `Search ${this.notifications.length} notifications...`;
+        }
     }
 
     handleFilterChange(tab) {
@@ -213,12 +296,6 @@ class NotificationSystem {
         }
     }
 
-    handleSortChange(sort) {
-        this.currentSort = sort;
-        this.render();
-        console.log(`🔄 Sort changed to: ${sort}`);
-    }
-
     getFilteredNotifications() {
         let filtered = [...this.notifications];
         
@@ -226,7 +303,8 @@ class NotificationSystem {
         if (this.currentSearch) {
             filtered = filtered.filter(notification => 
                 notification.title.toLowerCase().includes(this.currentSearch) ||
-                notification.message.toLowerCase().includes(this.currentSearch)
+                notification.message.toLowerCase().includes(this.currentSearch) ||
+                notification.category.toLowerCase().includes(this.currentSearch)
             );
         }
         
@@ -238,18 +316,6 @@ class NotificationSystem {
                 filtered = filtered.filter(notification => notification.category === this.currentFilter);
             }
         }
-        
-        // Apply sorting
-        filtered.sort((a, b) => {
-            const dateA = new Date(a.timestamp);
-            const dateB = new Date(b.timestamp);
-            
-            if (this.currentSort === 'oldest') {
-                return dateA - dateB;
-            } else {
-                return dateB - dateA; // newest first (default)
-            }
-        });
         
         return filtered;
     }
@@ -270,14 +336,29 @@ class NotificationSystem {
         if (filteredNotifications.length === 0) {
             // Show empty state
             if (emptyState) {
-                emptyState.style.display = 'block';
+                emptyState.classList.add('active');
                 listContainer.innerHTML = '';
                 listContainer.appendChild(emptyState);
+                
+                // Update empty state message based on filter/search
+                const emptyTitle = emptyState.querySelector('h3');
+                const emptyMessage = emptyState.querySelector('p');
+                
+                if (this.currentSearch) {
+                    emptyTitle.textContent = 'No matching notifications';
+                    emptyMessage.textContent = `No notifications found for "${this.currentSearch}"`;
+                } else if (this.currentFilter === 'unread') {
+                    emptyTitle.textContent = 'No unread notifications';
+                    emptyMessage.textContent = 'You\'ve read all your notifications';
+                } else if (this.currentFilter !== 'all') {
+                    emptyTitle.textContent = `No ${this.currentFilter} notifications`;
+                    emptyMessage.textContent = `You don't have any ${this.currentFilter} notifications`;
+                }
             }
         } else {
             // Hide empty state
             if (emptyState) {
-                emptyState.style.display = 'none';
+                emptyState.classList.remove('active');
             }
             
             // Clear and render notifications
@@ -300,19 +381,19 @@ class NotificationSystem {
         
         element.innerHTML = `
             <div class="notification-item-header">
-                <div class="notification-item-title">
-                    <div class="notification-icon ${iconClass}">
-                        <i class="${notification.icon || 'fas fa-bell'}"></i>
-                    </div>
-                    <div class="notification-text">
-                        <h4>${notification.title}</h4>
-                        <p>${notification.message}</p>
+                <div class="notification-icon ${iconClass}">
+                    <i class="${notification.icon || 'fas fa-bell'}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${notification.title}</div>
+                    <div class="notification-message">${notification.message}</div>
+                    <div class="notification-meta">
+                        <span class="notification-time">${timeAgo}</span>
+                        <span class="notification-category">${notification.category}</span>
                     </div>
                 </div>
-                <div class="notification-time">${timeAgo}</div>
+                ${!notification.read ? '<div class="unread-indicator"></div>' : ''}
             </div>
-            ${notification.read ? '' : '<div class="unread-indicator"></div>'}
-            ${notification.actions ? this.renderNotificationActions(notification.actions, notification.id) : ''}
         `;
         
         // Add click event
@@ -324,19 +405,6 @@ class NotificationSystem {
         });
         
         return element;
-    }
-
-    renderNotificationActions(actions, notificationId) {
-        return `
-            <div class="notification-actions">
-                ${actions.map(action => `
-                    <button class="notification-action-btn ${action.type === 'primary' ? 'primary' : ''}"
-                            onclick="event.stopPropagation(); notificationSystem.handleAction('${action.action}', ${JSON.stringify(action.data)}, '${notificationId}')">
-                        ${action.text}
-                    </button>
-                `).join('')}
-            </div>
-        `;
     }
 
     getIconClass(category) {
@@ -376,9 +444,10 @@ class NotificationSystem {
         }).length;
         
         // Update header count
-        const headerCount = document.getElementById('totalNotificationCount');
+        const headerCount = document.getElementById('notificationCount');
         if (headerCount) {
-            headerCount.textContent = unread > 0 ? unread : '';
+            headerCount.textContent = unread > 0 ? unread : '0';
+            headerCount.style.display = unread > 0 ? 'inline-flex' : 'none';
         }
         
         // Update stats bar
@@ -390,6 +459,12 @@ class NotificationSystem {
         updateElement('statsTotal', total);
         updateElement('statsUnread', unread);
         updateElement('statsToday', today);
+        
+        // Update header title
+        const headerTitle = document.querySelector('.panel-header h2');
+        if (headerTitle && unread > 0) {
+            headerTitle.innerHTML = `Notifications <span class="notification-count">${unread}</span>`;
+        }
     }
 
     updateFilterCounts() {
@@ -453,10 +528,28 @@ class NotificationSystem {
     }
 
     refresh() {
-        this.loadNotifications();
-        this.render();
-        this.showToast('Notifications refreshed', 'success');
-        console.log('🔄 Refreshed notifications');
+        this.showToast('Refreshing notifications...', 'info');
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Add a new notification for demo
+            const newNotification = {
+                id: 'notif_new_' + Date.now(),
+                type: 'update',
+                title: 'System Updated',
+                message: 'The notification system has been refreshed with the latest updates.',
+                timestamp: new Date().toISOString(),
+                read: false,
+                category: 'system',
+                icon: 'fas fa-sync-alt'
+            };
+            
+            this.notifications.unshift(newNotification);
+            this.saveNotifications();
+            this.render();
+            this.showToast('Notifications refreshed successfully', 'success');
+            console.log('🔄 Refreshed notifications');
+        }, 800);
     }
 
     clearAll() {
@@ -534,29 +627,50 @@ class NotificationSystem {
     handleAction(action, data, notificationId) {
         console.log(`🔄 Handling action: ${action}`, data);
         
+        let message = '';
+        
         switch (action) {
             case 'continue_application':
-                this.showToast('Opening application...', 'info');
-                // In real app: window.spa.navigateToSection('applications');
+                message = 'Opening application form...';
                 break;
                 
             case 'view_receipt':
-                this.showToast('Opening receipt...', 'info');
-                // In real app: window.spa.navigateToSection('payments');
+                message = 'Opening payment receipt...';
                 break;
                 
             case 'activate_tenant':
-                this.showToast('Activating tenant mode...', 'success');
-                // In real app: window.spa.navigateToSection('tenant-activation');
+                message = 'Activating tenant mode...';
                 break;
                 
-            case 'view_details':
-                // Already viewing details in modal
+            case 'schedule_movein':
+                message = 'Opening move-in scheduler...';
+                break;
+                
+            case 'pay_rent':
+                message = 'Opening payment gateway...';
+                break;
+                
+            case 'view_maintenance':
+                message = 'Opening maintenance details...';
+                break;
+                
+            case 'view_message':
+                message = 'Opening message center...';
+                break;
+                
+            case 'update_payment':
+                message = 'Opening payment settings...';
+                break;
+                
+            case 'download_receipt':
+                message = 'Downloading receipt PDF...';
                 break;
                 
             default:
-                this.showToast('Action completed', 'success');
+                message = 'Action completed';
         }
+        
+        this.showToast(message, 'success');
         
         // Mark as read if not already
         this.markAsRead(notificationId);
@@ -564,10 +678,10 @@ class NotificationSystem {
 
     showToast(message, type = 'info') {
         // Create toast container if it doesn't exist
-        let toastContainer = document.querySelector('.toast-container');
+        let toastContainer = document.querySelector('.notification-toast-container');
         if (!toastContainer) {
             toastContainer = document.createElement('div');
-            toastContainer.className = 'toast-container';
+            toastContainer.className = 'notification-toast-container';
             toastContainer.style.cssText = `
                 position: fixed;
                 top: 20px;
@@ -575,26 +689,28 @@ class NotificationSystem {
                 z-index: 10001;
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             `;
             document.body.appendChild(toastContainer);
         }
         
         // Create toast
         const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
+        toast.className = `notification-toast notification-toast-${type}`;
         toast.style.cssText = `
             background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
             color: white;
-            padding: 12px 20px;
+            padding: 12px 16px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             font-weight: 500;
-            animation: slideInRight 0.3s ease;
+            font-size: 0.875rem;
+            animation: toastSlideIn 0.3s ease;
             max-width: 300px;
+            min-width: 200px;
         `;
         
         const icon = type === 'success' ? 'fa-check-circle' : 
@@ -609,7 +725,7 @@ class NotificationSystem {
         
         // Remove after 3 seconds
         setTimeout(() => {
-            toast.style.animation = 'slideOutRight 0.3s ease';
+            toast.style.animation = 'toastSlideOut 0.3s ease';
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
@@ -621,24 +737,34 @@ class NotificationSystem {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📄 DOM Content Loaded - Starting Notification System...');
-    window.notificationSystem = new NotificationSystem();
+    console.log('📄 DOM Content Loaded - Starting Notification Panel...');
+    window.notificationPanel = new NotificationPanel();
 });
 
 // Global function to add new notification (for other parts of the app)
 window.addNotification = function(notificationData) {
-    if (window.notificationSystem) {
+    if (window.notificationPanel) {
         const newNotification = {
             id: 'notif_' + Date.now(),
             timestamp: new Date().toISOString(),
             read: false,
             icon: 'fas fa-bell',
+            category: 'general',
             ...notificationData
         };
         
-        window.notificationSystem.notifications.unshift(newNotification);
-        window.notificationSystem.saveNotifications();
-        window.notificationSystem.render();
+        window.notificationPanel.notifications.unshift(newNotification);
+        window.notificationPanel.saveNotifications();
+        window.notificationPanel.render();
+        
+        // Add animation class for new notification
+        setTimeout(() => {
+            const element = document.querySelector(`[data-id="${newNotification.id}"]`);
+            if (element) {
+                element.classList.add('new');
+                setTimeout(() => element.classList.remove('new'), 1000);
+            }
+        }, 100);
         
         console.log('📨 Added new notification:', newNotification.id);
         return newNotification.id;
@@ -650,13 +776,13 @@ window.addNotification = function(notificationData) {
 window.createApplicationNotification = function(type, propertyData) {
     const templates = {
         'application_started': {
-            title: 'Application Started 📝',
+            title: 'Application Started',
             message: `You've started an application for "${propertyData.title}"`,
             category: 'applications',
             icon: 'fas fa-file-alt'
         },
         'application_approved': {
-            title: 'Application Approved! 🎊',
+            title: 'Application Approved!',
             message: `Congratulations! Your application for "${propertyData.title}" has been approved.`,
             category: 'applications',
             icon: 'fas fa-check-circle',
@@ -670,7 +796,7 @@ window.createApplicationNotification = function(type, propertyData) {
             ]
         },
         'payment_received': {
-            title: 'Payment Received 💳',
+            title: 'Payment Received',
             message: `Payment for "${propertyData.title}" has been processed successfully.`,
             category: 'payments',
             icon: 'fas fa-credit-card',
@@ -681,6 +807,12 @@ window.createApplicationNotification = function(type, propertyData) {
                     action: 'view_receipt'
                 }
             ]
+        },
+        'rent_reminder': {
+            title: 'Rent Due Soon',
+            message: `Your rent for "${propertyData.title}" is due in 3 days. Amount: ₦${propertyData.amount || '0'}`,
+            category: 'payments',
+            icon: 'fas fa-calendar-alt'
         }
     };
     
@@ -693,11 +825,11 @@ window.createApplicationNotification = function(type, propertyData) {
 };
 
 // Add CSS animations for toasts
-if (!document.querySelector('#toast-animations')) {
+if (!document.querySelector('#notification-toast-animations')) {
     const style = document.createElement('style');
-    style.id = 'toast-animations';
+    style.id = 'notification-toast-animations';
     style.textContent = `
-        @keyframes slideInRight {
+        @keyframes toastSlideIn {
             from {
                 opacity: 0;
                 transform: translateX(100%);
@@ -708,7 +840,7 @@ if (!document.querySelector('#toast-animations')) {
             }
         }
         
-        @keyframes slideOutRight {
+        @keyframes toastSlideOut {
             from {
                 opacity: 1;
                 transform: translateX(0);
@@ -722,4 +854,4 @@ if (!document.querySelector('#toast-animations')) {
     document.head.appendChild(style);
 }
 
-console.log('🎉 Notification System Module Loaded!');
+console.log('🎉 Notification Panel System Loaded!');

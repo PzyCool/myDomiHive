@@ -141,71 +141,72 @@ class DomiHiveEnterpriseSPA {
     console.log('✅ Notification panel closed');
   }
 
-  async loadNotificationPanelContent() {
+ async loadNotificationPanelContent() {
     console.log("📥 Loading notification panel content...");
     
     const panel = document.getElementById('notificationPanelContainer');
     if (!panel) return;
     
     try {
-      // Fetch the notification.html content
-      const response = await fetch('/Pages/notification.html');
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      const htmlContent = await response.text();
-      
-      // Create temporary div to parse HTML
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = htmlContent;
-      
-      // Get the main content container
-      const notificationContent = tempDiv.querySelector('.notifications-container');
-      
-      if (notificationContent) {
-        // Clear panel and add content
-        panel.innerHTML = '';
+        // Fetch the notification.html content
+        const response = await fetch('/Pages/notification.html');
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         
-        // Add close button
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'notification-panel-close';
-        closeBtn.innerHTML = '<i class="fas fa-times"></i>';
-        closeBtn.title = 'Close notifications';
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.closeNotificationPanel();
-        });
+        const htmlContent = await response.text();
         
-        panel.appendChild(closeBtn);
-        panel.appendChild(notificationContent.cloneNode(true));
+        // Create temporary div to parse HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlContent;
         
-        // Load notification.css if not already loaded
-        await this.loadNotificationPanelStyles();
+        // ✅ FIXED: Look for the NEW structure (.notifications-panel)
+        const notificationContent = tempDiv.querySelector('.notifications-panel');
         
-        // Execute notification.js
-        await this.executeNotificationScripts();
+        if (notificationContent) {
+            // Clear panel and add content
+            panel.innerHTML = '';
+            
+            // Add close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'notification-panel-close';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.title = 'Close notifications';
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.closeNotificationPanel();
+            });
+            
+            panel.appendChild(closeBtn);
+            panel.appendChild(notificationContent.cloneNode(true));
+            
+            // Load notification.css if not already loaded
+            await this.loadNotificationPanelStyles();
+            
+            // Execute notification.js
+            await this.executeNotificationScripts();
+            
+            this.notificationPanelLoaded = true;
+            console.log('✅ Notification panel content loaded successfully');
+        } else {
+            console.error('❌ Could not find .notifications-panel in HTML');
+        }
         
-        this.notificationPanelLoaded = true;
-        console.log('✅ Notification panel content loaded successfully');
-      }
-      
     } catch (error) {
-      console.error('❌ Failed to load notification panel content:', error);
-      panel.innerHTML = `
-        <div style="padding: 3rem 2rem; text-align: center; color: var(--gray);">
-          <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--error);"></i>
-          <h3 style="color: var(--dark-gray); margin-bottom: 0.5rem;">Failed to load notifications</h3>
-          <p style="margin-bottom: 1.5rem;">Please try again later</p>
-          <button style="padding: 0.75rem 1.5rem; background: var(--accent-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;"
-                  onclick="spa.loadNotificationPanelContent()">
-            <i class="fas fa-redo"></i> Retry
-          </button>
-        </div>
-      `;
+        console.error('❌ Failed to load notification panel content:', error);
+        panel.innerHTML = `
+            <div style="padding: 3rem 2rem; text-align: center; color: var(--gray);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--error);"></i>
+                <h3 style="color: var(--dark-gray); margin-bottom: 0.5rem;">Failed to load notifications</h3>
+                <p style="margin-bottom: 1.5rem;">Please try again later</p>
+                <button style="padding: 0.75rem 1.5rem; background: var(--accent-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;"
+                        onclick="spa.loadNotificationPanelContent()">
+                    <i class="fas fa-redo"></i> Retry
+                </button>
+            </div>
+        `;
     }
-  }
-
+}
   async loadNotificationPanelStyles() {
     // Check if notification.css is already loaded
     if (document.querySelector('link[href*="notification.css"]')) {
